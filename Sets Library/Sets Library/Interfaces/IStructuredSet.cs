@@ -19,7 +19,7 @@
 using SetsLibrary.Models;
 namespace SetsLibrary.Interfaces
 {
-    internal interface IStructuredSet<T>
+    public interface IStructuredSet<T>
         where T : IComparable
     {
         /// <summary>
