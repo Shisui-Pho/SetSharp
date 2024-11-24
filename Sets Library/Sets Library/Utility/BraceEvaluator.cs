@@ -16,7 +16,7 @@
  * - Removes extraneous elements from evaluation, ensuring strict brace matching.
  */
 
-namespace Sets_Library.Utility
+namespace SetsLibrary.Utility
 {
     /// <summary>
     /// Provides methods to evaluate the correctness of braces in a given expression.
