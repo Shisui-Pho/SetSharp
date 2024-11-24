@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace SetLibrary.Collections
 {
@@ -16,6 +14,23 @@ namespace SetLibrary.Collections
 
         //Properties
         public int Count => _elements.Count;
+
+        //Indexer
+        /// <summary>
+        /// Gets an element in the collection on the specified index.
+        /// </summary>
+        /// <param name="index">The zero based index</param>
+        /// <returns>The element on the specified index</returns>
+        public T this[int index]
+        {
+            get
+            {
+                if(index <  0 || index >= _elements.Count)
+                    throw new IndexOutOfRangeException(nameof(index));
+
+                return _elements[index];
+            }//end getter
+        }//indexer
 
         //Default constructor
         public SortedElements()
@@ -61,20 +76,26 @@ namespace SetLibrary.Collections
         private int FindIndexOfInsertion(T valueToAdd)
         {
             int lowerbound = 0;
-            int upperbound = Count - 1;
+            int upperbound = Count; //Set upperbound to Count to allow insertion at the end
 
             while (lowerbound < upperbound)
             {
-                int mid = (upperbound + lowerbound) / 2;
+                int mid = (lowerbound + upperbound) / 2;
                 int comparer = _elements[mid].CompareTo(valueToAdd);
 
-                if (comparer == 0) return mid; //Exact match
-                if (comparer > 0) upperbound = mid;//Search left
-                else lowerbound = mid + 1; //Search right
-            }
+                if (comparer < 0)
+                {
+                    lowerbound = mid + 1; //Search right
+                }
+                else
+                {
+                    upperbound = mid; //Search left
+                }
+            }//end while
+            return lowerbound; //This is the correct insertion index
 
-            return lowerbound;
         }//FindIndexOfInsertion
+
 
         /// <summary>
         /// Adds a range of elements to the collection in sorted order.
