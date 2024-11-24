@@ -20,7 +20,7 @@ using SetsLibrary.Models;
 namespace SetsLibrary.Interfaces
 {
     public interface ISetTree<T> : IComparable
-        where T : IComparable
+        where T : IComparable<T>
     {
         /// <summary>
         /// String representation of the root elements.

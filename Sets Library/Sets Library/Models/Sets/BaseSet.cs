@@ -25,7 +25,7 @@ namespace SetsLibrary.Models
     /// </summary>
     /// <typeparam name="T">The type of elements in the set, which must be comparable.</typeparam>
     public abstract class BaseSet<T> : IStructuredSet<T>
-        where T : IComparable
+        where T : IComparable<T>
     {
         /// <summary>
         /// Gets the set tree element at the specified index.

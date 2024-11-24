@@ -24,7 +24,7 @@ namespace SetsLibrary.Models.SetTree
     /// Represents a tree structure for sets, allowing the organization and manipulation of set elements.
     /// </summary>
     /// <typeparam name="T">The type of elements in the set tree, which must be comparable.</typeparam>
-    public class SetTree<T> : ISetTree<T> where T : IComparable
+    public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     {
         /// <summary>
         /// Gets the root element of the set tree.

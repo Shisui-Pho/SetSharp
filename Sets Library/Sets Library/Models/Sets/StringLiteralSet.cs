@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SetsLibrary.Interfaces;
 
 namespace SetsLibrary.Models
 {
-    internal class StringLiteralSet
+    public class StringLiteralSet : BaseSet<string>
     {
+        public override bool Contains(string Element)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IStructuredSet<string> MergeWith(IStructuredSet<string> set)
+        {
+            throw new NotImplementedException();
+        }
     }//class
 }//namespace

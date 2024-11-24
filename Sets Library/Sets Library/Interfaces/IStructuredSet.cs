@@ -20,7 +20,7 @@ using SetsLibrary.Models;
 namespace SetsLibrary.Interfaces
 {
     public interface IStructuredSet<T>
-        where T : IComparable
+        where T : IComparable<T>
     {
         /// <summary>
         /// Get the evaluated string representation of the set.
