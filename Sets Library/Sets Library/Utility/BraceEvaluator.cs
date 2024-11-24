@@ -21,7 +21,7 @@ namespace SetsLibrary.Utility
     /// <summary>
     /// Provides methods to evaluate the correctness of braces in a given expression.
     /// </summary>
-    internal static class BraceEvaluator
+    public static class BraceEvaluator
     {
         /// <summary>
         /// Checks if the braces in the specified expression are correctly balanced.
