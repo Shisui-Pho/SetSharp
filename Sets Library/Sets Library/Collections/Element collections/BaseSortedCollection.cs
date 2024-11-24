@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections;
 namespace SetsLibrary.Collections
 {
     public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TElement, TElement>
         where TElement : IComparable<TElement>
     {
-
         //Data field to store elements
         private List<TElement> _elements;
 
