@@ -26,6 +26,12 @@ public interface ISortedElements<T> : ISortedSetCollection<T, T>
     where T : IComparable<T>
 {
     /// <summary>
+    /// Gets an element in the collection on the specified index.
+    /// </summary>
+    /// <param name="index">The zero based index.</param>
+    /// <returns>The element on the specified index</returns>
+    T this[int index] { get; }
+    /// <summary>
     /// Removes an element from the sorted list.
     /// </summary>
     /// <param name="val">The element to be removed.</param>
