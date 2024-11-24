@@ -19,7 +19,7 @@
 
 using SetsLibrary.Interfaces;
 
-namespace SetLibrary.Collections;
+namespace SetsLibrary.Collections;
 
 /// <summary>
 /// Represents a collection of sorted subsets, allowing for addition, removal, and searching of set trees within the collection.
@@ -28,6 +28,12 @@ namespace SetLibrary.Collections;
 public interface ISortedSubSets<T> : ISortedSetCollection<T, ISetTree<T>>
     where T : IComparable<T>
 {
+    /// <summary>
+    /// Gets the set tree in the specified index.
+    /// </summary>
+    /// <param name="index">Zero based index of the element tree</param>
+    /// <returns>The specified element tree in the given index</returns>
+    ISetTree<T> this[int index] { get;}
     /// <summary>
     /// Removes a tree from the sorted list.
     /// </summary>

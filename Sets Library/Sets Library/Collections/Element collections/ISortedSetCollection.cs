@@ -16,7 +16,7 @@
  * - Supports enumeration over a specified type of enumerator for the collection.
  */
 
-namespace SetLibrary.Collections;
+namespace SetsLibrary.Collections;
 
 /// <summary>
 /// Represents a collection of sorted sets that can be manipulated and enumerated.
