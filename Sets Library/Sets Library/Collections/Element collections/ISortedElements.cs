@@ -17,12 +17,13 @@
  */
 
 namespace SetLibrary.Collections;
+
 /// <summary>
 /// Represents a collection of sorted elements that allows for addition, removal, and searching within the collection.
 /// </summary>
-/// <typeparam name="T">The type of elements in the collection, which must implement <see cref="IComparable"/>.</typeparam>
-public interface ISortedElements<T> : ISortedSetCollection<T>, IEnumerable<T>
-    where T : IComparable
+/// <typeparam name="T">The type of elements in the collection, which must implement <see cref="IComparable{T}"/>.</typeparam>
+public interface ISortedElements<T> : ISortedSetCollection<T, T>
+    where T : IComparable<T>
 {
     /// <summary>
     /// Removes an element from the sorted list.

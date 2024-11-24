@@ -18,13 +18,14 @@
  */
 
 using SetsLibrary.Interfaces;
+
 namespace SetLibrary.Collections;
 
 /// <summary>
 /// Represents a collection of sorted subsets, allowing for addition, removal, and searching of set trees within the collection.
 /// </summary>
 /// <typeparam name="T">The type of elements in the subsets, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public interface ISortedSubSets<T> : ISortedSetCollection<T>, IEnumerable<ISetTree<T>>
+public interface ISortedSubSets<T> : ISortedSetCollection<T, ISetTree<T>>
     where T : IComparable<T>
 {
     /// <summary>

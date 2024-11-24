@@ -4,16 +4,16 @@
  * Date: 24 November 2024
  * 
  * Description:
- * This file defines the ISortedSetCollection<T> interface, which represents a collection 
- * of sorted sets. The interface provides basic functionality for manipulating and querying 
- * the collection, including retrieving the count of elements and removing elements by index. 
- * Elements in the collection are required to implement the IComparable interface, ensuring 
- * that they can be sorted and compared effectively.
+ * This file defines the ISortedSetCollection<T, TEnumerator> interface, which represents a collection 
+ * of sorted sets. The interface provides functionality for manipulating and querying the collection, 
+ * including retrieving the count of elements and removing elements by index. Elements in the collection 
+ * are required to implement the IComparable interface, ensuring effective sorting and comparison.
  * 
  * Key Features:
  * - Represents a collection of sorted sets with type constraints on elements.
  * - Provides a property to retrieve the total count of elements in the collection.
  * - Allows dynamic removal of elements by their index.
+ * - Supports enumeration over a specified type of enumerator for the collection.
  */
 
 namespace SetLibrary.Collections;
@@ -21,8 +21,9 @@ namespace SetLibrary.Collections;
 /// <summary>
 /// Represents a collection of sorted sets that can be manipulated and enumerated.
 /// </summary>
-/// <typeparam name="T">The type of elements in the sets, which must implement <see cref="IComparable"/>.</typeparam>
-public interface ISortedSetCollection<T>
+/// <typeparam name="T">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
+/// <typeparam name="TEnumerator">The type of enumerator used to iterate through the collection.</typeparam>
+public interface ISortedSetCollection<T, TEnumerator> : IEnumerable<TEnumerator>
     where T : IComparable<T>
 {
     /// <summary>
@@ -35,4 +36,8 @@ public interface ISortedSetCollection<T>
     /// </summary>
     /// <param name="index">The zero-based index of the element to be removed.</param>
     void RemoveAt(int index);
+    /// <summary>
+    /// Clears the current collection.
+    /// </summary>
+    void Clear();
 } // interface
