@@ -79,10 +79,10 @@ namespace SetsLibrary.Models.SetTree
         /// <summary>
         /// Compares the current instance with another object of the same type.
         /// </summary>
-        /// <param name="obj">The object to compare with the current instance.</param>
+        /// <param name="other">The object to compare with the current instance.</param>
         /// <returns>A signed integer that indicates the relative order of the objects.</returns>
         /// <exception cref="NotImplementedException">This method is not implemented.</exception>
-        public int CompareTo(object? obj)
+        public int CompareTo(ISetTree<T>? other)
         {
             throw new NotImplementedException();
         }
