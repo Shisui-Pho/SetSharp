@@ -62,7 +62,7 @@ namespace SetsLibrary.Models
         public void AddElement(T Element)
         {
             throw new NotImplementedException();
-        }
+        }//AddElement
 
         /// <summary>
         /// Adds a new tree as an element in the current set. If the tree already exists, it will not be added.
@@ -71,7 +71,7 @@ namespace SetsLibrary.Models
         public void AddElement(ISetTree<T> tree)
         {
             throw new NotImplementedException();
-        }
+        }//AddElement
 
         /// <summary>
         /// Adds a new subset to the current set from a string representation of the subset.
@@ -80,7 +80,7 @@ namespace SetsLibrary.Models
         public void AddSubsetAsString(string subset)
         {
             throw new NotImplementedException();
-        }
+        }//AddSubsetAsString
 
         /// <summary>
         /// Clears all elements in the current set.
@@ -88,17 +88,8 @@ namespace SetsLibrary.Models
         public void Clear()
         {
             throw new NotImplementedException();
-        }
+        }//Clear
 
-        /// <summary>
-        /// Checks if the specified element exists in the set.
-        /// </summary>
-        /// <param name="Element">The element to check for.</param>
-        /// <returns>True if the element exists; otherwise, false.</returns>
-        public bool Contains(T Element)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Checks if the specified tree exists in the set.
@@ -108,7 +99,7 @@ namespace SetsLibrary.Models
         public bool Contains(ISetTree<T> tree)
         {
             throw new NotImplementedException();
-        }
+        }//Contains
 
         /// <summary>
         /// Checks if the current set is an element of the specified set.
@@ -118,7 +109,7 @@ namespace SetsLibrary.Models
         public bool IsElementOf(IStructuredSet<T> setB)
         {
             throw new NotImplementedException();
-        }
+        }//IsElementOf
 
         /// <summary>
         /// Determines if the current set is a subset of the specified set.
@@ -129,17 +120,7 @@ namespace SetsLibrary.Models
         public bool IsSubSetOf(IStructuredSet<T> setB, out SetResultType type)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Merges the current set with another set and returns the resulting set.
-        /// </summary>
-        /// <param name="set">The set to merge with.</param>
-        /// <returns>The merged set.</returns>
-        public IStructuredSet<T> MergeWith(IStructuredSet<T> set)
-        {
-            throw new NotImplementedException();
-        }
+        }//IsSubSetOf
 
         /// <summary>
         /// Removes the specified tree from the current set.
@@ -149,7 +130,7 @@ namespace SetsLibrary.Models
         public bool RemoveElement(ISetTree<T> tree)
         {
             throw new NotImplementedException();
-        }
+        }//RemoveElement
 
         /// <summary>
         /// Removes the specified element from the current set.
@@ -159,7 +140,7 @@ namespace SetsLibrary.Models
         public bool RemoveElement(T Element)
         {
             throw new NotImplementedException();
-        }
+        }//RemoveElement
 
         /// <summary>
         /// Removes all elements of the specified set from the current set and returns the resulting set.
@@ -169,6 +150,22 @@ namespace SetsLibrary.Models
         public IStructuredSet<T> Without(IStructuredSet<T> setB)
         {
             throw new NotImplementedException();
-        }
-    }
-}
+        }//Without
+
+        #region Abstract methods
+        /// <summary>
+        /// Merges the current set with another set and returns the resulting set.
+        /// </summary>
+        /// <param name="set">The set to merge with.</param>
+        /// <returns>The merged set.</returns>
+        public abstract IStructuredSet<T> MergeWith(IStructuredSet<T> set);
+
+        /// <summary>
+        /// Checks if the specified element exists in the set.
+        /// </summary>
+        /// <param name="Element">The element to check for.</param>
+        /// <returns>True if the element exists; otherwise, false.</returns>
+        public abstract bool Contains(T Element);
+        #endregion ABSTRACT METHODS
+    }//class
+}//namespace
