@@ -23,7 +23,7 @@ namespace SetsLibrary.Interfaces
 {
     /// <summary>
     /// Represents a tree-based set structure, where elements can be stored in both root and subset collections. 
-    /// It provides methods to manipulate, retrieve, and manage elements and subsets in a sorted set tree.
+    /// This interface provides methods to manipulate, retrieve, and manage elements and subsets in a sorted set tree.
     /// </summary>
     /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/>.</typeparam>
     public interface ISetTree<T> : IComparable<ISetTree<T>>
@@ -38,7 +38,7 @@ namespace SetsLibrary.Interfaces
         string RootElements { get; }
 
         /// <summary>
-        /// Gets the cardinality of the current set.
+        /// Gets the cardinality (size) of the current set, i.e., the total number of elements.
         /// </summary>
         /// <value>
         /// The number of elements in the current set.
@@ -46,12 +46,20 @@ namespace SetsLibrary.Interfaces
         int Cardinality { get; }
 
         /// <summary>
-        /// Gets the number of nested subsets in the root of the current set.
+        /// Gets the count of root elements in the current set.
         /// </summary>
         /// <value>
-        /// The number of subsets contained in the root of the current set.
+        /// The count of root elements in the set.
         /// </value>
-        int NumberOfSubsets { get; }
+        int CountRootElements { get; }
+
+        /// <summary>
+        /// Gets the count of subsets contained within the current set.
+        /// </summary>
+        /// <value>
+        /// The number of nested subsets within the set.
+        /// </value>
+        int CountSubsets { get; }
 
         /// <summary>
         /// Gets the set extraction settings associated with the current set.
@@ -60,14 +68,6 @@ namespace SetsLibrary.Interfaces
         /// The <see cref="SetExtractionConfiguration{T}"/> settings for extracting the set.
         /// </value>
         SetExtractionConfiguration<T> ExtractionSettings { get; }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the elements of the set as subsets.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the subsets of the current set.
-        /// </returns>
-        IEnumerable<ISetTree<T>> GetAllElementsAsSetEnumarator();
 
         /// <summary>
         /// Returns an enumerator that iterates through the subsets of the current set.
@@ -135,15 +135,6 @@ namespace SetsLibrary.Interfaces
         /// The zero-based index of the element within the root, or -1 if the element is not found.
         /// </returns>
         int IndexOf(T element);
-
-        /// <summary>
-        /// Gets the index of the specified element in the set, whether it's in the root or a subset.
-        /// </summary>
-        /// <param name="element">The string representation of the element to search for.</param>
-        /// <returns>
-        /// The zero-based index of the element within the set, or -1 if the element is not found.
-        /// </returns>
-        int IndexOf(string element);
 
         /// <summary>
         /// Gets the index of the specified subset in the nested sets of the current set.

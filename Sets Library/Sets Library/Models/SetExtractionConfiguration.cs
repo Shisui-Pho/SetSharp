@@ -75,6 +75,7 @@ public class SetExtractionConfiguration<T>
         // Check for nulls
         ArgumentNullException.ThrowIfNull(_converter, nameof(_converter));
         Converter = _converter;
+        IsICustomObject = true;
     }//ctor 2
 
     // Methods
