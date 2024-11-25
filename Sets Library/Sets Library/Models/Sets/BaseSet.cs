@@ -53,7 +53,7 @@ namespace SetsLibrary.Models
         /// <summary>
         /// Gets the current settings of the set extractor.
         /// </summary>
-        public SetExtractionSettings<T> Settings => throw new NotImplementedException();
+        public SetExtractionConfiguration<T> Settings => throw new NotImplementedException();
 
         /// <summary>
         /// Adds a new element to the set. If the element already exists, it will not be added.

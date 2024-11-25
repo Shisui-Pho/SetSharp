@@ -54,7 +54,7 @@ namespace SetsLibrary.Models.SetTree
         /// Gets the extraction settings for the set tree.
         /// </summary>
         /// <exception cref="NotImplementedException">This property is not implemented.</exception>
-        public SetExtractionSettings<T> ExtractionSettings => throw new NotImplementedException();
+        public SetExtractionConfiguration<T> ExtractionSettings => throw new NotImplementedException();
 
         /// <summary>
         /// Adds a new element to the set tree.

@@ -42,7 +42,7 @@ namespace SetsLibrary.Interfaces
         /// <summary>
         /// Set extraction settings.
         /// </summary>
-        SetExtractionSettings<T> ExtractionSettings { get; }
+        SetExtractionConfiguration<T> ExtractionSettings { get; }
         /// <summary>
         /// Gets the set representation of an element in the current set.
         /// </summary>
