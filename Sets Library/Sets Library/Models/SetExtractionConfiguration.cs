@@ -6,12 +6,13 @@
  * Description:
  * Defines the SetExtractionConfiguration class, which specifies the configuration
  * for extracting sets, including terminators for fields and rows, and an optional 
- * custom converter for converting string literals into objects.
+ * custom converter for converting string literals into objects. It also ensures that
+ * reserved characters cannot be used as terminators.
  * 
  * Key Features:
  * - Supports configuration with field and row terminators.
  * - Allows integration of a custom object converter implementing ICustomObjectConverter<T>.
- * - Includes validation to ensure terminators are not null and distinct.
+ * - Includes validation to ensure terminators are not null, distinct, and do not contain reserved characters.
  * - Provides a method to convert string records into objects using the provided converter.
  */
 
@@ -21,12 +22,16 @@ using System;
 namespace SetsLibrary.Models;
 
 /// <summary>
-/// Represents the configuration for extracting sets, including terminators and an optional custom converter.
+/// Represents the configuration for extracting sets, including terminators, optional custom converter, 
+/// and validation for reserved characters used in terminators.
 /// </summary>
 /// <typeparam name="T">The type of object that the extracted records will be converted into. This type must implement <see cref="IComparable{T}"/>.</typeparam>
 public class SetExtractionConfiguration<T>
     where T : IComparable<T>
 {
+    // Reserved characters that cannot be used in field or row terminators
+    private const string RESERVED_CHARACTERS = "{}";
+
     /// <summary>
     /// Gets the field terminator used to separate fields in a record.
     /// </summary>
@@ -55,12 +60,12 @@ public class SetExtractionConfiguration<T>
     /// <param name="fieldTerminator">The string used to separate fields in a record.</param>
     /// <param name="rowTerminator">The string used to separate rows in the data.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="fieldTerminator"/> or <paramref name="rowTerminator"/> is null.</exception>
-    /// <exception cref="ArgumentException">Thrown if <paramref name="fieldTerminator"/> is the same as <paramref name="rowTerminator"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="fieldTerminator"/> is the same as <paramref name="rowTerminator"/> or if they contain reserved characters.</exception>
     public SetExtractionConfiguration(string fieldTerminator, string rowTerminator)
     {
         VerifyProperties(fieldTerminator, rowTerminator);
         IsICustomObject = false;
-    }//ctor main
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SetExtractionConfiguration{T}"/> class with field and row terminators and a custom object converter.
@@ -72,21 +77,20 @@ public class SetExtractionConfiguration<T>
     public SetExtractionConfiguration(string fieldTerminator, string rowTerminator, ICustomObjectConverter<T> _converter)
         : this(fieldTerminator, rowTerminator)
     {
-        // Check for nulls
         ArgumentNullException.ThrowIfNull(_converter, nameof(_converter));
         Converter = _converter;
         IsICustomObject = true;
-    }//ctor 2
+    }
 
     // Methods
 
     /// <summary>
-    /// Verifies that the field and row terminators are not null and not the same.
+    /// Verifies that the field and row terminators are not null, not the same, and do not contain reserved characters.
     /// </summary>
     /// <param name="_fieldTerminator">The field terminator to check.</param>
     /// <param name="_rowTerminator">The row terminator to check.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="_fieldTerminator"/> or <paramref name="_rowTerminator"/> is null.</exception>
-    /// <exception cref="ArgumentException">Thrown if <paramref name="_fieldTerminator"/> is the same as <paramref name="_rowTerminator"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="_fieldTerminator"/> is the same as <paramref name="_rowTerminator"/> or if they contain reserved characters.</exception>
     private void VerifyProperties(string _fieldTerminator, string _rowTerminator)
     {
         // Check if they are not null
@@ -97,10 +101,20 @@ public class SetExtractionConfiguration<T>
         if (_fieldTerminator == _rowTerminator)
             throw new ArgumentException("Terminators cannot be the same.");
 
+        // Check if terminators contain any reserved characters
+        for (int i = 0; i < RESERVED_CHARACTERS.Length; i++)
+        {
+            if (_fieldTerminator.Contains(RESERVED_CHARACTERS[i]))
+                throw new ArgumentException("Cannot use reserved characters.", nameof(_fieldTerminator));
+
+            if (_rowTerminator.Contains(RESERVED_CHARACTERS[i]))
+                throw new ArgumentException("Cannot use reserved characters.", nameof(_rowTerminator));
+        }
+
         // Assign terminators
         FieldTerminator = _fieldTerminator;
         RowTerminator = _rowTerminator;
-    }//VerifyProperties
+    }
 
     /// <summary>
     /// Converts a record string to an object of type <typeparamref name="T"/> using the specified converter.
@@ -110,11 +124,7 @@ public class SetExtractionConfiguration<T>
     /// <exception cref="ArgumentNullException">Thrown if the <see cref="Converter"/> is null.</exception>
     public T ToObject(string record)
     {
-        // Check for nulls
         ArgumentNullException.ThrowIfNull(this.Converter, nameof(this.Converter));
-
-        // Convert
         return this.Converter.ToObject(record, this);
-    }//ToObject
-}//class
-//namespace
+    }
+}
