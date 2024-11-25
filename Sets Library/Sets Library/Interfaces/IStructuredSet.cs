@@ -45,7 +45,7 @@ namespace SetsLibrary.Interfaces
         /// <summary>
         /// Gets the current settings of the set extractor.
         /// </summary>
-        SetExtractionSettings<T> Settings { get; }
+        SetExtractionConfiguration<T> Settings { get; }
         /// <summary>
         /// Adds a new element in the current set. If the element already exists it will not be added.
         /// </summary>
