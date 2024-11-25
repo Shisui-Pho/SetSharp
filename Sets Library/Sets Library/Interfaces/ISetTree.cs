@@ -17,9 +17,10 @@
  */
 
 using SetsLibrary.Models;
+using SetsLibrary.Models.SetTree;
 namespace SetsLibrary.Interfaces
 {
-    public interface ISetTree<T> : IComparable
+    public interface ISetTree<T> : IComparable<ISetTree<T>>
         where T : IComparable<T>
     {
         /// <summary>
