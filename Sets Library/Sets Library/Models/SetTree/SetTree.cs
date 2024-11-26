@@ -11,8 +11,8 @@ namespace SetsLibrary.Models.SetTree;
 public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 {
     #region Data-fields
-    private readonly ISortedElements<T> _elements;
-    private readonly ISortedSubSets<T> _subSets;
+    protected internal readonly ISortedElements<T> _elements;
+    protected internal readonly ISortedSubSets<T> _subSets;
     #endregion Data-fields
 
     #region Properties
