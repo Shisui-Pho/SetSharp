@@ -48,6 +48,14 @@ namespace SetsLibrary.Utility
             // Base case: no subsets, return the root set elements as a tree
             if (!expression.Contains("}") && !expression.Contains("{"))
             {
+                //Remove last trailing seperators
+                if (expression.EndsWith(extractionConfig.RowTerminator))
+                    expression = expression.Remove(expression.Length - 1);
+
+                if (expression.StartsWith(extractionConfig.RowTerminator))
+                    expression = expression.Remove(expression.Length - 1);
+
+
                 IEnumerable<T> rootElements = SortAndRemoveDuplicates(expression, extractionConfig);
                 return new SetTree<T>(extractionConfig, rootElements);
             }
@@ -107,7 +115,7 @@ namespace SetsLibrary.Utility
         public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration<T> extractionConfig)
         {
             //Split elements based on the row terminator
-            string[] elements = rootElements.Split(extractionConfig.RowTerminator);
+            string[] elements = rootElements.Split(extractionConfig.RowTerminator, StringSplitOptions.RemoveEmptyEntries);
 
             //Use a HashSet to ensure uniqueness of elements
             HashSet<T> uniqueElements = new HashSet<T>();
@@ -126,8 +134,17 @@ namespace SetsLibrary.Utility
                     }
                     else
                     {
+                        if ((element == "" || element == " ") && typeof(T) != typeof(string))
+                            continue;//Ignore element
+
+                        string _elem = element;
+
+                        //Trim sting to remove white spaces
+                        if (typeof(T) != typeof(string))
+                            _elem = _elem.Trim();
+
                         //Convert to the specified type T
-                        T item = (T)Convert.ChangeType(element, typeof(T));
+                        T item = (T)Convert.ChangeType(_elem, typeof(T));
                         uniqueElements.Add(item);
                     }
                 }
