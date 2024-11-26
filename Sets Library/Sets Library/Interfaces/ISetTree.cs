@@ -38,12 +38,12 @@ namespace SetsLibrary.Interfaces
         string RootElements { get; }
 
         /// <summary>
-        /// Gets the cardinality (size) of the current set, i.e., the total number of elements.
+        /// Gets the size of the current set, i.e., the total number of elements.
         /// </summary>
         /// <value>
         /// The number of elements in the current set.
         /// </value>
-        int Cardinality { get; }
+        int Count { get; }
 
         /// <summary>
         /// Gets the count of root elements in the current set.

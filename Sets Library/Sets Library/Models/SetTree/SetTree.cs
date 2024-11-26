@@ -32,7 +32,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// <summary>
     /// Gets the total number of elements and subsets in the tree.
     /// </summary>
-    public int Cardinality => _elements.Count + _subSets.Count;
+    public int Count => _elements.Count + _subSets.Count;
 
     /// <summary>
     /// Gets the configuration used for extracting elements from the set tree.
@@ -263,10 +263,10 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //If they are the same       : 0
 
         //First check cardinality
-        if (this.Cardinality > other.Cardinality)
+        if (this.Count > other.Count)
             return 1;//other comes before this
 
-        if (this.Cardinality < other.Cardinality)
+        if (this.Count < other.Count)
             return -1;//this comes before other
 
         //If cardinalities are the same it can mean two things
