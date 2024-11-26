@@ -36,13 +36,6 @@ namespace SetsLibrary.Interfaces
         /// </summary>
         int Cardinality { get; }
         /// <summary>
-        /// An indexer that returns a "Set" of an element inside the SetTree.
-        ///     If the the element is in the root, it will be returned in a "Set" format.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns>A set of ISetTree<typeparamref name="T"/></returns>
-        ISetTree<T> this[int index] { get; }
-        /// <summary>
         /// Gets the current settings of the set extractor.
         /// </summary>
         SetExtractionConfiguration<T> Settings { get; }

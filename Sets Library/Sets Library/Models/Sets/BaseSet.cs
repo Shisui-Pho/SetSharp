@@ -28,32 +28,24 @@ namespace SetsLibrary.Models
         where T : IComparable<T>
     {
         /// <summary>
-        /// Gets the set tree element at the specified index.
-        /// </summary>
-        /// <param name="index">The zero-based index of the element.</param>
-        /// <returns>The <see cref="ISetTree{T}"/> at the specified index.</returns>
-        /// <exception cref="NotImplementedException">This method is not implemented.</exception>
-        public ISetTree<T> this[int index] => throw new NotImplementedException();
-
-        /// <summary>
         /// Gets the evaluated string representation of the set, with duplicates removed.
         /// </summary>
-        public string ElementString => throw new NotImplementedException();
+        public string ElementString {get; private set; }
 
         /// <summary>
         /// Gets the original string representation of the set.
         /// </summary>
-        public string OriginalString => throw new NotImplementedException();
+        public string OriginalString {get; private set; }
 
         /// <summary>
         /// Gets the cardinality (number of elements) of the evaluated set.
         /// </summary>
-        public int Cardinality => throw new NotImplementedException();
+        public int Cardinality {get; private set; }
 
         /// <summary>
         /// Gets the current settings of the set extractor.
         /// </summary>
-        public SetExtractionConfiguration<T> Settings => throw new NotImplementedException();
+        public SetExtractionConfiguration<T> Settings {get; private set; }
 
         /// <summary>
         /// Adds a new element to the set. If the element already exists, it will not be added.
