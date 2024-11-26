@@ -14,107 +14,137 @@
  * - Provides functionality for evaluating set relationships, such as subset checks.
  * - Supports nested subsets and element retrieval through indexers.
  * - Includes cardinality and extraction settings for structured sets.
+ * 
+ * The generic type parameter T must implement the IComparable<T> interface to allow for comparison
+ * operations on elements within the structured set.
  */
 
 using SetsLibrary.Models;
+
 namespace SetsLibrary.Interfaces
 {
-    public interface IStructuredSet<T>
-        where T : IComparable<T>
+    /// <summary>
+    /// Interface for managing structured sets that support operations on both elements 
+    /// and nested subsets. The interface allows for set manipulation, relationship checks,
+    /// and extraction settings.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the set, which must implement IComparable&lt;T&gt;.</typeparam>
+    public interface IStructuredSet<T> where T : IComparable<T>
     {
         /// <summary>
-        /// Get the evaluated string representation of the set.
-        /// Note : Duplicates will be removed
+        /// Gets the original string expression representing the set.
         /// </summary>
-        string ElementString { get; }
+        string OriginalExpression { get; }
+
         /// <summary>
-        /// Gets the original set string
-        /// </summary>
-        string OriginalString { get; }
-        /// <summary>
-        /// Gets the Cardinality of the evaluated set.
+        /// Gets the cardinality (number of elements) of the evaluated set.
         /// </summary>
         int Cardinality { get; }
+
         /// <summary>
-        /// Gets the current settings of the set extractor.
+        /// Gets the current settings for extracting elements from the set.
         /// </summary>
         SetExtractionConfiguration<T> ExtractionConfiguration { get; }
+
         /// <summary>
-        /// Adds a new element in the current set. If the element already exists it will not be added.
+        /// Adds an element to the set. If the element already exists, it will not be added.
         /// </summary>
-        /// <param name="Element">Element to be added</param>
+        /// <param name="Element">The element to be added to the set.</param>
         void AddElement(T Element);
+
         /// <summary>
-        /// Adds a new tree as an element in the current set. If the element tree already exists it will not be added.
-        /// This element could be a set or just an single element and will be on the first nesting level.
+        /// Adds a new tree (set or element) as an element to the set. If the tree already exists, it will not be added.
+        /// This element will be at the first nesting level.
         /// </summary>
-        /// <param name="tree"></param>
+        /// <param name="tree">The tree (set or element) to add to the set.</param>
         void AddElement(ISetTree<T> tree);
+
         /// <summary>
-        /// Adds a new subset in the current string by exctracting the tree.
+        /// Adds a new subset to the set, represented as a string. This string will be extracted and treated as a subset.
         /// </summary>
-        /// <param name="subset">A string representation of the subset.</param>
+        /// <param name="subset">A string representation of the subset to be added.</param>
         void AddSubsetAsString(string subset);
+
         /// <summary>
-        /// Adds a new tree as an element in the current set. If the tree already exists it will not be added.
-        /// The tree will be on the first nesting level of the current set.
+        /// Removes an element (set or individual element) from the first nesting level of the set.
+        /// If the tree does not exist, no action is taken.
         /// </summary>
-        /// <param name="tree">The tree to be removed</param>
+        /// <param name="tree">The tree (set or element) to remove from the set.</param>
+        /// <returns>True if the element was found and removed, otherwise false.</returns>
         bool RemoveElement(ISetTree<T> tree);
+
         /// <summary>
-        /// Adds a set as a subset of the current set. This set will be an element on the first nesting level of the current set.
+        /// Merges the current set with another set, adding elements from the other set at the first nesting level.
         /// </summary>
-        /// <param name="set"></param>
+        /// <param name="set">The set to merge with the current set.</param>
+        /// <returns>A new set containing elements from both sets.</returns>
         IStructuredSet<T> MergeWith(IStructuredSet<T> set);
+
         /// <summary>
-        /// Removes all elements of SetB that are in setA and return the resulting set.
+        /// Removes all elements from the current set that are present in another set.
         /// </summary>
-        /// <param name="setB"></param>
-        /// <returns>A new setA without elements in setB.</returns>
+        /// <param name="setB">The set whose elements should be removed from the current set.</param>
+        /// <returns>A new set without elements found in setB.</returns>
         IStructuredSet<T> Without(IStructuredSet<T> setB);
+
         /// <summary>
-        /// Removes an element in the current set. This element could be a set or just an single element.
-        /// This element must be on the first nesting level.
+        /// Removes an element from the current set. The element must be at the first nesting level.
         /// </summary>
-        /// <param name="Element">The element tree to be removed</param>
-        /// <returns>Returns a bool indicating if the element was found and removed or not</returns>
+        /// <param name="Element">The element to remove.</param>
+        /// <returns>True if the element was found and removed, otherwise false.</returns>
         bool RemoveElement(T Element);
+
         /// <summary>
-        /// Removes an element in the current set. This element could be a set or just an single element.
-        /// This element must be on the first nesting level.
+        /// Checks whether an element exists in the set. The element must be at the first nesting level.
         /// </summary>
-        /// <param name="Element">The element to be search</param>
-        /// <returns>Returns a bool indicating if the element was found and removed or not</returns>
+        /// <param name="Element">The element to check for existence in the set.</param>
+        /// <returns>True if the element exists in the set, otherwise false.</returns>
         bool Contains(T Element);
+
         /// <summary>
-        /// Checks if the element exists in the current set. This element will be on the first nesting level.
+        /// Checks whether a specific tree (set or element) exists in the current set at the first nesting level.
         /// </summary>
-        /// <param name="tree">The element to be checked</param>
-        /// <returns>Returns true if the it is in the set</returns>
+        /// <param name="tree">The tree (set or element) to check for.</param>
+        /// <returns>True if the tree exists in the set, otherwise false.</returns>
         bool Contains(ISetTree<T> tree);
+
         /// <summary>
-        /// Checks if the given set is a subset of the current set. If they have the same cardinality and all elements in the set are in setB. 
-        /// Then the setType will be Proper set &amp; same set otherwise it will be a Proper set.
+        /// Checks if the current set is a subset of another set.
+        /// The method also identifies the relationship type (Proper Set, Same Set, etc.) between the sets.
         /// </summary>
-        /// <param name="setB">Set that is to contain the current set.</param>
-        /// <param name="type">The set type between the current set and setB</param>
-        /// <returns>A boolean to indeicate if a set is a subset or not.</returns>
+        /// <param name="setB">The set to check for subset inclusion.</param>
+        /// <param name="type">Outputs the set relationship type between the current set and setB.</param>
+        /// <returns>True if the current set is a subset of setB, otherwise false.</returns>
         bool IsSubSetOf(IStructuredSet<T> setB, out SetResultType type);
+
         /// <summary>
-        /// 
+        /// Checks if the current set is an element of another set.
         /// </summary>
-        /// <param name="setB"></param>
-        /// <returns></returns>
+        /// <param name="setB">The set to check for element inclusion.</param>
+        /// <returns>True if the current set is an element of setB, otherwise false.</returns>
         bool IsElementOf(IStructuredSet<T> setB);
+
         /// <summary>
-        /// Clears the entire set tree.
+        /// Clears all elements and subsets from the set, resetting it to an empty state.
         /// </summary>
         void Clear();
+
         /// <summary>
-        /// Gets the element in the current set based on an index. The element can be in the root or nested in a subset.
+        /// Builds and returns a string representation of the structured set.
         /// </summary>
-        /// <param name="index">The index of the element.</param>
-        /// <returns>An element struct which contains the element <typeparamref name="T"/> and position on the set.</returns>
-        //Element<T> GetElementByIndex(int index);
-    }//interface : IStructuredSet
-}//class
+        /// <returns>A string representation of the set.</returns>
+        string BuildStringRepresentation();
+
+        /// <summary>
+        /// Enumerates and returns all root elements in the current set.
+        /// </summary>
+        /// <returns>An enumerable collection of root elements in the set.</returns>
+        IEnumerable<T> EnumerateRootElements();
+
+        /// <summary>
+        /// Enumerates and returns all subsets in the current set.
+        /// </summary>
+        /// <returns>An enumerable collection of subsets in the set.</returns>
+        IEnumerable<ISetTree<T>> EnumerateSubsets();
+    } // interface : IStructuredSet
+} // namespace SetsLibrary.Interfaces
