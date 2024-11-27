@@ -166,7 +166,7 @@ namespace SetLibrary.Collections
         {
             //Return the struct of the set
             for (int i = 0; i < _count_sets; i++)
-                yield return new Set(_setNames[i], _sets[i].ElementString, _sets[i].Cardinality);
+                yield return new Set(_setNames[i], _sets[i].ToString(), _sets[i].Cardinality);
         }//
         #endregion Enumeration
 
@@ -214,7 +214,7 @@ namespace SetLibrary.Collections
         {
             if (index < 0 || index >= _count_sets)
                 throw new IndexOutOfRangeException();
-            var set = new Set(_setNames[index], _sets[index].ElementString, _sets[index].Cardinality);
+            var set = new Set(_setNames[index], _sets[index].ToString(), _sets[index].Cardinality);
             return set;
         }//GetSetByIndex
         #endregion SetContainment and Finding
