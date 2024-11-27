@@ -52,19 +52,21 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 
     #region Constructors
 
+    internal SetTree()
+    {
+        //Create new instances of collection
+        this._elements = new SortedElements<T>();
+        this._subSets = new SortedSubSets<T>();
+    }//ctor default
     /// <summary>
     /// Initializes a new instance of the <see cref="SetTree{T}"/> class with the specified extraction settings.
     /// </summary>
     /// <param name="extractionSettings">The settings used for extracting elements from the set tree.</param>
     public SetTree(SetExtractionConfiguration<T> extractionSettings)
+        : this()
     {
         //Check if settings are null
         ArgumentNullException.ThrowIfNull(extractionSettings, nameof(extractionSettings));
-
-        //Create new instances of collection
-        this._elements = new SortedElements<T>();
-        this._subSets = new SortedSubSets<T>();
-
         this.ExtractionSettings = extractionSettings;
     }
 
