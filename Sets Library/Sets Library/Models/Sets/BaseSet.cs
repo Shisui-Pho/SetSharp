@@ -17,6 +17,10 @@
  */
 
 using SetsLibrary.Interfaces;
+using SetsLibrary.Models.SetTree;
+using SetsLibrary.Utility;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 namespace SetsLibrary.Models
 {
@@ -27,33 +31,103 @@ namespace SetsLibrary.Models
     public abstract class BaseSet<T> : IStructuredSet<T>
         where T : IComparable<T>
     {
-        /// <summary>
-        /// Gets the evaluated string representation of the set, with duplicates removed.
-        /// </summary>
-        public string ElementString {get; private set; }
+        //Data fields
+        private readonly SetTreeWrapperWithIndexers _treeWrapper;
 
+        #region Embeded class
+        private class SetTreeWrapperWithIndexers : SetTree<T>
+        {
+            public T GetRootElementByIndex(int index)
+            {
+                if(index >= base._elements.Count ||  index < 0)
+                    throw new ArgumentOutOfRangeException("index");
+
+                return base._elements[index];
+            }//GetRootElementByIndex
+            public ISetTree<T> GetSubsetByIndex(int index)
+            {
+                if (index >= base._subSets.Count || index < 0)
+                    throw new ArgumentOutOfRangeException("index");
+
+                return _subSets[index];
+            }//GetSubsetByIndex
+            public void Clear()
+            {
+                base._elements.Clear();
+                base._subSets.Clear();
+            }//Clear
+        }//class
+
+
+
+        #endregion Embeded class
+
+        #region Properties
         /// <summary>
         /// Gets the original string representation of the set.
         /// </summary>
-        public string OriginalString {get; private set; }
+        public string OriginalExpression {get; private set; }
 
         /// <summary>
         /// Gets the cardinality (number of elements) of the evaluated set.
         /// </summary>
-        public int Cardinality {get; private set; }
+        public int Cardinality => _treeWrapper.Count;
 
         /// <summary>
         /// Gets the current settings of the set extractor.
         /// </summary>
-        public SetExtractionConfiguration<T> Settings {get; private set; }
+        public SetExtractionConfiguration<T> ExtractionConfiguration {get; private set; }
+        #endregion Properties
 
+        #region Constructors
+        public BaseSet(SetExtractionConfiguration<T> extractionConfiguration)
+        {
+            //verify if configurations are not null
+            ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
+            
+            //set the configurations
+            this.ExtractionConfiguration = extractionConfiguration;
+        }//ctor default
+        public BaseSet(string expression, SetExtractionConfiguration<T> config)
+            : this(config)
+        {
+            //Extract tree
+            _treeWrapper = (SetTreeWrapperWithIndexers)Extractions(expression);
+
+            //Asign properties
+            OriginalExpression = expression;
+        }//ctor main
+
+        private ISetTree<T> Extractions(string expression)
+        {
+            //Check if string is null or empty or a whitespace
+            ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
+            ArgumentException.ThrowIfNullOrEmpty(expression, nameof(expression));
+
+            //Evaluate braces
+            if (!BraceEvaluator.AreBracesCorrect(expression))
+            {
+                //If braaces missmatch
+                throw new ArgumentException("Braces of the expression are not matching");
+            }
+
+            //Extract the set tree
+            return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
+        }//Extractions
+        #endregion Constructors
+
+        #region Implemented Methods
         /// <summary>
         /// Adds a new element to the set. If the element already exists, it will not be added.
         /// </summary>
-        /// <param name="Element">The element to be added.</param>
-        public void AddElement(T Element)
+        /// <param name="element">The element to be added.</param>
+        public void AddElement(T element)
         {
-            throw new NotImplementedException();
+            //Check if element is null or not
+            ArgumentNullException.ThrowIfNull(element, nameof(element));
+
+            //Add element to the tree
+            _treeWrapper.AddElement(element);
         }//AddElement
 
         /// <summary>
@@ -62,7 +136,11 @@ namespace SetsLibrary.Models
         /// <param name="tree">The tree to be added.</param>
         public void AddElement(ISetTree<T> tree)
         {
-            throw new NotImplementedException();
+            //Check for nulls
+            ArgumentNullException.ThrowIfNull(tree,nameof(tree));
+
+            //Add to the tree
+            _treeWrapper.AddSubSetTree(tree);
         }//AddElement
 
         /// <summary>
@@ -71,7 +149,14 @@ namespace SetsLibrary.Models
         /// <param name="subset">The string representation of the subset.</param>
         public void AddSubsetAsString(string subset)
         {
-            throw new NotImplementedException();
+            //Check if null
+            ArgumentNullException.ThrowIfNull(subset, nameof(subset));
+
+            //Extract the tree
+            var tree = Extractions(subset);
+
+            //Add the tree
+            this.AddElement(tree);
         }//AddSubsetAsString
 
         /// <summary>
@@ -79,9 +164,21 @@ namespace SetsLibrary.Models
         /// </summary>
         public void Clear()
         {
-            throw new NotImplementedException();
+            _treeWrapper.Clear();
         }//Clear
 
+        /// <summary>
+        /// Checks if the specified element exists in the set.
+        /// </summary>
+        /// <param name="element">The element to check for.</param>
+        /// <returns>True if the element exists; otherwise, false.</returns>
+        public bool Contains(T element)
+        {
+            //Check for nullss
+            ArgumentNullException.ThrowIfNull(element, nameof(element));
+
+            return _treeWrapper.IndexOf(element) >= 0;
+        }//Contains
 
         /// <summary>
         /// Checks if the specified tree exists in the set.
@@ -90,7 +187,10 @@ namespace SetsLibrary.Models
         /// <returns>True if the tree exists; otherwise, false.</returns>
         public bool Contains(ISetTree<T> tree)
         {
-            throw new NotImplementedException();
+            //Check for nullss
+            ArgumentNullException.ThrowIfNull(tree, nameof(tree));
+
+            return _treeWrapper.IndexOf(tree) >= 0;
         }//Contains
 
         /// <summary>
@@ -100,7 +200,10 @@ namespace SetsLibrary.Models
         /// <returns>True if the current set is an element of setB; otherwise, false.</returns>
         public bool IsElementOf(IStructuredSet<T> setB)
         {
-            throw new NotImplementedException();
+            //Check for null
+            ArgumentNullException.ThrowIfNull(setB, nameof(setB));
+
+            return setB.Contains(this._treeWrapper);
         }//IsElementOf
 
         /// <summary>
@@ -111,8 +214,91 @@ namespace SetsLibrary.Models
         /// <returns>True if the current set is a subset; otherwise, false.</returns>
         public bool IsSubSetOf(IStructuredSet<T> setB, out SetResultType type)
         {
-            throw new NotImplementedException();
+            type = SetResultType.NotASubSet;
+
+            //First check cardinalities
+            if (this.Cardinality > setB.Cardinality)
+                return false;
+
+            if(IsSameSet(setB))
+            {
+                //Subset and a properset
+                type = SetResultType.Same_Set & SetResultType.SubSet;
+                return false;
+            }//end if
+
+            //Here it's either they are the same or 
+            if (!IsSubSetOf(setB))
+                return false;
+
+            type = SetResultType.ProperSet;
+            return true;
         }//IsSubSetOf
+        private bool IsSubSetOf(IStructuredSet<T> setB)
+        {
+            //Check for nulls
+            ArgumentNullException.ThrowIfNull(setB, nameof(setB));
+
+            //First loop through the root elements
+            var setBRootElements = setB.EnumerateRootElements().ToHashSet();
+
+            bool areRootElementsContained = Contains(setBRootElements, 
+                                            _treeWrapper.CountRootElements, 
+                                            _treeWrapper.GetRootElementByIndex);
+
+            //Check if all current root elements are contained in setB
+            if (!areRootElementsContained)
+                return false;
+
+            //Now check for the Subsets
+            var setBSubsets = setB.EnumerateSubsets().ToHashSet();
+
+            return Contains(setBSubsets,
+                            _treeWrapper.CountSubsets,
+                            _treeWrapper.GetSubsetByIndex); ;
+        }//IsProperSet
+        private bool Contains<TElement>(HashSet<TElement> elements, int count, Func<int, TElement> funcElement)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (!elements.Contains(funcElement(i)))
+                    return false;
+            }
+
+            return true;
+        }//Contains
+        private bool IsSameSet(IStructuredSet<T> setB)
+        {
+            ArgumentNullException.ThrowIfNull(setB, nameof (setB));
+
+            //Check cardinalities
+            if (this.Cardinality != setB.Cardinality)
+                return false;
+            
+            BaseSet<T>? baseSetB = setB as BaseSet<T>;
+
+            if(baseSetB != null)
+                return baseSetB._treeWrapper.CompareTo(this._treeWrapper) == 0; //check if same set
+
+            return CompareSetsNotBaseSet(setB);
+        }//IsSameSet
+        private bool CompareSetsNotBaseSet(IStructuredSet<T> setB)
+        {
+            //Compare the root elements
+            bool areRootElementsEqual = setB.EnumerateRootElements().SequenceEqual(EnumerateRootElements());
+
+            if(!areRootElementsEqual)
+                return false;
+
+            //Compare the subsets
+            bool areSubSetsEqual = setB.EnumerateSubsets().SequenceEqual(EnumerateSubsets());
+
+            if(!areSubSetsEqual) return false;
+
+            //They are the same
+            return true;
+        }//CompareSetsNotBaseSet
+
 
         /// <summary>
         /// Removes the specified tree from the current set.
@@ -121,19 +307,82 @@ namespace SetsLibrary.Models
         /// <returns>True if the tree was found and removed; otherwise, false.</returns>
         public bool RemoveElement(ISetTree<T> tree)
         {
-            throw new NotImplementedException();
+            //Check for null
+            ArgumentNullException.ThrowIfNull (tree, nameof (tree));
+
+            //Remove element
+            return _treeWrapper.RemoveElement(tree);
         }//RemoveElement
 
         /// <summary>
         /// Removes the specified element from the current set.
         /// </summary>
-        /// <param name="Element">The element to remove.</param>
+        /// <param name="element">The element to remove.</param>
         /// <returns>True if the element was found and removed; otherwise, false.</returns>
-        public bool RemoveElement(T Element)
+        public bool RemoveElement(T element)
         {
-            throw new NotImplementedException();
+            //Check for null
+            ArgumentNullException.ThrowIfNull(element, nameof(element));
+
+            //Remove element
+            return _treeWrapper.RemoveElement(element);
         }//RemoveElement
 
+        /// <summary>
+        /// Builds and returns a string representation of the structured set.
+        /// This method has not been implemented yet, and calling it will throw a <see cref="NotImplementedException"/>.
+        /// </summary>
+        /// <returns>A string representation of the set.</returns>
+        public string BuildStringRepresentation()
+        {
+            return _treeWrapper.ToString();
+        }//BuildStringRepresentation
+
+        /// <summary>
+        /// Enumerates and returns all root elements in the current set.
+        /// This method has not been implemented yet, and calling it will throw a <see cref="NotImplementedException"/>.
+        /// </summary>
+        /// <returns>An enumerable collection of root elements in the set.</returns>
+        public IEnumerable<T> EnumerateRootElements()
+        {
+            return _treeWrapper.GetRootElementsEnumarator();
+        }//EnumerateRootElements
+
+        /// <summary>
+        /// Enumerates and returns all subsets in the current set.
+        /// This method has not been implemented yet, and calling it will throw a <see cref="NotImplementedException"/>.
+        /// </summary>
+        /// <returns>An enumerable collection of subsets in the set.</returns>
+        public IEnumerable<ISetTree<T>> EnumerateSubsets()
+        {
+            return _treeWrapper.GetSubsetsEnumarator();
+        }//EnumerateSubsets
+
+        /// <summary>
+        /// Merges the current set with another set and returns the resulting set.
+        /// </summary>
+        /// <param name="set">The set to merge with.</param>
+        /// <returns>The merged set.</returns>
+        public IStructuredSet<T> MergeWith(IStructuredSet<T> set)
+        {
+            //Check for argument null exceptions
+            ArgumentNullException.ThrowIfNull(set,  nameof (set));
+
+            //Check if they have elements
+            if (this.Cardinality <= 0)
+                return set;
+
+            if (set.Cardinality <= 0)
+                return this;
+
+            //Get the string representation of the sets
+            string setA = _treeWrapper.ToString();
+            string? setB = set.ToString();
+
+            //Merg strings
+            string _set = setA.Remove(setA.Length - 1) + "," + setB?.Remove(0, 1);
+            return BuildNewSet(_set);
+        }//MergeWith
         /// <summary>
         /// Removes all elements of the specified set from the current set and returns the resulting set.
         /// </summary>
@@ -141,23 +390,63 @@ namespace SetsLibrary.Models
         /// <returns>The resulting set after removal.</returns>
         public IStructuredSet<T> Without(IStructuredSet<T> setB)
         {
-            throw new NotImplementedException();
+            //Check for nulls
+            ArgumentNullException.ThrowIfNull(setB, nameof(setB));
+
+            //Check if the first one has elements
+            if (this.Cardinality <= 0)
+                return setB;
+
+            if (setB.Cardinality <= 0)
+                return this;
+
+            //Start with the root elemets
+
+            var newSet = BuildNewSet();
+            //Loop through the root elements and subsets of the current instance
+            //-If the new set has the same elements as "setB" then all remaining elements
+            //-the current instace need to be added in the newSet
+            for (int i = 0;i < _treeWrapper.CountRootElements; i++)
+            {
+                //Check if setB contains the current element in it set
+                var elem = _treeWrapper.GetRootElementByIndex(i);
+                if (newSet.Cardinality < setB.Cardinality)
+                {
+                    if (!setB.Contains(elem))
+                        newSet.AddElement(elem);
+                }//end if
+                else
+                {
+                    //Just add
+                    newSet.AddElement(elem);
+                }
+            }//end for
+
+            //Loop througth the subsets of this instance
+            for (int i = 0; i < _treeWrapper.CountSubsets; i++)
+            {
+                //Check if setB contains the current subste in it set
+                var sub = _treeWrapper.GetSubsetByIndex(i);
+                if(newSet.Cardinality < setB.Cardinality)
+                {
+                    if (!setB.Contains(sub))
+                        newSet.AddElement(sub);
+                }
+                else
+                {
+                    //Just add the element
+                    newSet.AddElement(sub);
+                }
+            }//end for 
+
+            //return the new set
+            return newSet;
         }//Without
+        #endregion Implemented methods
 
         #region Abstract methods
-        /// <summary>
-        /// Merges the current set with another set and returns the resulting set.
-        /// </summary>
-        /// <param name="set">The set to merge with.</param>
-        /// <returns>The merged set.</returns>
-        public abstract IStructuredSet<T> MergeWith(IStructuredSet<T> set);
-
-        /// <summary>
-        /// Checks if the specified element exists in the set.
-        /// </summary>
-        /// <param name="Element">The element to check for.</param>
-        /// <returns>True if the element exists; otherwise, false.</returns>
-        public abstract bool Contains(T Element);
+        protected abstract IStructuredSet<T> BuildNewSet(string setString); 
+        protected abstract IStructuredSet<T> BuildNewSet(); 
         #endregion ABSTRACT METHODS
     }//class
 }//namespace
