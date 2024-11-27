@@ -30,23 +30,27 @@ namespace SetsLibrary.Models.Sets;
 internal class CustomObjectSet<T> : BaseSet<T>
     where T : IComparable<T>, ICustomObjectConverter<T>
 {
-    /// <summary>
-    /// Checks if the specified element exists in the set.
-    /// </summary>
-    /// <param name="Element">The element to check for presence in the set.</param>
-    /// <returns>True if the element is found; otherwise, false.</returns>
-    public override bool Contains(T Element)
+    #region Constructers
+    public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration) 
+        : base(extractionConfiguration)
     {
-        throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// Merges the current set with another set, returning a new set that contains elements from both.
-    /// </summary>
-    /// <param name="set">The set to merge with.</param>
-    /// <returns>A new <see cref="IStructuredSet{T}"/> containing elements from both sets.</returns>
-    public override IStructuredSet<T> MergeWith(IStructuredSet<T> set)
+    public CustomObjectSet(string expression, SetExtractionConfiguration<T> config) 
+        : base(expression, config)
     {
-        throw new NotImplementedException();
     }
+    #endregion Constructors
+
+    #region Ovverides
+    protected override IStructuredSet<T> BuildNewSet(string setString)
+    {
+        return new CustomObjectSet<T>(setString,this.ExtractionConfiguration);
+    }//BuildNewSet
+
+    protected override IStructuredSet<T> BuildNewSet()
+    {
+        return new CustomObjectSet<T>(this.ExtractionConfiguration);
+    }//BuildNewSet
+    #endregion Ovverides
 } // class

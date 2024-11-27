@@ -23,28 +23,27 @@ namespace SetsLibrary.Models.Sets
     /// <summary>
     /// Represents a typed set that can contain elements of a specified type T.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/>.</typeparam>
+    /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/> and <see cref="IConvertible"/>.</typeparam>
     public class TypedSet<T> : BaseSet<T>
-        where T : IComparable<T>
+        where T : IComparable<T>, IConvertible
     {
-        /// <summary>
-        /// Checks if the specified element exists in the set.
-        /// </summary>
-        /// <param name="Element">The element to check for presence in the set.</param>
-        /// <returns>True if the element is found; otherwise, false.</returns>
-        public override bool Contains(T Element)
+        #region Constructors
+        public TypedSet(SetExtractionConfiguration<T> extractionConfiguration) : base(extractionConfiguration)
         {
-            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Merges the current set with another set, returning a new set that contains elements from both.
-        /// </summary>
-        /// <param name="set">The set to merge with.</param>
-        /// <returns>A new <see cref="IStructuredSet{T}"/> containing elements from both sets.</returns>
-        public override IStructuredSet<T> MergeWith(IStructuredSet<T> set)
+        public TypedSet(string expression, SetExtractionConfiguration<T> config) : base(expression, config)
         {
-            throw new NotImplementedException();
         }
+        #endregion Constructors
+        protected override IStructuredSet<T> BuildNewSet(string setString)
+        {
+            return new TypedSet<T>(setString, this.ExtractionConfiguration);
+        }//BuildNewSet
+
+        protected override IStructuredSet<T> BuildNewSet()
+        {
+            return new TypedSet<T>(this.ExtractionConfiguration);
+        }//BuildNewSet
     } // class
 } // namespace
