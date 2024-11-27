@@ -23,28 +23,52 @@ namespace SetsLibrary.Models.Sets
     /// <summary>
     /// Represents a typed set that can contain elements of a specified type T.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/>.</typeparam>
+    /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/> and <see cref="IConvertible"/>.</typeparam>
     public class TypedSet<T> : BaseSet<T>
-        where T : IComparable<T>
+        where T : IComparable<T>, IConvertible
     {
+        #region Constructors
+
         /// <summary>
-        /// Checks if the specified element exists in the set.
+        /// Initializes a new instance of the <see cref="TypedSet{T}"/> class with the specified extraction configuration.
         /// </summary>
-        /// <param name="Element">The element to check for presence in the set.</param>
-        /// <returns>True if the element is found; otherwise, false.</returns>
-        public override bool Contains(T Element)
+        /// <param name="extractionConfiguration">The configuration used for extracting set elements and subsets.</param>
+        public TypedSet(SetExtractionConfiguration<T> extractionConfiguration) : base(extractionConfiguration)
         {
-            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Merges the current set with another set, returning a new set that contains elements from both.
+        /// Initializes a new instance of the <see cref="TypedSet{T}"/> class with the specified string expression and extraction configuration.
         /// </summary>
-        /// <param name="set">The set to merge with.</param>
-        /// <returns>A new <see cref="IStructuredSet{T}"/> containing elements from both sets.</returns>
-        public override IStructuredSet<T> MergeWith(IStructuredSet<T> set)
+        /// <param name="expression">The string representation of the set expression.</param>
+        /// <param name="config">The configuration used for extracting set elements and subsets.</param>
+        public TypedSet(string expression, SetExtractionConfiguration<T> config) : base(expression, config)
         {
-            throw new NotImplementedException();
         }
+
+        #endregion Constructors
+
+        #region Overrides
+
+        /// <summary>
+        /// Builds and returns a new <see cref="TypedSet{T}"/> based on the provided string representation of the set.
+        /// </summary>
+        /// <param name="setString">The string representation of the set to be created.</param>
+        /// <returns>A new instance of <see cref="TypedSet{T}"/>.</returns>
+        protected override IStructuredSet<T> BuildNewSet(string setString)
+        {
+            return new TypedSet<T>(setString, this.ExtractionConfiguration);
+        } // BuildNewSet
+
+        /// <summary>
+        /// Builds and returns a new, empty <see cref="TypedSet{T}"/>.
+        /// </summary>
+        /// <returns>A new, empty instance of <see cref="TypedSet{T}"/>.</returns>
+        protected override IStructuredSet<T> BuildNewSet()
+        {
+            return new TypedSet<T>(this.ExtractionConfiguration);
+        } // BuildNewSet
+
+        #endregion Overrides
     } // class
 } // namespace

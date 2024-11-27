@@ -11,8 +11,8 @@ namespace SetsLibrary.Models.SetTree;
 public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 {
     #region Data-fields
-    private readonly ISortedElements<T> _elements;
-    private readonly ISortedSubSets<T> _subSets;
+    protected internal readonly ISortedElements<T> _elements;
+    protected internal readonly ISortedSubSets<T> _subSets;
     #endregion Data-fields
 
     #region Properties
@@ -32,7 +32,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// <summary>
     /// Gets the total number of elements and subsets in the tree.
     /// </summary>
-    public int Cardinality => _elements.Count + _subSets.Count;
+    public int Count => _elements.Count + _subSets.Count;
 
     /// <summary>
     /// Gets the configuration used for extracting elements from the set tree.
@@ -52,19 +52,21 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 
     #region Constructors
 
+    internal SetTree()
+    {
+        //Create new instances of collection
+        this._elements = new SortedElements<T>();
+        this._subSets = new SortedSubSets<T>();
+    }//ctor default
     /// <summary>
     /// Initializes a new instance of the <see cref="SetTree{T}"/> class with the specified extraction settings.
     /// </summary>
     /// <param name="extractionSettings">The settings used for extracting elements from the set tree.</param>
     public SetTree(SetExtractionConfiguration<T> extractionSettings)
+        : this()
     {
         //Check if settings are null
         ArgumentNullException.ThrowIfNull(extractionSettings, nameof(extractionSettings));
-
-        //Create new instances of collection
-        this._elements = new SortedElements<T>();
-        this._subSets = new SortedSubSets<T>();
-
         this.ExtractionSettings = extractionSettings;
     }
 
@@ -263,10 +265,10 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //If they are the same       : 0
 
         //First check cardinality
-        if (this.Cardinality > other.Cardinality)
+        if (this.Count > other.Count)
             return 1;//other comes before this
 
-        if (this.Cardinality < other.Cardinality)
+        if (this.Count < other.Count)
             return -1;//this comes before other
 
         //If cardinalities are the same it can mean two things

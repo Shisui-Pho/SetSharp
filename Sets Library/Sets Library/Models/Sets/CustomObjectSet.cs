@@ -30,23 +30,49 @@ namespace SetsLibrary.Models.Sets;
 internal class CustomObjectSet<T> : BaseSet<T>
     where T : IComparable<T>, ICustomObjectConverter<T>
 {
+    #region Constructors
+
     /// <summary>
-    /// Checks if the specified element exists in the set.
+    /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class with the specified extraction configuration.
     /// </summary>
-    /// <param name="Element">The element to check for presence in the set.</param>
-    /// <returns>True if the element is found; otherwise, false.</returns>
-    public override bool Contains(T Element)
+    /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
+    public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration)
+        : base(extractionConfiguration)
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
-    /// Merges the current set with another set, returning a new set that contains elements from both.
+    /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class with the specified string expression and extraction configuration.
     /// </summary>
-    /// <param name="set">The set to merge with.</param>
-    /// <returns>A new <see cref="IStructuredSet{T}"/> containing elements from both sets.</returns>
-    public override IStructuredSet<T> MergeWith(IStructuredSet<T> set)
+    /// <param name="expression">The string representation of the set expression.</param>
+    /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
+    public CustomObjectSet(string expression, SetExtractionConfiguration<T> config)
+        : base(expression, config)
     {
-        throw new NotImplementedException();
     }
+
+    #endregion Constructors
+
+    #region Overrides
+
+    /// <summary>
+    /// Builds and returns a new <see cref="CustomObjectSet{T}"/> based on the provided string representation of the set.
+    /// </summary>
+    /// <param name="setString">The string representation of the set to be created.</param>
+    /// <returns>A new instance of <see cref="CustomObjectSet{T}"/>.</returns>
+    protected override IStructuredSet<T> BuildNewSet(string setString)
+    {
+        return new CustomObjectSet<T>(setString, this.ExtractionConfiguration);
+    }//BuildNewSet
+
+    /// <summary>
+    /// Builds and returns a new, empty <see cref="CustomObjectSet{T}"/>.
+    /// </summary>
+    /// <returns>A new, empty instance of <see cref="CustomObjectSet{T}"/>.</returns>
+    protected override IStructuredSet<T> BuildNewSet()
+    {
+        return new CustomObjectSet<T>(this.ExtractionConfiguration);
+    }//BuildNewSet
+
+    #endregion Overrides
 } // class

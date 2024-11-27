@@ -13,7 +13,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         public class MockSetTree<T> : ISetTree<T> where T : IComparable<T>
         {
             public string RootElements { get; set; }
-            public int Cardinality { get; set; }
+            public int Count { get; set; }
             public int CountRootElements => RootElements.Split(',').Length;
             public int CountSubsets { get; set; }
             public SetExtractionConfiguration<T> ExtractionSettings { get; set; }
@@ -36,13 +36,13 @@ namespace SetsLibrary.Tests.Utilities.Extract
             public void AddElement(T element)
             {
                 _elements.Add(element);
-                Cardinality++;
+                Count++;
             }
 
             public void AddRange(IEnumerable<T> elements)
             {
                 _elements.AddRange(elements);
-                Cardinality += elements is ICollection<T> collection ? collection.Count : 0;
+                Count += elements is ICollection<T> collection ? collection.Count : 0;
             }
 
             public IEnumerable<ISetTree<T>> GetSubsetsEnumarator() => _subsets;
@@ -52,7 +52,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             public int IndexOf(T element) => _elements.IndexOf(element);
             public int IndexOf(ISetTree<T> subset) => _subsets.IndexOf(subset);
 
-            public override string ToString() => $"{RootElements} (Cardinality: {Cardinality})";
+            public override string ToString() => $"{RootElements} (Cardinality: {Count})";
 
             public void AddRange(IEnumerable<ISetTree<T>> subsets)
             {
@@ -78,7 +78,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
-            Assert.Equal(3, tree.Cardinality);
+            Assert.Equal(3, tree.Count);
             Assert.Equal(3, tree.CountRootElements);
             Assert.Equal(0, tree.CountSubsets);
         }
@@ -97,7 +97,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert
             Assert.Equal("", tree.RootElements);
-            Assert.Equal(0, tree.Cardinality);
+            Assert.Equal(0, tree.Count);
             Assert.Equal(0, tree.CountRootElements);
             Assert.Equal(0, tree.CountSubsets);
         }
@@ -116,14 +116,14 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert for the root elements
             Assert.Equal("1,2", tree.RootElements);
-            Assert.Equal(3, tree.Cardinality);
+            Assert.Equal(3, tree.Count);
             Assert.Equal(2, tree.CountRootElements);
             Assert.Equal(1, tree.CountSubsets);
 
             // Assert for the first subset
             ISetTree<int> subsetTree = tree.GetSubsetsEnumarator().First();
             Assert.Equal("3,4", subsetTree.RootElements);
-            Assert.Equal(2, subsetTree.Cardinality);
+            Assert.Equal(2, subsetTree.Count);
             Assert.Equal(2, subsetTree.CountRootElements);
             Assert.Equal(0, subsetTree.CountSubsets);
         }
@@ -141,19 +141,19 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert for the root elements
             Assert.Equal("1,2", tree.RootElements);
-            Assert.Equal(4, tree.Cardinality);
+            Assert.Equal(4, tree.Count);
             Assert.Equal(2, tree.CountRootElements);
             Assert.Equal(2, tree.CountSubsets);
 
             // Assert for the first subset
             ISetTree<int> subsetTree1 = tree.GetSubsetsEnumarator().ElementAt(0);
             Assert.Equal("3,4", subsetTree1.RootElements);
-            Assert.Equal(2, subsetTree1.Cardinality);
+            Assert.Equal(2, subsetTree1.Count);
 
             // Assert for the second subset
             ISetTree<int> subsetTree2 = tree.GetSubsetsEnumarator().ElementAt(1);
             Assert.Equal("5,6", subsetTree2.RootElements);
-            Assert.Equal(2, subsetTree2.Cardinality);
+            Assert.Equal(2, subsetTree2.Count);
         }
 
         // Test for a set with a custom conversion (e.g., converting strings to integers)
@@ -172,7 +172,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
-            Assert.Equal(3, tree.Cardinality);
+            Assert.Equal(3, tree.Count);
         }
 
         // Test for an expression with spaces around the elements
@@ -189,7 +189,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
-            Assert.Equal(3, tree.Cardinality);
+            Assert.Equal(3, tree.Count);
         }
 
         // Theory Test: Extract various sets with different configurations
@@ -209,7 +209,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
 
             // Assert
             Assert.Equal(expectedRootElements, tree.RootElements);
-            Assert.Equal(expectedCardinality, tree.Cardinality);
+            Assert.Equal(expectedCardinality, tree.Count);
             Assert.Equal(expectedRootCount, tree.CountRootElements);
             Assert.Equal(expectedSubsetCount, tree.CountSubsets);
         }
