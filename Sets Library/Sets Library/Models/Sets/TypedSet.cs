@@ -28,22 +28,47 @@ namespace SetsLibrary.Models.Sets
         where T : IComparable<T>, IConvertible
     {
         #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypedSet{T}"/> class with the specified extraction configuration.
+        /// </summary>
+        /// <param name="extractionConfiguration">The configuration used for extracting set elements and subsets.</param>
         public TypedSet(SetExtractionConfiguration<T> extractionConfiguration) : base(extractionConfiguration)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypedSet{T}"/> class with the specified string expression and extraction configuration.
+        /// </summary>
+        /// <param name="expression">The string representation of the set expression.</param>
+        /// <param name="config">The configuration used for extracting set elements and subsets.</param>
         public TypedSet(string expression, SetExtractionConfiguration<T> config) : base(expression, config)
         {
         }
+
         #endregion Constructors
+
+        #region Overrides
+
+        /// <summary>
+        /// Builds and returns a new <see cref="TypedSet{T}"/> based on the provided string representation of the set.
+        /// </summary>
+        /// <param name="setString">The string representation of the set to be created.</param>
+        /// <returns>A new instance of <see cref="TypedSet{T}"/>.</returns>
         protected override IStructuredSet<T> BuildNewSet(string setString)
         {
             return new TypedSet<T>(setString, this.ExtractionConfiguration);
-        }//BuildNewSet
+        } // BuildNewSet
 
+        /// <summary>
+        /// Builds and returns a new, empty <see cref="TypedSet{T}"/>.
+        /// </summary>
+        /// <returns>A new, empty instance of <see cref="TypedSet{T}"/>.</returns>
         protected override IStructuredSet<T> BuildNewSet()
         {
             return new TypedSet<T>(this.ExtractionConfiguration);
-        }//BuildNewSet
+        } // BuildNewSet
+
+        #endregion Overrides
     } // class
 } // namespace

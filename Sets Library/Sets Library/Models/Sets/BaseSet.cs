@@ -80,14 +80,27 @@ namespace SetsLibrary.Models
         #endregion Properties
 
         #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified extraction configuration.
+        /// This constructor sets the extraction configuration but does not evaluate or set the expression.
+        /// </summary>
+        /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
         public BaseSet(SetExtractionConfiguration<T> extractionConfiguration)
         {
             //verify if configurations are not null
             ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
-            
+
             //set the configurations
             this.ExtractionConfiguration = extractionConfiguration;
         }//ctor default
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified string expression 
+        /// and extraction configuration.
+        /// This constructor evaluates the set tree based on the given expression and sets the original expression.
+        /// </summary>
+        /// <param name="expression">The string representation of the set expression.</param>
+        /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
         public BaseSet(string expression, SetExtractionConfiguration<T> config)
             : this(config)
         {
@@ -445,8 +458,22 @@ namespace SetsLibrary.Models
         #endregion Implemented methods
 
         #region Abstract methods
-        protected abstract IStructuredSet<T> BuildNewSet(string setString); 
-        protected abstract IStructuredSet<T> BuildNewSet(); 
+        /// <summary>
+        /// Builds and returns a new set based on the provided string representation.
+        /// This method is abstract and must be implemented by derived classes to handle the specific logic 
+        /// for creating a set from a string.
+        /// </summary>
+        /// <param name="setString">The string representation of the set to be created.</param>
+        /// <returns>A new instance of a structured set.</returns>
+        protected abstract IStructuredSet<T> BuildNewSet(string setString);
+
+        /// <summary>
+        /// Builds and returns a new, empty set.
+        /// This method is abstract and must be implemented by derived classes to handle the specific logic 
+        /// for creating an empty set.
+        /// </summary>
+        /// <returns>A new, empty instance of a structured set.</returns>
+        protected abstract IStructuredSet<T> BuildNewSet();
         #endregion ABSTRACT METHODS
     }//class
 }//namespace

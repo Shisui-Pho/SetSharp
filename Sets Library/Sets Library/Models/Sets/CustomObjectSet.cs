@@ -30,27 +30,49 @@ namespace SetsLibrary.Models.Sets;
 internal class CustomObjectSet<T> : BaseSet<T>
     where T : IComparable<T>, ICustomObjectConverter<T>
 {
-    #region Constructers
-    public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration) 
+    #region Constructors
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class with the specified extraction configuration.
+    /// </summary>
+    /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
+    public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration)
         : base(extractionConfiguration)
     {
     }
 
-    public CustomObjectSet(string expression, SetExtractionConfiguration<T> config) 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class with the specified string expression and extraction configuration.
+    /// </summary>
+    /// <param name="expression">The string representation of the set expression.</param>
+    /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
+    public CustomObjectSet(string expression, SetExtractionConfiguration<T> config)
         : base(expression, config)
     {
     }
+
     #endregion Constructors
 
-    #region Ovverides
+    #region Overrides
+
+    /// <summary>
+    /// Builds and returns a new <see cref="CustomObjectSet{T}"/> based on the provided string representation of the set.
+    /// </summary>
+    /// <param name="setString">The string representation of the set to be created.</param>
+    /// <returns>A new instance of <see cref="CustomObjectSet{T}"/>.</returns>
     protected override IStructuredSet<T> BuildNewSet(string setString)
     {
-        return new CustomObjectSet<T>(setString,this.ExtractionConfiguration);
+        return new CustomObjectSet<T>(setString, this.ExtractionConfiguration);
     }//BuildNewSet
 
+    /// <summary>
+    /// Builds and returns a new, empty <see cref="CustomObjectSet{T}"/>.
+    /// </summary>
+    /// <returns>A new, empty instance of <see cref="CustomObjectSet{T}"/>.</returns>
     protected override IStructuredSet<T> BuildNewSet()
     {
         return new CustomObjectSet<T>(this.ExtractionConfiguration);
     }//BuildNewSet
-    #endregion Ovverides
+
+    #endregion Overrides
 } // class
