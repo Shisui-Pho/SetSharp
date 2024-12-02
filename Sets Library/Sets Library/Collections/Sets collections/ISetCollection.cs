@@ -73,8 +73,8 @@ public interface ISetCollection<T> : IEnumerable<T>
     /// Gets the set structure at the specified index.
     /// </summary>
     /// <param name="index">The zero-based index of the set.</param>
-    /// <returns>A <see cref="Set"/> structure of the set at the specified index.</returns>
-    Set GetSetByIndex(int index);
+    /// <returns>A <see cref="IStructuredSet<typeparamref name="T"/>"/> structure of the set at the specified index.</returns>
+    IStructuredSet<T> GetSetByIndex(int index);
 
     /// <summary>
     /// Removes a specified set from the collection.
@@ -97,8 +97,8 @@ public interface ISetCollection<T> : IEnumerable<T>
     /// <summary>
     /// Gets an enumerator of the set structures in the collection.
     /// </summary>
-    /// <returns>An enumerable collection of the <see cref="Set"/> structures.</returns>
-    IEnumerator<Set> EnumerateWithSetStructure();
+    /// <returns>An enumerable collection of the <see cref="IStructuredSet{T}"/> structures.</returns>
+    IEnumerator<IStructuredSet<T>> EnumerateWithSetStructure();
 
     /// <summary>
     /// Resets the naming (numbering) of sets in the collection.
