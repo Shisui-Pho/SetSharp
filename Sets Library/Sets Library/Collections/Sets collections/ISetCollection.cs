@@ -61,7 +61,6 @@ public interface ISetCollection<TSet, TType> : IEnumerable<TSet>
     /// <param name="name">The name of the set.</param>
     /// <returns>True if the set is in the collection; otherwise, false.</returns>
     bool Contains(string name);
-
     /// <summary>
     /// Finds a set by its name in the collection.
     /// </summary>
@@ -83,4 +82,5 @@ public interface ISetCollection<TSet, TType> : IEnumerable<TSet>
     /// Clears the current collection of sets.
     /// </summary>
     void Clear();
+    IEnumerable<Set> EnumerateSetStructures();
 } // interface

@@ -29,4 +29,9 @@
     <ProjectReference Include="..\Sets Library\Sets Library.csproj" />
   </ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="Collections\Set Collection\" />
+	</ItemGroup>
+
 </Project>
