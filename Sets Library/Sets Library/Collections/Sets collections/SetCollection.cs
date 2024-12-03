@@ -155,8 +155,8 @@ namespace SetLibrary.Collections
 
         public void Clear()
         {
-            _dicCollection.Clear();
-            _lastKey.ResetKey();
+            _dicCollection = new Dictionary<Key, IStructuredSet<T>>();
+            _lastKey = new Key();
         }
 
         public bool Contains(IStructuredSet<T> item)
@@ -187,11 +187,6 @@ namespace SetLibrary.Collections
             return this[name];
         }//FindSetByName
 
-        public IEnumerator<IStructuredSet<T>> GetEnumerator()
-        {
-            return _dicCollection.Values.GetEnumerator();
-        }
-
         public bool Remove(string name)
         {
             //Check for nulls
@@ -214,6 +209,14 @@ namespace SetLibrary.Collections
             AddRange(array);
             //
         }//Reset
+
+        public IEnumerator<KeyValuePair<string, IStructuredSet<T>>> GetEnumerator()
+        {
+            foreach (var item in _dicCollection)
+            {
+                yield return new KeyValuePair<string, IStructuredSet<T>>(item.Key.FullKey, item.Value);
+            }
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
