@@ -1,6 +1,7 @@
 ﻿using SetsLibrary.Collections;
 using SetsLibrary.Interfaces;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace SetLibrary.Collections
@@ -15,7 +16,7 @@ namespace SetLibrary.Collections
         private Key _lastKey;
 
         #region Embedded class
-        private class Key 
+        private class Key : IEqualityComparer<Key>
         {
             private Stack<char> _keyChars;
             public string FullKey => string.Join("", _keyChars);
@@ -104,6 +105,16 @@ namespace SetLibrary.Collections
             {
                 _keyChars.Clear();
             }
+
+            public bool Equals(Key? x, Key? y)
+            {
+                return x.FullKey == y.FullKey;
+            }
+
+            public int GetHashCode([DisallowNull] Key obj)
+            {
+                return obj.FullKey.GetHashCode();
+            }
         }//emebed class
         #endregion Embedded class
         //Properties
@@ -162,7 +173,7 @@ namespace SetLibrary.Collections
 
         public void Clear()
         {
-            _dicCollection = new Dictionary<Key, IStructuredSet<T>>();
+            _dicCollection = new Dictionary<Key, IStructuredSet<T>>(new Key());
             _lastKey = new Key();
         }
 
@@ -217,7 +228,7 @@ namespace SetLibrary.Collections
             var array = _dicCollection.Values;
 
             //Reset the current clasas
-            Reset();
+            Clear();
 
             //Re-add the sets
             AddRange(array);
