@@ -127,6 +127,8 @@ namespace SetLibrary.Collections
 
         public void Add(IStructuredSet<T> item)
         {
+            _lastKey = _lastKey.GenerateNextKey();
+
             //Check for nulls
             ArgumentNullException.ThrowIfNull(item, nameof(item));
 
@@ -138,8 +140,6 @@ namespace SetLibrary.Collections
                 //Add the element with the current key
                 _dicCollection.Add(_lastKey, item);
             }
-
-            _lastKey = _lastKey.GenerateNextKey();
 
             //Add the element
             _dicCollection.Add(_lastKey, item);
