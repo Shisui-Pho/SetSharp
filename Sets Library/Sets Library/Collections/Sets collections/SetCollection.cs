@@ -132,15 +132,6 @@ namespace SetLibrary.Collections
             //Check for nulls
             ArgumentNullException.ThrowIfNull(item, nameof(item));
 
-            //If we are adding the first element
-            //If empty
-            if(Count  == 0)
-            {
-                
-                //Add the element with the current key
-                _dicCollection.Add(_lastKey, item);
-            }
-
             //Add the element
             _dicCollection.Add(_lastKey, item);
         }
