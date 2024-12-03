@@ -23,6 +23,15 @@ namespace SetLibrary.Collections
             {
                 _keyChars = new Stack<char>();
             }
+            private Key(IEnumerable<char> chars)
+                : this()
+            {
+                //Check for nulls
+                ArgumentNullException.ThrowIfNull(chars, nameof(chars));
+
+                //Add to key
+                ToKey(chars);
+            }
             public Key(string name)
                 : this()
             {
@@ -32,54 +41,63 @@ namespace SetLibrary.Collections
                 //Make the name a key
                 ToKey(name);
             }
-            private void ToKey(string name)
+            private void ToKey(IEnumerable<char> characters)
             {
-                var characters = name.ToCharArray();
-                for (var i = 0; i < characters.Length; i++) 
-                    _keyChars.Push(characters[i]);
-            }//ToKey
+                foreach (var item in characters)
+                    _keyChars.Push(item);                
+            }
 
             //Generate next key
             public Key GenerateNextKey()
             {
-                //This will generate the next key based on it current state
-                int count_Z_occurences = 0;
-                //The original characters of the current key class should be kept as they are
-                Stack<char> original = new Stack<char>();
-                while (_keyChars.Count > 0)
+                //Queue to keep track of the new characters
+                Stack<char> newKey = new Stack<char>();
+                Stack<char> currentCopy = new Stack<char>();
+
+                //A flag to determine if a solution was found or not
+                bool isIncremented = false;
+                int lastAlphabetOccurences = 0;
+                while(_keyChars.Count > 0)
                 {
-                    //Pop the last character
+                    //Pop the top element
                     char currentTop = _keyChars.Pop();
-                    original.Push(currentTop);
-                    //Check if it is the letter 'Z'?
-                    if(currentTop != 'Z')
+
+                    //Add it to the copy
+                    currentCopy.Push(currentTop);
+
+                    //Check if the current Top element is the 'Z' element and the next key has 
+                    //not been generated
+                    if (currentTop != 'Z' && !isIncremented)
                     {
-                        //Elarge it and push it to the stack
+                        //Generate the key by incrementing the current top element
                         currentTop++;
+                        isIncremented = true;
+                    }
+                    else if (currentTop == 'Z' && !isIncremented)
+                    {
+                        //Increment the top element to be an 'A'
+                        currentTop = 'A';
 
-                        _keyChars.Push(currentTop);
-
-                        break;
+                        //Count the 'Z' occurences 
+                        lastAlphabetOccurences++;
                     }
 
-                    //Here it means we have the 'Z'character
-                    //-We need to add that to our queue
-                    count_Z_occurences++;
-                }//
+                    //Count the Z occurences 
+                    if(currentTop == 'Z')
+                        lastAlphabetOccurences++;
 
-                if (_keyChars.Count == 0)//If there's nothing in the stack we need to add one more elemet
-                    count_Z_occurences++;
+                    //Push to the newKey stack
+                    newKey.Push(currentTop);
+                }//end while
 
-                //Add 'A's
-                string name = this.FullKey;
-                for (int i = 0; i < count_Z_occurences; i++)
-                    name += "A";
+                //Ovveride the new old stak with the new stack
+                _keyChars = currentCopy;
 
-                //Re-add the removed charcters
-                while(original.Count > 0)
-                    _keyChars.Push(original.Pop());
+                //Check if we need to increment the string, i.e, we have to add 'A'
+                if (_keyChars.Count == lastAlphabetOccurences)
+                    newKey.Push('A');
 
-                return new Key(name);
+                return new Key(newKey.Reverse());
             }//GenerateNextKey
             //Reset key
             public void ResetKey()
