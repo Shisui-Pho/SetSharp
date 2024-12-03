@@ -35,7 +35,7 @@ public interface ISetCollection<TSet, TType> : IEnumerable<KeyValuePair<string,T
     /// </summary>
     /// <param name="name">The name of the set.</param>
     /// <returns>An instance of <see cref="IStructuredSet{T}"/> at the specified index.</returns>
-    TSet this[string name] { get; }
+    TSet? this[string name] { get; }
 
     /// <summary>
     /// Gets the number of sets in the collection.
@@ -66,7 +66,7 @@ public interface ISetCollection<TSet, TType> : IEnumerable<KeyValuePair<string,T
     /// </summary>
     /// <param name="name">The name of the set.</param>
     /// <returns>The set if found; otherwise, null.</returns>
-    TSet FindSetByName(string name);
+    TSet? FindSetByName(string name);
     /// <summary>
     /// Removes a set from the collection by its name.
     /// </summary>

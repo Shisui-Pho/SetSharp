@@ -110,13 +110,11 @@ namespace SetLibrary.Collections
         public int Count => _dicCollection.Count;
 
         //inderxer
-        public IStructuredSet<T> this[string name]
+        public IStructuredSet<T>? this[string name]
         {
             get
             {
-                Key key = new Key(name);
-                
-                return _dicCollection[key];
+                return FindSetByName(name);
             }
         }
 
@@ -188,12 +186,19 @@ namespace SetLibrary.Collections
             return _dicCollection.ContainsKey(key);
         }
 
-        public IStructuredSet<T> FindSetByName(string name)
+        public IStructuredSet<T>? FindSetByName(string name)
         {
             //Check for nulls
             ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
-            return this[name];
+            //Generate the key
+            Key key = new Key(name);
+
+            //Check if the key exists
+            if( _dicCollection.ContainsKey(key))
+                return _dicCollection[key];
+
+            return null;
         }//FindSetByName
 
         public bool Remove(string name)
