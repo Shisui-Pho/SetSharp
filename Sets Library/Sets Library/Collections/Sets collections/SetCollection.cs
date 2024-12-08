@@ -11,7 +11,7 @@ namespace SetLibrary.Collections
     {
         //Data-fields
         //This dictionary will hold the set names(Unique) as well as the set itselt 
-        private Dictionary<Key, IStructuredSet<T>> _dicCollection;
+        private Dictionary<string, IStructuredSet<T>> _dicCollection;
         //This will keep track of the current key/last key
         private Key _lastKey;
 
@@ -131,7 +131,7 @@ namespace SetLibrary.Collections
             ArgumentNullException.ThrowIfNull(item, nameof(item));
 
             //Add the element
-            _dicCollection.Add(_lastKey, item);
+            _dicCollection.Add(_lastKey.FullKeyValue, item);
         }
         public void AddRange(IEnumerable<IStructuredSet<T>> collection)
         {
@@ -144,7 +144,7 @@ namespace SetLibrary.Collections
 
         public void Clear()
         {
-            _dicCollection = new Dictionary<Key, IStructuredSet<T>>(new Key());
+            _dicCollection = new Dictionary<string, IStructuredSet<T>>();
             _lastKey = new Key();
         }
 
@@ -165,7 +165,7 @@ namespace SetLibrary.Collections
             //Get the key value
             Key key = new Key(name);
 
-            return _dicCollection.ContainsKey(key);
+            return _dicCollection.ContainsKey(key.FullKeyValue);
         }
 
         public IStructuredSet<T>? FindSetByName(string name)
@@ -177,8 +177,8 @@ namespace SetLibrary.Collections
             Key key = new Key(name);
 
             //Check if the key exists
-            if( _dicCollection.ContainsKey(key))
-                return _dicCollection[key];
+            if( _dicCollection.ContainsKey(key.FullKeyValue))
+                return _dicCollection[key.FullKeyValue];
 
             return null;
         }//FindSetByName
@@ -190,7 +190,7 @@ namespace SetLibrary.Collections
 
             Key key = new Key(name);
 
-            return _dicCollection.Remove(key);
+            return _dicCollection.Remove(key.FullKeyValue);
         }
 
         public void Reset()
@@ -210,7 +210,7 @@ namespace SetLibrary.Collections
         {
             foreach (var item in _dicCollection)
             {
-                yield return new KeyValuePair<string, IStructuredSet<T>>(item.Key.FullKeyValue, item.Value);
+                yield return new KeyValuePair<string, IStructuredSet<T>>(item.Key, item.Value);
             }
         }
 
