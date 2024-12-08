@@ -32,35 +32,7 @@ namespace SetsLibrary.Models
         where T : IComparable<T>
     {
         //Data fields
-        private readonly SetTreeWrapperWithIndexers _treeWrapper;
-
-        #region Embeded class
-        private class SetTreeWrapperWithIndexers : SetTree<T>
-        {
-            public T GetRootElementByIndex(int index)
-            {
-                if(index >= base._elements.Count ||  index < 0)
-                    throw new ArgumentOutOfRangeException("index");
-
-                return base._elements[index];
-            }//GetRootElementByIndex
-            public ISetTree<T> GetSubsetByIndex(int index)
-            {
-                if (index >= base._subSets.Count || index < 0)
-                    throw new ArgumentOutOfRangeException("index");
-
-                return _subSets[index];
-            }//GetSubsetByIndex
-            public void Clear()
-            {
-                base._elements.Clear();
-                base._subSets.Clear();
-            }//Clear
-        }//class
-
-
-
-        #endregion Embeded class
+        private readonly SetTreeWrapper<T> _treeWrapper;
 
         #region Properties
         /// <summary>
@@ -105,7 +77,7 @@ namespace SetsLibrary.Models
             : this(config)
         {
             //Extract tree
-            _treeWrapper = (SetTreeWrapperWithIndexers)Extractions(expression);
+            _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
             //Asign properties
             OriginalExpression = expression;
