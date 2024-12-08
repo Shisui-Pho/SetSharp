@@ -32,7 +32,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1, 2, 3 }", settings);
+            var set = new MockSetStructure();
 
             // Act
             setCollection.Add(set);
@@ -46,7 +46,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1, 2, 3 }", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -73,7 +73,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
 
             // Act
             setCollection.Add(set);
@@ -87,8 +87,8 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set1 = new TypedSet<int>("{1,2,3}", settings);
-            var set2 = new TypedSet<int>("{4,5,6}", settings);
+            var set1 = new MockSetStructure();
+            var set2 = new MockSetStructure();
 
             // Act
             setCollection.Add(set1);
@@ -103,8 +103,8 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set1 = new TypedSet<int>("{1,2,3}", settings);
-            var set2 = new TypedSet<int>("{4,5,6}", settings);
+            var set1 = new MockSetStructure();
+            var set2 = new MockSetStructure();
 
             // Act
             setCollection.Add(set1);
@@ -122,8 +122,8 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set1 = new TypedSet<int>("{1,2,3}", settings);
-            var set2 = new TypedSet<int>("{4,5,6}", settings);
+            var set1 = new MockSetStructure();
+            var set2 = new MockSetStructure();
             setCollection.Add(set1);
             setCollection.Add(set2);
 
@@ -152,7 +152,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
 
             // Act
             setCollection.Add(set);
@@ -166,7 +166,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -181,7 +181,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -198,7 +198,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -213,7 +213,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -243,7 +243,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
 
             // Act
             setCollection.Add(set);
@@ -257,7 +257,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -272,7 +272,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -289,7 +289,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act
@@ -304,7 +304,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             // Arrange
             var setCollection = new SetCollection<int>();
-            var set = new TypedSet<int>("{1,2,3}", settings);
+            var set = new MockSetStructure();
             setCollection.Add(set);
 
             // Act

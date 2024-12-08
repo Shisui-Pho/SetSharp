@@ -7,18 +7,17 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
 {
     public class SetCollectionTestsExcelSpreadSheedEmulator
     {
-        private static readonly SetExtractionConfiguration<int> settings = new SetExtractionConfiguration<int>(";",",");
         private static SetCollection<int> collection;
         public SetCollectionTestsExcelSpreadSheedEmulator()
         {
             //Create an empty set
             collection = new SetCollection<int>();
             //Add 16,384 empty sets. 
-            var set = new TypedSet<int>(settings);
+            var set = new MockSetStructure();
             for (int i = 0; i < 16384; i++)
                 collection.Add(set);
-            string exp = "{5,6,8,5,6,5,2,{3,5}}";
-            set = new TypedSet<int>(exp, settings);
+
+            set = new MockSetStructure();
             collection.Add(set);
         }
 
