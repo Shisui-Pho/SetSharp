@@ -14,6 +14,14 @@
  * - Supports operations like adding, removing, and checking for elements and subsets.
  * - Includes functionality for merging sets, evaluating subset relationships, and cardinality.
  * - Allows for flexible set operations with a generic type parameter, enabling usage with different element types.
+ * - Enables parsing of set expressions into structured sets using a tree-like model.
+ * 
+ * Version History:
+ * 1.0 - Initial implementation
+ * 
+ * Notes:
+ * This class is intended for use as a base class for specific set implementations that may add additional 
+ * functionality specific to the type of set being created.
  */
 
 using SetsLibrary.Interfaces;
