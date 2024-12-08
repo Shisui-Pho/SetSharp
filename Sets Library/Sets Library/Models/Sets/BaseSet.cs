@@ -14,6 +14,14 @@
  * - Supports operations like adding, removing, and checking for elements and subsets.
  * - Includes functionality for merging sets, evaluating subset relationships, and cardinality.
  * - Allows for flexible set operations with a generic type parameter, enabling usage with different element types.
+ * - Enables parsing of set expressions into structured sets using a tree-like model.
+ * 
+ * Version History:
+ * 1.0 - Initial implementation
+ * 
+ * Notes:
+ * This class is intended for use as a base class for specific set implementations that may add additional 
+ * functionality specific to the type of set being created.
  */
 
 using SetsLibrary.Interfaces;
@@ -32,35 +40,7 @@ namespace SetsLibrary.Models
         where T : IComparable<T>
     {
         //Data fields
-        private readonly SetTreeWrapperWithIndexers _treeWrapper;
-
-        #region Embeded class
-        private class SetTreeWrapperWithIndexers : SetTree<T>
-        {
-            public T GetRootElementByIndex(int index)
-            {
-                if(index >= base._elements.Count ||  index < 0)
-                    throw new ArgumentOutOfRangeException("index");
-
-                return base._elements[index];
-            }//GetRootElementByIndex
-            public ISetTree<T> GetSubsetByIndex(int index)
-            {
-                if (index >= base._subSets.Count || index < 0)
-                    throw new ArgumentOutOfRangeException("index");
-
-                return _subSets[index];
-            }//GetSubsetByIndex
-            public void Clear()
-            {
-                base._elements.Clear();
-                base._subSets.Clear();
-            }//Clear
-        }//class
-
-
-
-        #endregion Embeded class
+        private readonly SetTreeWrapper<T> _treeWrapper;
 
         #region Properties
         /// <summary>
@@ -105,7 +85,7 @@ namespace SetsLibrary.Models
             : this(config)
         {
             //Extract tree
-            _treeWrapper = (SetTreeWrapperWithIndexers)Extractions(expression);
+            _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
             //Asign properties
             OriginalExpression = expression;
