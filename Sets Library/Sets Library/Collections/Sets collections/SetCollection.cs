@@ -18,87 +18,58 @@ namespace SetLibrary.Collections
         #region Embedded class
         private class Key : IEqualityComparer<Key>
         {
-            private Stack<char> _keyChars;
-            public string FullKey => string.Join("", _keyChars);
+            private readonly List<char> _keyChars;
+
+            public string FullKeyValue { get; private set; }
             public Key()
             {
-                _keyChars = new Stack<char>();
+                _keyChars = new List<char>();
+                FullKeyValue = "";
             }
-            private Key(IEnumerable<char> chars)
+            public Key(IEnumerable<char> characterKeys)
                 : this()
             {
-                //Check for nulls
-                ArgumentNullException.ThrowIfNull(chars, nameof(chars));
+                ArgumentNullException.ThrowIfNull(characterKeys, nameof(characterKeys));
 
-                //Add to key
-                ToKey(chars);
-            }
-            public Key(string name)
-                : this()
-            {
-                //Check for nulls
-                ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+                _keyChars.AddRange(characterKeys);
 
-                //Make the name a key
-                ToKey(name);
-            }
-            private void ToKey(IEnumerable<char> characters)
-            {
-                foreach (var item in characters)
-                    _keyChars.Push(item);                
-            }
-
-            //Generate next key
+                FullKeyValue = string.Join("", characterKeys);
+            }//ctor main
             public Key GenerateNextKey()
             {
-                //Queue to keep track of the new characters
-                Stack<char> newKey = new Stack<char>();
-                Stack<char> currentCopy = new Stack<char>();
+                //If the current list is empty
+                if (_keyChars.Count == 0)
+                    return new Key("A");
 
-                //A flag to determine if a solution was found or not
+                //Create a copy
+                //Check the last and first elements if they are 'Z'
+                char[]? newValues = null;
+
+                if (_keyChars[0] == 'Z' && _keyChars[_keyChars.Count - 1] == 'Z')
+                    newValues = new char[_keyChars.Count + 1];
+                else
+                    newValues = new char[_keyChars.Count];
+
+                //Here the length of the array is already been determined
                 bool isIncremented = false;
-                int lastAlphabetOccurences = 0;
-                while(_keyChars.Count > 0)
+                for (int i = _keyChars.Count - 1; i >= 0; i--)
                 {
-                    //Pop the top element
-                    char currentTop = _keyChars.Pop();
-
-                    //Add it to the copy
-                    currentCopy.Push(currentTop);
-
-                    //Check if the current Top element is the 'Z' element and the next key has 
-                    //not been generated
-                    if (currentTop != 'Z' && !isIncremented)
+                    char current = _keyChars[i];
+                    if (current == 'Z' && !isIncremented)
+                        current = 'A';
+                    else if (!isIncremented)
                     {
-                        //Generate the key by incrementing the current top element
-                        currentTop++;
+                        current++;
                         isIncremented = true;
                     }
-                    else if (currentTop == 'Z' && !isIncremented)
-                    {
-                        //Increment the top element to be an 'A'
-                        currentTop = 'A';
 
-                        //Count the 'Z' occurences 
-                        lastAlphabetOccurences++;
-                    }
+                    newValues[i] = current;
+                }
 
-                    //Count the Z occurences 
-                    if(currentTop == 'Z')
-                        lastAlphabetOccurences++;
+                if (_keyChars.Count < newValues.Length)//It means that the values array has one extra slot
+                    newValues[newValues.Length - 1] = 'A';
 
-                    //Push to the newKey stack
-                    newKey.Push(currentTop);
-                }//end while
-
-                //Ovveride the new old stak with the new stack
-                _keyChars = currentCopy;
-
-                //Check if we need to increment the string, i.e, we have to add 'A'
-                if (_keyChars.Count == lastAlphabetOccurences)
-                    newKey.Push('A');
-
-                return new Key(newKey.Reverse());
+                return new Key(newValues);
             }//GenerateNextKey
             //Reset key
             public void ResetKey()
@@ -108,12 +79,12 @@ namespace SetLibrary.Collections
 
             public bool Equals(Key? x, Key? y)
             {
-                return x.FullKey == y.FullKey;
+                return x.FullKeyValue == y.FullKeyValue;
             }
 
             public int GetHashCode([DisallowNull] Key obj)
             {
-                return obj.FullKey.GetHashCode();
+                return obj.FullKeyValue.GetHashCode();
             }
         }//emebed class
         #endregion Embedded class
@@ -239,7 +210,7 @@ namespace SetLibrary.Collections
         {
             foreach (var item in _dicCollection)
             {
-                yield return new KeyValuePair<string, IStructuredSet<T>>(item.Key.FullKey, item.Value);
+                yield return new KeyValuePair<string, IStructuredSet<T>>(item.Key.FullKeyValue, item.Value);
             }
         }
 
