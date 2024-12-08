@@ -1,253 +1,329 @@
-﻿using SetsLibrary.Collections;
+﻿/*
+ * File: SetCollection.cs
+ * Author: Phiwokwakhe Khathwane
+ * Date: 8 December 2024
+ * 
+ * Description:
+ * This file contains the definition of the SetCollection<T> class, 
+ * a generic collection that holds unique sets, identified by string keys. 
+ * It provides methods to add, remove, check, and retrieve sets by their names, 
+ * as well as functionalities to reset and iterate over the collection.
+ * 
+ * Key Features:
+ * - Stores sets of elements that implement IComparable.
+ * - Each set is identified by a unique string key, generated sequentially.
+ * - Supports adding individual sets, adding a range of sets, and clearing the collection.
+ * - Provides methods for checking the existence of sets by name or by object reference.
+ * - Allows for enumerating over the collection of sets.
+ * 
+ * Generic Constraints:
+ * - T must implement IComparable<T> to ensure ordered comparison of elements within the sets.
+ */
+
+using SetsLibrary.Collections;
 using SetsLibrary.Interfaces;
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
 namespace SetLibrary.Collections
 {
-    public class SetCollection<T> : ISetCollection<T>
+    /// <summary>
+    /// A generic collection class that holds a set of unique sets, identified by string keys.
+    /// </summary>
+    /// <typeparam name="T">The type of elements in the sets, which must implement IComparable.</typeparam>
+    public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
         where T : IComparable<T>
     {
-        #region Datafields
-        //Parallel  arrays that will hold the sets and their names
-        private List<IStructuredSet<T>> _sets;
-        private List<string> _setNames;
-        private int _count_sets;
-        #endregion Datafields
+        // Data-fields
+        // This dictionary will hold the set names (Unique) as well as the set itself.
+        private Dictionary<string, IStructuredSet<T>> _dicCollection;
 
-        #region Properties, Indexers and Contructor
-        //Properties
-        public int Count => _sets.Count;
+        // This will keep track of the current key/last key.
+        private Key _lastKey;
 
-        //Indexer
-        public IStructuredSet<T> this[int index]
+        #region Embedded class
+        /// <summary>
+        /// Represents a key used to uniquely identify sets within the collection.
+        /// </summary>
+        private class Key : IEqualityComparer<Key>
+        {
+            private readonly List<char> _keyChars;
+
+            /// <summary>
+            /// Gets the full key value as a string.
+            /// </summary>
+            public string FullKeyValue { get; private set; }
+
+            /// <summary>
+            /// Default constructor initializing an empty key.
+            /// </summary>
+            public Key()
+            {
+                _keyChars = new List<char>();
+                FullKeyValue = "";
+            }
+
+            /// <summary>
+            /// Initializes a key with a list of character values.
+            /// </summary>
+            /// <param name="characterKeys">The collection of characters representing the key.</param>
+            public Key(IEnumerable<char> characterKeys)
+                : this()
+            {
+                ArgumentNullException.ThrowIfNull(characterKeys, nameof(characterKeys));
+
+                _keyChars.AddRange(characterKeys);
+
+                FullKeyValue = string.Join("", characterKeys);
+            }
+
+            /// <summary>
+            /// Generates the next sequential key by incrementing the current key value.
+            /// </summary>
+            public Key GenerateNextKey()
+            {
+                // If the current list is empty
+                if (_keyChars.Count == 0)
+                    return new Key("A");
+
+                // Create a copy
+                // Check the last and first elements if they are 'Z'
+                char[]? newValues = null;
+
+                if (_keyChars[0] == 'Z' && _keyChars[_keyChars.Count - 1] == 'Z')
+                    newValues = new char[_keyChars.Count + 1];
+                else
+                    newValues = new char[_keyChars.Count];
+
+                // Here the length of the array is already been determined
+                bool isIncremented = false;
+                for (int i = _keyChars.Count - 1; i >= 0; i--)
+                {
+                    char current = _keyChars[i];
+                    if (current == 'Z' && !isIncremented)
+                        current = 'A';
+                    else if (!isIncremented)
+                    {
+                        current++;
+                        isIncremented = true;
+                    }
+
+                    newValues[i] = current;
+                }
+
+                if (_keyChars.Count < newValues.Length) // It means that the values array has one extra slot
+                    newValues[newValues.Length - 1] = 'A';
+
+                return new Key(newValues);
+            }
+
+            /// <summary>
+            /// Resets the key to an empty state.
+            /// </summary>
+            public void ResetKey()
+            {
+                _keyChars.Clear();
+            }
+
+            public bool Equals(Key? x, Key? y)
+            {
+                return x.FullKeyValue == y.FullKeyValue;
+            }
+
+            public int GetHashCode([DisallowNull] Key obj)
+            {
+                return obj.FullKeyValue.GetHashCode();
+            }
+        } // Embedded class
+        #endregion Embedded class
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the count of sets in the collection.
+        /// </summary>
+        public int Count => _dicCollection.Count;
+
+        /// <summary>
+        /// Indexer to access sets by their name.
+        /// </summary>
+        public IStructuredSet<T>? this[string name]
         {
             get
             {
-                if (index < 0 || index >= _setNames.Count)
-                    throw new IndexOutOfRangeException();
-                return _sets[index];
+                return FindSetByName(name);
             }
-        }//end indexer
+        }
 
-        //Constructor
+        #endregion Properties
+
+        #region Constructors
+
+        /// <summary>
+        /// Default constructor that initializes an empty collection.
+        /// </summary>
         public SetCollection()
         {
             Clear();
-        }//ctor main
+        }
+
+        /// <summary>
+        /// Initializes the collection with a range of sets.
+        /// </summary>
+        /// <param name="collection">The collection of sets to add.</param>
         public SetCollection(IEnumerable<IStructuredSet<T>> collection)
         {
             Clear();
-            foreach (var item in collection)
-            {
-                //Add all elements from the incoming collection in the internal collection
-                //  and also assign a name in all the elements.
-                this.Add(item);
-            }//for each
-        }//ctor 02
-        #endregion Properties, Indexers and Contructor
 
-        #region Adding new element/set in the collection
+            // Check for nulls
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
+
+            // Add the range
+            this.AddRange(collection);
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
+        /// <summary>
+        /// Adds a single set to the collection.
+        /// </summary>
+        /// <param name="item">The set to add.</param>
         public void Add(IStructuredSet<T> item)
         {
-            if(_count_sets == 0)
-            {
-                char n = (char)65;
-                _sets.Add(item);
-                _setNames.Add(n.ToString());
-                _count_sets++;
-                return;
-            }//end if
+            _lastKey = _lastKey.GenerateNextKey();
 
-            //First get the last name in the array of names
-            string name = _setNames[_count_sets - 1];
+            // Check for nulls
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
 
-            //Now find the next name
-            string newname = NextName(name);
+            // Add the element
+            _dicCollection.Add(_lastKey.FullKeyValue, item);
+        }
 
-            //Add the set and name in the || arrays/lists
-            _sets.Add(item);
-            _setNames.Add(newname);
-            _count_sets++;
-        }//Add
-        private string NextName(string name)
+        /// <summary>
+        /// Adds multiple sets to the collection.
+        /// </summary>
+        /// <param name="collection">The collection of sets to add.</param>
+        public void AddRange(IEnumerable<IStructuredSet<T>> collection)
         {
-            //Stack that will hold the current characters of the name
-            Stack<char> sValues = new Stack<char>();
-            for (int i = 0; i < name.Length; i++)
-            {
-                //Add all characters to the statck
-                sValues.Push(name[i]);
-            }//edn for
-            
-            //variable to hold the newname following the current name
-            string newname = "";
+            // Check for nulls
+            ArgumentNullException.ThrowIfNull(collection, nameof(collection));
 
-            //Get the last letter ascii value
-            int current_char_ascii = sValues.Pop();
+            foreach (var item in collection)
+                Add(item);
+        }
 
-            if (sValues.Count == 0)//If we have one letter
-            {
-                //Move to the next character
-                current_char_ascii++;
-                if (current_char_ascii > 90)
-                    return "AA";
-                return ((char)current_char_ascii).ToString();
-            }//end if we have a single character
-
-            //The idea
-            //--Here in this lines of code we are considering names which are bigger that 'AA'
-            //--So we first increament the last letter('A') to get the next name
-            //--If we get a name 'AZ' and increament ('Z') we get '[' which is not correct, so the Idea is to round the new increament to
-            //**              'A' and then Increament the next character ('A') thus 'AZ' --> 'BA'
-            //--If we get to 'ZZ', note that if we increament 'Z' we get '[' but using the above approach we can get 'ZZ' --> '[A'
-            //**                   which is not correct, so when get that situation we make it <A's> with n+1 A's, ie. 'ZZ'--> 'AAA'
-            //**                   After this then the algorithm continues....
-
-            //Increament it to the next character
-            current_char_ascii++; 
-
-            //Check if we need to round to 'A' or not
-            bool needs_rounding = (current_char_ascii > 90);
-
-            //A stack that will hold the new character's in-order.
-            Stack<char> sNewValues = new Stack<char>();
-            do
-            {
-                //Rounding the character
-                if(needs_rounding)
-                {
-                    //This means we're above Z
-                    sNewValues.Push('A');//Push 'A' to the stack
-
-                    //Pop the next character and round it (Rounding)
-                    current_char_ascii = sValues.Pop();
-                    current_char_ascii++; // Round the character by 1
-                }//end if
-                else
-                {
-                    //Else we don't need to do roundings
-                    //-Just add the character as it is and pop the next character
-                    sNewValues.Push((char)current_char_ascii);
-                    current_char_ascii = sValues.Pop();
-                }//end else
-
-                //Check for rounding again
-                needs_rounding = (current_char_ascii > 90);
-            } while (sValues.Count > 0);
-            //Add the last character
-
-            //Check for rounding for the last character
-            if (needs_rounding)
-            {
-                current_char_ascii++;
-                needs_rounding = current_char_ascii > 90;//If we are greater than 90 after rounding
-                if(!needs_rounding)
-                    sNewValues.Push((char)++current_char_ascii);
-                else
-                {
-                    //Start afresh with 'A...n+1'; 
-                    int count = name.Length + 1;
-                    sNewValues = new Stack<char>("".PadRight(count, 'A'));
-                }//end else
-            }//                
-            else
-                sNewValues.Push((char)current_char_ascii);
-
-            while (sNewValues.Count > 0)
-                newname += sNewValues.Pop();
-
-            return newname;
-        }//EvaluateName
-        #endregion Adding new element/set in the collection
-
-        #region Enumeration 
-        public IEnumerator<Set> EnumerateWithSetStructure()
-        {
-            //Return the struct of the set
-            for (int i = 0; i < _count_sets; i++)
-                yield return new Set(_setNames[i], _sets[i].ToString(), _sets[i].Cardinality);
-        }//
-        #endregion Enumeration
-
-        #region Removing element/set in the colletion
-        public void Remove(IStructuredSet<T> item)
-        {
-            int index = _sets.IndexOf(item);
-            RemoveAt(index);
-        }//Remove
-        public void Remove(string name)
-        {
-            int index = _setNames.IndexOf(name);
-            RemoveAt(index);
-        }//Remove
-        public void RemoveAt(int index)
-        {
-            if (index < 0)
-                return;
-            //Remove the element from the || arrays
-            _sets.RemoveAt(index);
-            _setNames.RemoveAt(index);
-            _count_sets--;
-        }//RemoveAt
-        #endregion Removing element/set in the collection
-
-        #region SetContainment and Finding
-        public bool Contains(IStructuredSet<T> item)
-        {
-            int index = this._sets.IndexOf(item);
-            return index >= 0;
-        }//Contains
-        public bool Contains(string name)
-        {
-            int index = this._setNames.IndexOf(name);
-            return index >= 0;
-        }//Contains
-        public IStructuredSet<T> FindSetByName(string name)
-        {
-            int index = this._setNames.IndexOf(name);
-            if (index < 0)
-                return default(IStructuredSet<T>);
-            return this._sets[index];
-        }//FindSetByName
-        public Set GetSetByIndex(int index)
-        {
-            if (index < 0 || index >= _count_sets)
-                throw new IndexOutOfRangeException();
-            var set = new Set(_setNames[index], _sets[index].ToString(), _sets[index].Cardinality);
-            return set;
-        }//GetSetByIndex
-        #endregion SetContainment and Finding
-
-        #region Resetting and Clearing
-        public void Reset()
-        {
-            //Here we reset the naming of the sets
-            List<IStructuredSet<T>> copy = this._sets;
-
-            //Clear the collection
-            Clear();
-
-            //Re-add the set collection
-            foreach (var item in copy)
-                this.Add(item);
-        }//ResetNaming
+        /// <summary>
+        /// Clears the collection, removing all sets.
+        /// </summary>
         public void Clear()
         {
-            _sets = new List<IStructuredSet<T>>();
-            _count_sets = 0;
-            _setNames = new List<string>();
-        }//Clear
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            throw new NotImplementedException();
+            _dicCollection = new Dictionary<string, IStructuredSet<T>>();
+            _lastKey = new Key();
         }
 
+        /// <summary>
+        /// Checks if a set is present in the collection.
+        /// </summary>
+        /// <param name="item">The set to check.</param>
+        /// <returns>True if the set is in the collection; otherwise, false.</returns>
+        public bool Contains(IStructuredSet<T> item)
+        {
+            // Check for nulls
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
+
+            // Use LINQ to check for it
+            return _dicCollection.ContainsValue(item);
+        }
+
+        /// <summary>
+        /// Checks if a set with a given name exists in the collection.
+        /// </summary>
+        /// <param name="name">The name of the set to check for.</param>
+        /// <returns>True if a set with the name exists; otherwise, false.</returns>
+        public bool Contains(string name)
+        {
+            // Check for nulls
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+
+            // Get the key value
+            Key key = new Key(name);
+
+            return _dicCollection.ContainsKey(key.FullKeyValue);
+        }
+
+        /// <summary>
+        /// Finds a set by its name.
+        /// </summary>
+        /// <param name="name">The name of the set.</param>
+        /// <returns>The set if found, otherwise null.</returns>
+        public IStructuredSet<T>? FindSetByName(string name)
+        {
+            // Check for nulls
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+
+            // Generate the key
+            Key key = new Key(name);
+
+            // Check if the key exists
+            if (_dicCollection.ContainsKey(key.FullKeyValue))
+                return _dicCollection[key.FullKeyValue];
+
+            return null;
+        }
+
+        /// <summary>
+        /// Removes a set by its name.
+        /// </summary>
+        /// <param name="name">The name of the set to remove.</param>
+        /// <returns>True if the set was removed; otherwise, false.</returns>
+        public bool Remove(string name)
+        {
+            // Check for nulls
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
+
+            Key key = new Key(name);
+
+            return _dicCollection.Remove(key.FullKeyValue);
+        }
+
+        /// <summary>
+        /// Resets the collection to its initial state, re-adding all sets that were previously added.
+        /// </summary>
+        public void Reset()
+        {
+            // Make a copy of the list
+            var array = _dicCollection.Values;
+
+            // Reset the current class
+            Clear();
+
+            // Re-add the sets
+            AddRange(array);
+        }
+
+        /// <summary>
+        /// Returns an enumerator for the collection.
+        /// </summary>
+        /// <returns>An enumerator for the collection.</returns>
+        public IEnumerator<KeyValuePair<string, IStructuredSet<T>>> GetEnumerator()
+        {
+            foreach (var item in _dicCollection)
+            {
+                yield return new KeyValuePair<string, IStructuredSet<T>>(item.Key, item.Value);
+            }
+        }
+
+        /// <summary>
+        /// Returns a non-generic enumerator for the collection.
+        /// </summary>
+        /// <returns>A non-generic enumerator for the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
         }
-        #endregion Reseting and Clearing
-    }//class
-}//namespace
+
+        #endregion Methods
+    } // class
+} // namespace

@@ -27,15 +27,15 @@ namespace SetsLibrary.Collections;
 /// Represents a collection of sets that can be enumerated and manipulated.
 /// </summary>
 /// <typeparam name="T">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public interface ISetCollection<T> : IEnumerable<T>
-    where T : IComparable<T>
+public interface ISetCollection<TSet, TType> : IEnumerable<KeyValuePair<string,TSet>>
+    where TType : IComparable<TType>
 {
     /// <summary>
     /// Gets the set at the specified index in the collection.
     /// </summary>
-    /// <param name="index">The index of the set in the collection.</param>
+    /// <param name="name">The name of the set.</param>
     /// <returns>An instance of <see cref="IStructuredSet{T}"/> at the specified index.</returns>
-    IStructuredSet<T> this[int index] { get; }
+    TSet? this[string name] { get; }
 
     /// <summary>
     /// Gets the number of sets in the collection.
@@ -46,14 +46,14 @@ public interface ISetCollection<T> : IEnumerable<T>
     /// Adds a new set to the collection.
     /// </summary>
     /// <param name="item">The set to be added.</param>
-    void Add(IStructuredSet<T> item);
-
+    void Add(TSet item);
+    void AddRange(IEnumerable<TSet> items);
     /// <summary>
     /// Checks whether the collection contains a specified set.
     /// </summary>
     /// <param name="item">The set to be searched for.</param>
     /// <returns>True if the set is in the collection; otherwise, false.</returns>
-    bool Contains(IStructuredSet<T> item);
+    bool Contains(TSet item);
 
     /// <summary>
     /// Checks whether the collection contains a set with the specified name.
@@ -61,44 +61,17 @@ public interface ISetCollection<T> : IEnumerable<T>
     /// <param name="name">The name of the set.</param>
     /// <returns>True if the set is in the collection; otherwise, false.</returns>
     bool Contains(string name);
-
     /// <summary>
     /// Finds a set by its name in the collection.
     /// </summary>
     /// <param name="name">The name of the set.</param>
     /// <returns>The set if found; otherwise, null.</returns>
-    IStructuredSet<T> FindSetByName(string name);
-
-    /// <summary>
-    /// Gets the set structure at the specified index.
-    /// </summary>
-    /// <param name="index">The zero-based index of the set.</param>
-    /// <returns>A <see cref="Set"/> structure of the set at the specified index.</returns>
-    Set GetSetByIndex(int index);
-
-    /// <summary>
-    /// Removes a specified set from the collection.
-    /// </summary>
-    /// <param name="item">The set to be removed.</param>
-    void Remove(IStructuredSet<T> item);
-
+    TSet? FindSetByName(string name);
     /// <summary>
     /// Removes a set from the collection by its name.
     /// </summary>
     /// <param name="name">The name of the set.</param>
-    void Remove(string name);
-
-    /// <summary>
-    /// Removes a set at a specified index from the collection.
-    /// </summary>
-    /// <param name="index">The zero-based index of the set.</param>
-    void RemoveAt(int index);
-
-    /// <summary>
-    /// Gets an enumerator of the set structures in the collection.
-    /// </summary>
-    /// <returns>An enumerable collection of the <see cref="Set"/> structures.</returns>
-    IEnumerator<Set> EnumerateWithSetStructure();
+    bool Remove(string name);
 
     /// <summary>
     /// Resets the naming (numbering) of sets in the collection.
