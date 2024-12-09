@@ -20,8 +20,6 @@
  * - System.Collections for IEnumerable support.
  */
 
-using SetsLibrary.Interfaces;
-using System.Collections;
 namespace SetsLibrary.Collections;
 
 /// <summary>

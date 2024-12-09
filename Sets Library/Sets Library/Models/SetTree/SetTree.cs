@@ -1,8 +1,7 @@
 ﻿using SetsLibrary.Collections;
-using SetsLibrary.Interfaces;
 using SetsLibrary.Utility;
 
-namespace SetsLibrary.Models.SetTree;
+namespace SetsLibrary;
 
 /// <summary>
 /// Represents a tree structure for sets, allowing the organization and manipulation of set elements.

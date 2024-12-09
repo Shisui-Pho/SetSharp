@@ -14,23 +14,22 @@
  * - Supports generic types that implement the IComparable interface.
  * - Utilizes SetExtractionSettings<T> for customizing the conversion process.
  */
-using SetsLibrary.Models;
-namespace SetLibrary.Models
+namespace SetsLibrary;
+
+/// <summary>
+/// Defines a contract for converting a string to an object of type T, 
+/// which can be utilized within a set.
+/// </summary>
+/// <typeparam name="T">The type of objects to convert, which must implement <see cref="IComparable"/>.</typeparam>
+public interface ICustomObjectConverter<T>
+    where T : IComparable<T>
 {
     /// <summary>
-    /// Defines a contract for converting a string to an object of type T, 
-    /// which can be utilized within a set.
+    /// Converts a string representation of an object to an instance of type T.
     /// </summary>
-    /// <typeparam name="T">The type of objects to convert, which must implement <see cref="IComparable"/>.</typeparam>
-    public interface ICustomObjectConverter<T>
-        where T : IComparable<T>
-    {
-        /// <summary>
-        /// Converts a string representation of an object to an instance of type T.
-        /// </summary>
-        /// <param name="field">The string representation of the object to convert.</param>
-        /// <param name="settings">The extraction settings used for the conversion process.</param>
-        /// <returns>An instance of type T created from the provided string representation.</returns>
-        T ToObject(string field, SetExtractionConfiguration<T> settings);
-    } // interface
-} // namespace
+    /// <param name="field">The string representation of the object to convert.</param>
+    /// <param name="settings">The extraction settings used for the conversion process.</param>
+    /// <returns>An instance of type T created from the provided string representation.</returns>
+    T ToObject(string field, SetExtractionConfiguration<T> settings);
+} // interface
+// namespace

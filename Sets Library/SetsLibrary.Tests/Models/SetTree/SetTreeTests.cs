@@ -1,10 +1,6 @@
-﻿using SetsLibrary.Interfaces;
-using SetsLibrary.Models;
-using SetsLibrary.Models.SetTree;
-using Xunit;
-
-namespace SetsLibrary.Tests.Models.SetTree 
-{ 
+﻿using Xunit;
+namespace SetsLibrary.Tests.Models.SetTree
+{
 
     public class SetTreeTests
 

@@ -14,46 +14,46 @@
  * - Used for evaluating proper sets, universal sets, and other set relationships.
  */
 
-namespace SetsLibrary.Models
+namespace SetsLibrary;
+
+/// <summary>
+/// Represents the types of relationships between sets.
+/// </summary>
+public enum SetResultType
 {
     /// <summary>
-    /// Represents the types of relationships between sets.
+    /// Default relationship type when no specific relation is identified.
     /// </summary>
-    public enum SetResultType
-    {
-        /// <summary>
-        /// Default relationship type when no specific relation is identified.
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// Indicates that the set is universal, containing all possible elements.
-        /// </summary>
-        Universal,
+    /// <summary>
+    /// Indicates that the set is universal, containing all possible elements.
+    /// </summary>
+    Universal,
 
-        /// <summary>
-        /// Indicates that the set is a subset of another set.
-        /// </summary>
-        SubSet,
+    /// <summary>
+    /// Indicates that the set is a subset of another set.
+    /// </summary>
+    SubSet,
 
-        /// <summary>
-        /// Indicates that the set is not a subset of another set.
-        /// </summary>
-        NotASubSet,
+    /// <summary>
+    /// Indicates that the set is not a subset of another set.
+    /// </summary>
+    NotASubSet,
 
-        /// <summary>
-        /// Indicates that the set is a proper subset of another set.
-        /// </summary>
-        ProperSet,
+    /// <summary>
+    /// Indicates that the set is a proper subset of another set.
+    /// </summary>
+    ProperSet,
 
-        /// <summary>
-        /// Indicates that the set is non-universal, meaning it does not contain all possible elements.
-        /// </summary>
-        Non_Universal,
+    /// <summary>
+    /// Indicates that the set is non-universal, meaning it does not contain all possible elements.
+    /// </summary>
+    Non_Universal,
 
-        /// <summary>
-        /// Indicates that the two sets are equal.
-        /// </summary>
-        Same_Set
-    }//enum
-}//namespace
+    /// <summary>
+    /// Indicates that the two sets are equal.
+    /// </summary>
+    Same_Set
+}//enum
+//namespace

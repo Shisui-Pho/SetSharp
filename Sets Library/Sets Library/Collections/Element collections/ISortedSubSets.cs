@@ -16,9 +16,6 @@
  * - Provides methods to check for the existence of a set tree and retrieve its index.
  * - Enables removal of set trees by value or by index.
  */
-
-using SetsLibrary.Interfaces;
-
 namespace SetsLibrary.Collections;
 
 /// <summary>

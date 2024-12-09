@@ -1,7 +1,6 @@
-﻿using SetsLibrary.Models;
+﻿using SetsLibrary;
 using SetsLibrary.Utility;
 using Xunit;
-using SetLibrary.Models;
 namespace SetsLibrary.Tests.Utilities.SortAndRemove;
 public class SortAndRemoveDuplicatesTests
 {

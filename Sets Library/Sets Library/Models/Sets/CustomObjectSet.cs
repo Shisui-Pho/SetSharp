@@ -16,11 +16,7 @@
  * - Provides a placeholder method for checking element presence (Contains).
  * - Includes a method for merging sets (MergeWith) with future implementation.
  */
-
-using SetLibrary.Models;
-using SetsLibrary.Interfaces;
-
-namespace SetsLibrary.Models.Sets;
+namespace SetsLibrary;
 
 /// <summary>
 /// Represents a custom set that can contain elements of type T, 
