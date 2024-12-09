@@ -16,10 +16,7 @@
  * - Provides a method to convert string records into objects using the provided converter.
  */
 
-using SetLibrary.Models;
-using System;
-
-namespace SetsLibrary.Models;
+namespace SetsLibrary;
 
 /// <summary>
 /// Represents the configuration for extracting sets, including terminators, optional custom converter, 

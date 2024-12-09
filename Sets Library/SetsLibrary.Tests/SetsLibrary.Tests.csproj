@@ -23,10 +23,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
-
 	<ItemGroup>
-    <ProjectReference Include="..\Sets Library\Sets Library.csproj" />
-  </ItemGroup>
+	  <ProjectReference Include="..\Sets Library\Sets Library.csproj" />
+	</ItemGroup>
 
 </Project>

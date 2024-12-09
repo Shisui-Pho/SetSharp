@@ -23,25 +23,25 @@
 
 using System.Collections;
 
-namespace SetsLibrary.Collections
+namespace SetsLibrary.Collections;
+
+/// <summary>
+/// Represents a collection of sorted elements that allows for addition, removal, and searching within the collection.
+/// </summary>
+/// <typeparam name="T">The type of elements in the collection, which must implement <see cref="IComparable{T}"/>.</typeparam>
+public class SortedElements<T> : BaseSortedCollection<T>, ISortedElements<T>
+    where T : IComparable<T>
 {
     /// <summary>
-    /// Represents a collection of sorted elements that allows for addition, removal, and searching within the collection.
+    /// Initializes a new instance of the <see cref="SortedElements{T}"/> class.
     /// </summary>
-    /// <typeparam name="T">The type of elements in the collection, which must implement <see cref="IComparable{T}"/>.</typeparam>
-    public class SortedElements<T> : BaseSortedCollection<T>, ISortedElements<T>
-        where T : IComparable<T>
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SortedElements{T}"/> class.
-        /// </summary>
-        public SortedElements() : base() { }//ctor main
+    public SortedElements() : base() { }//ctor main
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SortedElements{T}"/> class with an existing set of elements.
-        /// </summary>
-        /// <param name="elements">The collection of elements to initialize the sorted collection with.</param>
-        public SortedElements(IEnumerable<T> elements)
-            : base(elements) { }//ctor 01
-    }//class
-} //namespace SetLibrary.Collections
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SortedElements{T}"/> class with an existing set of elements.
+    /// </summary>
+    /// <param name="elements">The collection of elements to initialize the sorted collection with.</param>
+    public SortedElements(IEnumerable<T> elements)
+        : base(elements) { }//ctor 01
+}//class
+//namespace SetLibrary.Collections

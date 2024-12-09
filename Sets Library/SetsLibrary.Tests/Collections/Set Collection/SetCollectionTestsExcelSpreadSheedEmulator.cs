@@ -1,6 +1,5 @@
-﻿using SetLibrary.Collections;
-using SetsLibrary.Models;
-using SetsLibrary.Models.Sets;
+﻿using SetsLibrary;
+using SetsLibrary.Collections;
 using Xunit;
 
 namespace SetsLibrary.Tests.Collections.Set_Collection

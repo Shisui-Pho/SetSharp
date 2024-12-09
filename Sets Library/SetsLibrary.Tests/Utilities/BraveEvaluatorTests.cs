@@ -1,20 +1,4 @@
-﻿/*
- * File: BraceEvaluatorTests.cs
- * Author: Phiwokwakhe Khathwane
- * Date: 24 November 2024
- * 
- * Description:
- * This file contains unit tests for the BraceEvaluator class, verifying the functionality 
- * of brace evaluation logic for various cases. The tests ensure that opening and closing 
- * braces in string expressions are correctly matched and nested according to defined rules.
- * 
- * Key Features:
- * - Individual tests for specific scenarios, such as unmatched braces and improper nesting.
- * - Parameterized tests for efficient evaluation of multiple input cases.
- * - Edge case handling, including nested braces of varying complexity and incorrect brace patterns.
- */
-
-using SetsLibrary.Utility;
+﻿using SetsLibrary.Utility;
 using Xunit;
 namespace Tests.Utilities
 {

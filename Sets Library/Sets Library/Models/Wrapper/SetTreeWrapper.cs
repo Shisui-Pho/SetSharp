@@ -15,9 +15,7 @@
  * - Implements validation for index range and null checks.
  */
 
-using SetsLibrary.Interfaces;
-using SetsLibrary.Models.SetTree;
-namespace SetsLibrary.Models;
+namespace SetsLibrary;
 
 /// <summary>
 /// Represents a wrapper for the SetTree class that extends functionality for accessing elements 

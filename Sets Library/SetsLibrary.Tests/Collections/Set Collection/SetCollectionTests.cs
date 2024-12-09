@@ -1,11 +1,5 @@
-﻿using SetLibrary.Collections;
-using SetsLibrary.Models;
-using SetsLibrary.Models.Sets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SetsLibrary;
+using SetsLibrary.Collections;
 using Xunit;
 
 namespace SetsLibrary.Tests.Collections.Set_Collection

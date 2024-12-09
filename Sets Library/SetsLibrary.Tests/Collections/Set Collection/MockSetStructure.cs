@@ -1,6 +1,4 @@
-﻿using SetsLibrary.Interfaces;
-using SetsLibrary.Models;
-
+﻿using SetsLibrary;
 namespace SetsLibrary.Tests.Collections.Set_Collection;
 
 internal class MockSetStructure : IStructuredSet<int>

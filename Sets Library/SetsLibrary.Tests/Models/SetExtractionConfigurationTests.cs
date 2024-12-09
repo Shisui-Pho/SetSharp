@@ -1,6 +1,5 @@
 ﻿using Xunit;
-using SetsLibrary.Models;
-using SetLibrary.Models;
+using SetsLibrary;
 namespace SetsLibrary.Tests.Models
 {
     public class SetExtractionConfigurationTests

@@ -15,8 +15,7 @@
  * - Exposes root element and subset enumerators, along with counting properties.
  */
 
-using SetsLibrary.Interfaces;
-namespace SetsLibrary.Models;
+namespace SetsLibrary;
 
 /// <summary>
 /// Represents a base wrapper for a SetTree, delegating functionality to the underlying ISetTree instance.

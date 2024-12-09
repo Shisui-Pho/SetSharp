@@ -1,5 +1,4 @@
-﻿using SetLibrary.Collections;
-using SetsLibrary.Collections;
+﻿using SetsLibrary.Collections;
 using Xunit;
 
 namespace SetsLibrary.Tests.Collections.Element_Collections

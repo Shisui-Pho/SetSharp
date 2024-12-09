@@ -1,9 +1,6 @@
-﻿using Moq;
-using SetLibrary.Models;
-using SetsLibrary.Interfaces;
-using SetsLibrary.Models;
-using SetsLibrary.Utility;
+﻿using SetsLibrary.Utility;
 using Xunit;
+using SetsLibrary;
 namespace SetsLibrary.Tests.Utilities.Extract
 {
 
