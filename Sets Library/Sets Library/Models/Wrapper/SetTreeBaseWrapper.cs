@@ -21,7 +21,9 @@ namespace SetsLibrary;
 /// Represents a base wrapper for a SetTree, delegating functionality to the underlying ISetTree instance.
 /// </summary>
 /// <typeparam name="T">The type of the elements in the set. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public abstract class SetTreeBaseWrapper<T> : ISetTree<T>
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
     where T : IComparable<T>
 {
     /// <summary>
