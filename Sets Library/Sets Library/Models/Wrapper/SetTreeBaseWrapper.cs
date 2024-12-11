@@ -21,7 +21,9 @@ namespace SetsLibrary;
 /// Represents a base wrapper for a SetTree, delegating functionality to the underlying ISetTree instance.
 /// </summary>
 /// <typeparam name="T">The type of the elements in the set. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public abstract class SetTreeBaseWrapper<T> : ISetTree<T>
+#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
+public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
+#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
     where T : IComparable<T>
 {
     /// <summary>
@@ -169,4 +171,28 @@ public abstract class SetTreeBaseWrapper<T> : ISetTree<T>
     {
         return setTree.RemoveElement(element);
     }
+
+    #region Methods to be overriden
+
+    /// <summary>
+    /// Gets the root element at the specified index.
+    /// </summary>
+    /// <param name="index">The index of the root element to retrieve.</param>
+    /// <returns>The root element at the specified index, or <c>null</c> if not found.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is out of range.</exception>
+    public abstract T? GetRootElementByIndex(int index);
+
+    /// <summary>
+    /// Gets the subset at the specified index.
+    /// </summary>
+    /// <param name="index">The index of the subset to retrieve.</param>
+    /// <returns>The subset at the specified index, or <c>null</c> if not found.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is out of range.</exception>
+    public abstract ISetTree<T>? GetSubsetByIndex(int index);
+
+    /// <summary>
+    /// Clears the internal elements and subsets of the SetTree.
+    /// </summary>
+    public abstract void Clear();
+    #endregion Methods to be overriden
 }//class
