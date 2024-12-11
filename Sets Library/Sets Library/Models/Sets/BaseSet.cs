@@ -434,16 +434,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Check if setB contains the current element in it set
             var elem = _treeWrapper.GetRootElementByIndex(i);
-            if (newSet.Cardinality < setB.Cardinality)
-            {
-                if (!setB.Contains(elem))
-                    newSet.AddElement(elem);
-            }//end if
-            else
-            {
-                //Just add
+            if (!setB.Contains(elem))
                 newSet.AddElement(elem);
-            }
         }//end for
 
         //Loop througth the subsets of this instance
@@ -451,16 +443,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Check if setB contains the current subste in it set
             var sub = _treeWrapper.GetSubsetByIndex(i);
-            if(newSet.Cardinality < setB.Cardinality)
-            {
-                if (!setB.Contains(sub))
-                    newSet.AddElement(sub);
-            }
-            else
-            {
-                //Just add the element
+            if (!setB.Contains(sub))
                 newSet.AddElement(sub);
-            }
         }//end for 
 
         //return the new set
