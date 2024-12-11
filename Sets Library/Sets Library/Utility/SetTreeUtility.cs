@@ -38,7 +38,7 @@ public static class SetTreeUtility<T>
         // Recursively build the tree string representation
         string tree = BuildTree(setTree);
 
-        return "{" + tree + "}";
+        return /*"{"+*/ tree /*+ "}"*/;
     }//ToElementString
 
     /// <summary>
@@ -52,10 +52,10 @@ public static class SetTreeUtility<T>
         if (currentTree.CountSubsets == 0)
         {
             if (string.IsNullOrEmpty(currentTree.RootElements) || string.IsNullOrWhiteSpace(currentTree.RootElements))
-                return "\u2205"; // This is the empty set/element (∅)
+                return "{\u2205}"; // This is the empty set/element (∅)
 
             // Return the root elements as a string
-            return currentTree.RootElements;
+            return "{" + currentTree.RootElements + "}";
         }
 
         // Initialize a string to build the element tree
@@ -68,9 +68,9 @@ public static class SetTreeUtility<T>
             string sub = BuildTree(subtree);
 
             // Add the subset to the element tree, enclosing it in curly braces
-            elementTree += "{" + sub + "}";
+            elementTree += sub;
         }
-
-        return elementTree;
+        //Add it's root elements and return it
+        return "{" + currentTree.RootElements + currentTree.ExtractionSettings.RowTerminator + elementTree + "}";
     }
 }//BuildTree
