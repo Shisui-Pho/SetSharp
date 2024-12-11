@@ -91,6 +91,9 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Ensure the expression is valid (non-null and non-whitespace)
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
+        //Assign the configurations
+        this.ExtractionConfiguration = config;
+
         // Extract the set tree from the provided expression and configuration
         _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
@@ -398,7 +401,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         //Get the string representation of the sets
         string setA = _treeWrapper.ToString();
-        string? setB = set.ToString();
+        string? setB = set.BuildStringRepresentation();
 
         //Merg strings
         string _set = setA.Remove(setA.Length - 1) + "," + setB?.Remove(0, 1);
