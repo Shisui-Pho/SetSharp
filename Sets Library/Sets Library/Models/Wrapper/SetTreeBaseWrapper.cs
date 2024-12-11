@@ -42,6 +42,11 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
         ArgumentNullException.ThrowIfNull(setTree, nameof(setTree));
         this.setTree = setTree;
     }
+    internal SetTreeBaseWrapper(SetExtractionConfiguration<T> config)
+    {
+        //Creates a new instance of the set tree
+        setTree = new SetTree<T>(config);
+    }//ctor default
 
     /// <summary>
     /// Gets the root elements of the set as a string.

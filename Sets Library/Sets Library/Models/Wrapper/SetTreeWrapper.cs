@@ -36,7 +36,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
         if (setTree is SetTree<T>) // if they are the same, cast the setTree structure
             _assSetTree = setTree as SetTree<T>;
     }
-
+    internal SetTreeWrapper(SetExtractionConfiguration<T> config) : base(config) { }
     /// <summary>
     /// Gets the root element at the specified index.
     /// </summary>

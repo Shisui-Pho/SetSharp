@@ -46,7 +46,14 @@ internal class CustomObjectSet<T> : BaseSet<T>
         : base(expression, config)
     {
     }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class by injecting an existing instance of IIndexedSetTree.
+    /// This constructor allows for complete control over the set tree, including the expression and extraction settings.
+    /// </summary>
+    /// <param name="indexedSetTree">An existing instance of an IIndexedSetTree that provides both the set elements 
+    /// and configuration for extraction.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexedSetTree"/> is null.</exception>
+    public CustomObjectSet(IIndexedSetTree<T> indexedSetTree): base(indexedSetTree) { }
     #endregion Constructors
 
     #region Overrides

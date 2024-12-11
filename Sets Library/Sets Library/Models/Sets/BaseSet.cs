@@ -34,7 +34,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     where T : IComparable<T>
 {
     //Data fields
-    private readonly SetTreeWrapper<T> _treeWrapper;
+    private readonly IIndexedSetTree<T> _treeWrapper;
 
     #region Properties
     /// <summary>
@@ -57,33 +57,67 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified extraction configuration.
     /// This constructor sets the extraction configuration but does not evaluate or set the expression.
+    /// The set tree will be created using the provided configuration.
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="extractionConfiguration"/> is null.</exception>
     public BaseSet(SetExtractionConfiguration<T> extractionConfiguration)
     {
-        //verify if configurations are not null
+        // Ensure the extraction configuration is not null, as it is required for proper set extraction
         ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
 
-        //set the configurations
+        // Set the extraction configuration
         this.ExtractionConfiguration = extractionConfiguration;
-    }//ctor default
+
+        // Create a new instance of SetTreeWrapper using the provided configuration
+        _treeWrapper = new SetTreeWrapper<T>(extractionConfiguration);
+    }// Default constructor (uses SetExtractionConfiguration)
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified string expression 
-    /// and extraction configuration.
-    /// This constructor evaluates the set tree based on the given expression and sets the original expression.
+    /// and extraction configuration. This constructor evaluates the set tree based on the given expression
+    /// and sets the original expression.
     /// </summary>
     /// <param name="expression">The string representation of the set expression.</param>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="config"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="expression"/> is null or whitespace.</exception>
     public BaseSet(string expression, SetExtractionConfiguration<T> config)
-        : this(config)
     {
-        //Extract tree
+        // Ensure the configuration is not null, as it is needed to extract elements and subsets from the expression
+        ArgumentNullException.ThrowIfNull(config, nameof(config));
+
+        // Ensure the expression is valid (non-null and non-whitespace)
+        ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
+
+        // Extract the set tree from the provided expression and configuration
         _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
-        //Asign properties
+        // Assign the original expression after extraction
         OriginalExpression = expression;
-    }//ctor main
+    }// Constructor 1 (accepts expression and SetExtractionConfiguration)
+
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BaseSet{T}"/> class by injecting an existing instance of IIndexedSetTree.
+    /// This constructor allows for complete control over the set tree, including the expression and extraction settings.
+    /// </summary>
+    /// <param name="indexedSetTree">An existing instance of an IIndexedSetTree that provides both the set elements 
+    /// and configuration for extraction.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexedSetTree"/> is null.</exception>
+    public BaseSet(IIndexedSetTree<T> indexedSetTree)
+    {
+        // Ensure the provided indexed set tree is not null, as we need it to initialize the set
+        ArgumentNullException.ThrowIfNull(indexedSetTree, nameof(indexedSetTree));
+
+        // Assign the injected indexed set tree to the _treeWrapper field
+        this._treeWrapper = indexedSetTree;
+
+        // Set the extraction configuration and original expression based on the injected tree
+        this.ExtractionConfiguration = indexedSetTree.ExtractionSettings;
+        this.OriginalExpression = indexedSetTree.ToString(); // Set the original expression from the tree's ToString method
+    }// Constructor 2 (accepts injected IIndexedSetTree)
 
     private ISetTree<T> Extractions(string expression)
     {
