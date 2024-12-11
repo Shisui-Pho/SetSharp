@@ -248,7 +248,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Subset and a properset
             type = SetResultType.Same_Set & SetResultType.SubSet;
-            return false;
+            return true;
         }//end if
 
         //Here it's either they are the same or 
