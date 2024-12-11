@@ -43,7 +43,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     /// <param name="index">The index of the root element to retrieve.</param>
     /// <returns>The root element at the specified index, or <c>null</c> if not found.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is out of range.</exception>
-    public T? GetRootElementByIndex(int index)
+    public override T? GetRootElementByIndex(int index)
     {
         if (index >= Count || index < 0)
             throw new ArgumentOutOfRangeException("index");
@@ -69,7 +69,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     /// <param name="index">The index of the subset to retrieve.</param>
     /// <returns>The subset at the specified index, or <c>null</c> if not found.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is out of range.</exception>
-    public ISetTree<T>? GetSubsetByIndex(int index)
+    public override ISetTree<T>? GetSubsetByIndex(int index)
     {
         if (index >= Count || index < 0)
             throw new ArgumentOutOfRangeException("index");
@@ -90,7 +90,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     /// Clears the internal elements and subsets of the SetTree.
     /// </summary>
     /// <exception cref="ArgumentException">Thrown if the internal SetTree structure is not available.</exception>
-    public void Clear()
+    public override void Clear()
     {
         if (_assSetTree != null)
         {
