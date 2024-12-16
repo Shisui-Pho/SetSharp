@@ -51,25 +51,32 @@ public static class SetTreeUtility<T>
         // Base case: if there are no subsets, return the root elements or the empty set symbol
         if (currentTree.CountSubsets == 0)
         {
-            if (string.IsNullOrEmpty(currentTree.RootElements) || string.IsNullOrWhiteSpace(currentTree.RootElements))
+            string _elements = currentTree.RootElements;
+            if (string.IsNullOrEmpty(_elements) || string.IsNullOrWhiteSpace(_elements))
                 return "{\u2205}"; // This is the empty set/element (∅)
 
             // Return the root elements as a string
-            return "{" + currentTree.RootElements + "}";
+            return "{" + _elements + "}";
         }
 
         // Initialize a string to build the element tree
         string elementTree = "";
 
         // Loop through all subsets of the current tree
-        foreach (ISetTree<T> subtree in currentTree.GetSubsetsEnumarator())
+        foreach (ISetTree<T> subtree in currentTree.GetSubsetsEnumarator().ToList())
         {
             // Recursively retrieve the string representation of the subtree
             string sub = BuildTree(subtree);
 
             // Add the subset to the element tree, enclosing it in curly braces
-            elementTree += sub;
+            elementTree += sub + currentTree.ExtractionSettings.RowTerminator;
         }
+        //Remove the last index of the row terminator
+        int lastIndex = elementTree.LastIndexOf(currentTree.ExtractionSettings.RowTerminator);
+        
+        if (lastIndex >= 0)
+            elementTree = elementTree.Remove(lastIndex);
+
         //Add it's root elements and return it
         return "{" + currentTree.RootElements + currentTree.ExtractionSettings.RowTerminator + elementTree + "}";
     }
