@@ -91,6 +91,9 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Ensure the expression is valid (non-null and non-whitespace)
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
+        //Assign the configurations
+        this.ExtractionConfiguration = config;
+
         // Extract the set tree from the provided expression and configuration
         _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
@@ -245,7 +248,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Subset and a properset
             type = SetResultType.Same_Set & SetResultType.SubSet;
-            return false;
+            return true;
         }//end if
 
         //Here it's either they are the same or 
@@ -398,7 +401,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         //Get the string representation of the sets
         string setA = _treeWrapper.ToString();
-        string? setB = set.ToString();
+        string? setB = set.BuildStringRepresentation();
 
         //Merg strings
         string _set = setA.Remove(setA.Length - 1) + "," + setB?.Remove(0, 1);
@@ -431,16 +434,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Check if setB contains the current element in it set
             var elem = _treeWrapper.GetRootElementByIndex(i);
-            if (newSet.Cardinality < setB.Cardinality)
-            {
-                if (!setB.Contains(elem))
-                    newSet.AddElement(elem);
-            }//end if
-            else
-            {
-                //Just add
+            if (!setB.Contains(elem))
                 newSet.AddElement(elem);
-            }
         }//end for
 
         //Loop througth the subsets of this instance
@@ -448,16 +443,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Check if setB contains the current subste in it set
             var sub = _treeWrapper.GetSubsetByIndex(i);
-            if(newSet.Cardinality < setB.Cardinality)
-            {
-                if (!setB.Contains(sub))
-                    newSet.AddElement(sub);
-            }
-            else
-            {
-                //Just add the element
+            if (!setB.Contains(sub))
                 newSet.AddElement(sub);
-            }
         }//end for 
 
         //return the new set

@@ -23,7 +23,7 @@ namespace SetsLibrary;
 /// which must be comparable and convertible from a string representation.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/> and <see cref="ICustomObjectConverter{T}"/>.</typeparam>
-internal class CustomObjectSet<T> : BaseSet<T>
+public class CustomObjectSet<T> : BaseSet<T>
     where T : IComparable<T>, ICustomObjectConverter<T>
 {
     #region Constructors

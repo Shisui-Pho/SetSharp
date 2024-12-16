@@ -176,7 +176,10 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
     {
         return setTree.RemoveElement(element);
     }
-
+    public override string ToString()
+    {
+        return setTree.ToString();
+    }
     #region Methods to be overriden
 
     /// <summary>
