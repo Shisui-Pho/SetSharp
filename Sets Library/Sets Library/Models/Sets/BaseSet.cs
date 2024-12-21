@@ -1,7 +1,7 @@
 ﻿/*
  * File: BaseSet.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 24 November 2024
+ * Date: 21 December 2024
  * 
  * Description:
  * This file contains the implementation of the abstract BaseSet class, which provides 
@@ -23,7 +23,9 @@
  * This class is intended for use as a base class for specific set implementations that may add additional 
  * functionality specific to the type of set being created.
  */
+
 using SetsLibrary.Utility;
+
 namespace SetsLibrary;
 
 /// <summary>
@@ -33,14 +35,15 @@ namespace SetsLibrary;
 public abstract class BaseSet<T> : IStructuredSet<T>
     where T : IComparable<T>
 {
-    //Data fields
+    // Data fields
     private readonly IIndexedSetTree<T> _treeWrapper;
 
     #region Properties
+
     /// <summary>
     /// Gets the original string representation of the set.
     /// </summary>
-    public string OriginalExpression {get; private set; }
+    public string OriginalExpression { get; private set; }
 
     /// <summary>
     /// Gets the cardinality (number of elements) of the evaluated set.
@@ -50,10 +53,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Gets the current settings of the set extractor.
     /// </summary>
-    public SetExtractionConfiguration<T> ExtractionConfiguration {get; private set; }
+    public SetExtractionConfiguration<T> ExtractionConfiguration { get; private set; }
+
     #endregion Properties
 
     #region Constructors
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified extraction configuration.
     /// This constructor sets the extraction configuration but does not evaluate or set the expression.
@@ -71,8 +76,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Create a new instance of SetTreeWrapper using the provided configuration
         _treeWrapper = new SetTreeWrapper<T>(extractionConfiguration);
-    }// Default constructor (uses SetExtractionConfiguration)
-
+    } // Default constructor (uses SetExtractionConfiguration)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified string expression 
@@ -91,7 +95,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Ensure the expression is valid (non-null and non-whitespace)
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
-        //Assign the configurations
+        // Assign the configurations
         this.ExtractionConfiguration = config;
 
         // Extract the set tree from the provided expression and configuration
@@ -99,8 +103,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Assign the original expression after extraction
         OriginalExpression = expression;
-    }// Constructor 1 (accepts expression and SetExtractionConfiguration)
-
+    } // Constructor 1 (accepts expression and SetExtractionConfiguration)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class by injecting an existing instance of IIndexedSetTree.
@@ -120,29 +123,37 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Set the extraction configuration and original expression based on the injected tree
         this.ExtractionConfiguration = indexedSetTree.ExtractionSettings;
         this.OriginalExpression = indexedSetTree.ToString(); // Set the original expression from the tree's ToString method
-    }// Constructor 2 (accepts injected IIndexedSetTree)
+    } // Constructor 2 (accepts injected IIndexedSetTree)
 
+    /// <summary>
+    /// Extracts the set tree from the provided expression, validates brace structure, 
+    /// and returns the tree structure for the set.
+    /// </summary>
+    /// <param name="expression">The string representation of the set expression.</param>
+    /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="expression"/> is null, empty, or whitespace.</exception>
+    /// <exception cref="MissingBraceException">Thrown if the braces in the set expression are mismatched or invalid.</exception>
     private ISetTree<T> Extractions(string expression)
     {
-        //Check if string is null or empty or a whitespace
+        // Check if the string is null, empty, or contains only whitespace
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
-        ArgumentException.ThrowIfNullOrEmpty(expression, nameof(expression));
 
-        //Evaluate braces
+        // Evaluate brace correctness
         if (!BraceEvaluator.AreBracesCorrect(expression, out int indexOfInvalidBrace))
         {
-
             string details = $"The index of the invalid/missing brace is \"{indexOfInvalidBrace}\"." +
-                            $"\n{expression}" +
-                            $"\n{"".PadLeft(indexOfInvalidBrace)}^" +
-                            $"\n{"".PadRight(indexOfInvalidBrace)}pos({indexOfInvalidBrace})";
+                             $"\n{expression}" +
+                             $"\n{"".PadLeft(indexOfInvalidBrace)}^" +
+                             $"\n{"".PadRight(indexOfInvalidBrace)}pos({indexOfInvalidBrace})";
 
+            // Throw MissingBraceException if brace validation fails
             throw new MissingBraceException("Missing/Invalid brace", details);
         }
 
-        //Extract the set tree
+        // Extract and return the set tree from the expression using the extraction configuration
         return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
-    }//Extractions
+    } // Extractions
+
     #endregion Constructors
 
     #region Implemented Methods
