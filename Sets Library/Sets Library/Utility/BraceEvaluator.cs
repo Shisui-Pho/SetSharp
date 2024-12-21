@@ -28,8 +28,11 @@ public static class BraceEvaluator
     /// </summary>
     /// <param name="expression">The string expression to evaluate.</param>
     /// <returns>True if the braces are correctly balanced; otherwise, false.</returns>
-    public static bool AreBracesCorrect(string expression)
+    public static bool AreBracesCorrect(string expression, out int positionOfIncorrectBrace)
     {
+        //This will keep track of the number of elements that have been evaluated
+        positionOfIncorrectBrace = -1;
+
         //First check the opening and clossing braces if they exist
         if (!expression.StartsWith("{") || !expression.EndsWith("}"))
             return false;
@@ -40,11 +43,9 @@ public static class BraceEvaluator
 
         int lengthOfString = expression.Length;
 
-        //This will keep track of the number of elements that have been evaluated
-        int Count = 0;
         foreach (char character in expression)
         {
-            Count++;
+            positionOfIncorrectBrace++;
             if (character == '{')
             {
                 elements.Push(character);
@@ -72,7 +73,7 @@ public static class BraceEvaluator
                 //Handle edge case for a string like this : 
                 //-{1,2},{3,4}
                 //-Without this condition the Brace evaluation will pass
-                if (elements.Count == 0 && Count != lengthOfString)
+                if (elements.Count == 0 && (positionOfIncorrectBrace + 1) != lengthOfString)
                     return false;
 
                 continue;
@@ -83,7 +84,10 @@ public static class BraceEvaluator
             if (elements.Count > 0)
                 elements.Push(character);
         }//for each loop
-        return elements.Count == 0;
+        if (elements.Count == 0)
+            positionOfIncorrectBrace = -1;
+
+        return positionOfIncorrectBrace < 0;
     }//CheckBraces
 }//class
 //namespace
