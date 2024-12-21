@@ -129,10 +129,15 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         ArgumentException.ThrowIfNullOrEmpty(expression, nameof(expression));
 
         //Evaluate braces
-        if (!BraceEvaluator.AreBracesCorrect(expression))
+        if (!BraceEvaluator.AreBracesCorrect(expression, out int indexOfInvalidBrace))
         {
-            //If braaces missmatch
-            throw new ArgumentException("Braces of the expression are not matching");
+
+            string details = $"The index of the invalid/missing brace is \"{indexOfInvalidBrace}\"." +
+                            $"\n{expression}" +
+                            $"\n{"".PadLeft(indexOfInvalidBrace)}^" +
+                            $"\n{"".PadRight(indexOfInvalidBrace)}pos({indexOfInvalidBrace})";
+
+            throw new MissingBraceException("Missing/Invalid brace", details);
         }
 
         //Extract the set tree
