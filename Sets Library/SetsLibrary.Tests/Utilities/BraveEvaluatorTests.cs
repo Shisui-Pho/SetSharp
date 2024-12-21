@@ -12,7 +12,7 @@ namespace Tests.Utilities
             string expression = "{1, 2, {3, 4}}";
 
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.True(result);
@@ -25,7 +25,7 @@ namespace Tests.Utilities
             string expression = "1, 2, {3, 4}";
 
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.False(result);
@@ -38,7 +38,7 @@ namespace Tests.Utilities
             string expression = "{1, 2, 3, 4}}";
 
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.False(result);
@@ -51,7 +51,7 @@ namespace Tests.Utilities
             string expression = "{1, 2, {3, 4}";
 
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.False(result);
@@ -69,7 +69,7 @@ namespace Tests.Utilities
         public void Test_BraceEvaluation(string expression, bool expected)
         {
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.Equal(expected, result);
@@ -81,7 +81,7 @@ namespace Tests.Utilities
             string expression = "{1, 2, {3, 4, {5, 6, {7, 8}, 9}, 10}, 11}";
 
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.True(result);
@@ -94,7 +94,7 @@ namespace Tests.Utilities
             string expression = "{1, 2, {3, 4, {5, 6, {7, 8}, 9}, 10}, 11"; // Missing closing brace
 
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.False(result);
@@ -111,7 +111,7 @@ namespace Tests.Utilities
         public void Test_LongBraceTheory(string expression, bool expected)
         {
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression);
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _ );
 
             // Assert
             Assert.Equal(expected, result);
