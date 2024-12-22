@@ -165,11 +165,11 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestFieldTerminatorEqualsRowTerminator()
         {
             // Arrange & Act
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var exception = Assert.Throws<SetsConfigurationException>(() =>
                 new SetExtractionConfiguration<Person>(",", ",", new Person()));
 
             // Assert
-            Assert.Equal("Terminators cannot be the same.", exception.Message);
+            Assert.Contains("Terminators cannot be the same.", exception.Message);
         }
 
         // Test: Field Terminator Contains Reserved Characters
@@ -177,11 +177,11 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestFieldTerminatorContainsReservedCharacters()
         {
             // Arrange & Act
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var exception = Assert.Throws<SetsConfigurationException>(() =>
                 new SetExtractionConfiguration<Person>("{", "\n", new Person()));
 
             // Assert
-            Assert.Equal("Cannot use reserved characters. (Parameter '_fieldTerminator')", exception.Message);
+            Assert.Contains("Cannot use reserved characters.", exception.Message);
         }
 
         // Test: Row Terminator Contains Reserved Characters
@@ -189,11 +189,11 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestRowTerminatorContainsReservedCharacters()
         {
             // Arrange & Act
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var exception = Assert.Throws<SetsConfigurationException>(() =>
                 new SetExtractionConfiguration<Person>(",", "{", new Person()));
 
             // Assert
-            Assert.Equal("Cannot use reserved characters. (Parameter '_rowTerminator')", exception.Message);
+            Assert.Contains("Cannot use reserved characters.", exception.Message);
         }
 
         // Test: Handling of Missing Row Terminator
