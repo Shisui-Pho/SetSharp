@@ -145,9 +145,11 @@ public class SetTreeExtractor<T>
                 }
             }
             catch
+            (Exception ex)
             {
                 //Handle any exceptions during conversion (throwing is optional)
-                throw;
+                string det = $"Failed to convert the string \'{element}\' to type of \'{typeof(T)}\'";
+                throw new SetsException("Conversion failed due to invalid format",det, ex);
             }
         }//end for each
 

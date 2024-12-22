@@ -97,8 +97,8 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{Invalid Format\nHello, Kitty,10}";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
-            Assert.Equal("Invalid format.", exception.Message);
+            var exception = Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Contains("Conversion failed", exception.Message);
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{Phiwo, Smith, 15\nHello, Kitty, 10\nInvalidFieldFormat}";
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
         }
 
         // Test: Empty String Expression
@@ -233,8 +233,8 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{Hello, Kitty, 10\nnull}";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
-            Assert.Equal("Invalid format.", exception.Message);
+            var exception = Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Contains("Conversion failed", exception.Message);
         }
 
         // Test: Handling Special Characters in Fields
@@ -311,7 +311,7 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{John, Doe,20|Jane, Austen,30}"; // Custom delimiter `|`
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
         }
     }//class
 }//namespace
