@@ -18,11 +18,11 @@ namespace SetsLibrary.Tests.Models
 
 
         [Fact]
-        public void Constructor_Should_Throw_ArgumentException_When_Terminators_Are_The_Same()
+        public void Constructor_Should_Throw_SetsConfigurationException_When_Terminators_Are_The_Same()
         {
             string terminator = ";";
 
-            Assert.Throws<ArgumentException>(() => new SetExtractionConfiguration<int>(terminator, terminator));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<int>(terminator, terminator));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
 
@@ -33,9 +33,9 @@ namespace SetsLibrary.Tests.Models
         [InlineData(" \\{", "','")]
         [InlineData("}", ";;")]
         [InlineData("5434sfsdf}", "sdfsdfsf")]
-        public void Constructor_Should_Throw_ArgumentException_When_Terminators_Use_Reserved_Characters(string fieldTerm, string rownTerm)
+        public void Constructor_Should_Throw_SetsConfigurationException_When_Terminators_Use_Reserved_Characters(string fieldTerm, string rownTerm)
         {
-            Assert.Throws<ArgumentException>(() => new SetExtractionConfiguration<int>(fieldTerm, rownTerm));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<int>(fieldTerm, rownTerm));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
         [Theory]
@@ -73,17 +73,17 @@ namespace SetsLibrary.Tests.Models
         }
 
         [Fact]
-        public void Constructor_SameFieldAndRowTerminators_ThrowsArgumentException()
+        public void Constructor_SameFieldAndRowTerminators_SetsConfigurationException()
         {
-            Assert.Throws<ArgumentException>(() => new SetExtractionConfiguration<string>("terminator", "terminator"));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<string>("terminator", "terminator"));
         }
 
         [Theory]
         [InlineData("{", "rowTerminator")]
         [InlineData("fieldTerminator", "}")]
-        public void Constructor_ReservedCharactersInTerminators_ThrowsArgumentException(string fieldTerminator, string rowTerminator)
+        public void Constructor_ReservedCharactersInTerminators_SetsConfigurationException(string fieldTerminator, string rowTerminator)
         {
-            Assert.Throws<ArgumentException>(() => new SetExtractionConfiguration<string>(fieldTerminator, rowTerminator));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<string>(fieldTerminator, rowTerminator));
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace SetsLibrary.Tests.Models
         public void ToObject_NullConverter_ThrowsArgumentNullException()
         {
             var config = new SetExtractionConfiguration<string>("fieldTerminator", "rowTerminator");
-            Assert.Throws<ArgumentNullException>(() => config.ToObject("record"));
+            Assert.Throws<SetsConfigurationException>(() => config.ToObject("record"));
         }
 
         [Fact]

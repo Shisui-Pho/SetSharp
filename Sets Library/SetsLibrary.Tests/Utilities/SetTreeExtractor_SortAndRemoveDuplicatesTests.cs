@@ -49,7 +49,7 @@ public class SortAndRemoveDuplicatesTests
         var config = CreateIntConfig();
 
         // Act & Assert
-        Assert.Throws<FormatException>(() =>
+        Assert.Throws<SetsException>(() =>
             SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config).ToList());
     }
 
@@ -82,7 +82,7 @@ public class SortAndRemoveDuplicatesTests
         string input = "invalid,values";
 
         // Act & Assert
-        Assert.Throws<FormatException>(() =>
+        Assert.Throws<SetsException>(() =>
             SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config).ToList());
     }
 

@@ -13,7 +13,8 @@
  * - Validates that the expression starts with '{' and ends with '}'.
  * - Uses a stack to track and match braces in the expression.
  * - Handles edge cases, such as unmatched braces or improper nesting.
- * - Removes extraneous elements from evaluation, ensuring strict brace matching.
+ * - Strictly matches braces and ignores other characters in the expression.
+ * - Provides feedback on the position of the incorrect brace if the expression is invalid.
  */
 
 namespace SetsLibrary.Utility;
@@ -26,64 +27,87 @@ public static class BraceEvaluator
     /// <summary>
     /// Checks if the braces in the specified expression are correctly balanced.
     /// </summary>
-    /// <param name="expression">The string expression to evaluate.</param>
-    /// <returns>True if the braces are correctly balanced; otherwise, false.</returns>
-    public static bool AreBracesCorrect(string expression)
+    /// <param name="expression">The string expression to evaluate. This should primarily contain '{' and '}' characters.</param>
+    /// <param name="positionOfIncorrectBrace">The position of the incorrect brace if the expression is invalid; otherwise, -1.</param>
+    /// <returns>True if the braces are correctly balanced and nested; otherwise, false.</returns>
+    /// <remarks>
+    /// The expression is considered valid if:
+    /// - Every opening brace '{' has a matching closing brace '}'.
+    /// - Braces are properly nested.
+    /// - The expression starts with '{' and ends with '}'.
+    /// 
+    /// This method uses a stack to track the opening braces and ensures that each closing brace matches the most recent unmatched opening brace.
+    /// </remarks>
+    public static bool AreBracesCorrect(string expression, out int positionOfIncorrectBrace)
     {
-        //First check the opening and clossing braces if they exist
+        // Initialize the position of incorrect brace to -1 (indicating no issues)
+        positionOfIncorrectBrace = -1;
+
+        // Check if the expression starts with '{' and ends with '}'
         if (!expression.StartsWith("{") || !expression.EndsWith("}"))
             return false;
-        //Stack that will contain all the 
+
+        // Stack to track opening braces
         Stack<char> elements = new();
-        //Remove white space
-        //expression = expression.Replace(" ", "");
 
         int lengthOfString = expression.Length;
 
-        //This will keep track of the number of elements that have been evaluated
-        int Count = 0;
+        // Iterate through each character in the expression
         foreach (char character in expression)
         {
-            Count++;
+            positionOfIncorrectBrace++;
+
+            // Check for opening brace
             if (character == '{')
             {
-                elements.Push(character);
+                elements.Push(character); // Add the opening brace to the stack
                 continue;
-            }//if we have an oppening brace
+            }
 
+            // Check for closing brace
             if (character == '}')
             {
-                //Cannot have a clossing brace without an oppening brace
+                // If there is no matching opening brace, the expression is invalid
                 if (elements.Count <= 0)
                     return false;
-                //Keep on popping until we either have 
+
+                // Keep popping until we find the matching opening brace '{'
                 while (elements.Count > 0 && elements.Peek() != '{')
                 {
-                    //Pop the elements
+                    // Pop the elements
                     elements.Pop();
                 }
-                //If we have popped everything and have not encounterd an oppening brace
+
+                // If no matching opening brace found, return false
                 if (elements.Count <= 0)
                     return false;
 
-                //Remove the oppening brace
+                // Remove the matching opening brace
                 elements.Pop();
 
-                //Handle edge case for a string like this : 
-                //-{1,2},{3,4}
-                //-Without this condition the Brace evaluation will pass
-                if (elements.Count == 0 && Count != lengthOfString)
+                // Handle edge case for a string like this: '-{1,2},{3,4}'
+                // Without this condition, the brace evaluation would incorrectly pass
+                if (elements.Count == 0 && (positionOfIncorrectBrace + 1) != lengthOfString)
                     return false;
 
                 continue;
-            }//end if oppening
+            }
 
-            //If there's something in the stack
-            //-i.e. An oppening brace
+            // If there's something in the stack (i.e., an opening brace),
+            // we push non-brace characters onto the stack
             if (elements.Count > 0)
                 elements.Push(character);
-        }//for each loop
-        return elements.Count == 0;
-    }//CheckBraces
-}//class
-//namespace
+        }
+
+        // If there are unmatched opening braces left in the stack, it's invalid
+        if (elements.Count > 0)
+        {
+            positionOfIncorrectBrace = expression.Length - 1;
+            return false;
+        }
+
+        // If all braces are matched and there are no unmatched opening braces, return true
+        positionOfIncorrectBrace = -1;
+        return true;
+    }
+}

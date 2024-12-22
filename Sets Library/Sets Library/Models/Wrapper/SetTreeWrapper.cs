@@ -1,7 +1,7 @@
 ﻿/*
  * File: SetTreeWrapper.cs
- * Author: [Your Name]
- * Date: [Current Date]
+ * Author: Phiwokwakhe Khathwane
+ * Date: 24 November 2024
  * 
  * Description:
  * Defines the SetTreeWrapper class, a wrapper around the SetTree class that extends its functionality
@@ -89,7 +89,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     /// <summary>
     /// Clears the internal elements and subsets of the SetTree.
     /// </summary>
-    /// <exception cref="ArgumentException">Thrown if the internal SetTree structure is not available.</exception>
+    /// <exception cref="SetsException">Thrown if the internal SetTree structure is not available.</exception>
     public override void Clear()
     {
         if (_assSetTree != null)
@@ -99,7 +99,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
         }
         else
         {
-            throw new ArgumentException("Use a separate wrapper for this operation or wrap this one.");
-        }
+            string det = $"The clear methods work only if a SetTree implementation is used.";
+            throw new SetsException("Cannot access the clear properties of underlying data structure.", det);        }
     }
 }//class

@@ -97,8 +97,8 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{Invalid Format\nHello, Kitty,10}";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
-            Assert.Equal("Invalid format.", exception.Message);
+            var exception = Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Contains("Conversion failed", exception.InnerException?.Message);
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{Phiwo, Smith, 15\nHello, Kitty, 10\nInvalidFieldFormat}";
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
         }
 
         // Test: Empty String Expression
@@ -165,11 +165,11 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestFieldTerminatorEqualsRowTerminator()
         {
             // Arrange & Act
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var exception = Assert.Throws<SetsConfigurationException>(() =>
                 new SetExtractionConfiguration<Person>(",", ",", new Person()));
 
             // Assert
-            Assert.Equal("Terminators cannot be the same.", exception.Message);
+            Assert.Contains("Terminators cannot be the same.", exception.Message);
         }
 
         // Test: Field Terminator Contains Reserved Characters
@@ -177,11 +177,11 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestFieldTerminatorContainsReservedCharacters()
         {
             // Arrange & Act
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var exception = Assert.Throws<SetsConfigurationException>(() =>
                 new SetExtractionConfiguration<Person>("{", "\n", new Person()));
 
             // Assert
-            Assert.Equal("Cannot use reserved characters. (Parameter '_fieldTerminator')", exception.Message);
+            Assert.Contains("Cannot use reserved characters.", exception.Message);
         }
 
         // Test: Row Terminator Contains Reserved Characters
@@ -189,11 +189,11 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestRowTerminatorContainsReservedCharacters()
         {
             // Arrange & Act
-            var exception = Assert.Throws<ArgumentException>(() =>
+            var exception = Assert.Throws<SetsConfigurationException>(() =>
                 new SetExtractionConfiguration<Person>(",", "{", new Person()));
 
             // Assert
-            Assert.Equal("Cannot use reserved characters. (Parameter '_rowTerminator')", exception.Message);
+            Assert.Contains("Cannot use reserved characters.", exception.Message);
         }
 
         // Test: Handling of Missing Row Terminator
@@ -233,8 +233,8 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{Hello, Kitty, 10\nnull}";
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
-            Assert.Equal("Invalid format.", exception.Message);
+            var exception = Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Contains("Conversion failed", exception.InnerException?.Message ?? "");
         }
 
         // Test: Handling Special Characters in Fields
@@ -311,7 +311,7 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{John, Doe,20|Jane, Austen,30}"; // Custom delimiter `|`
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => new CustomObjectSet<Person>(expression, config));
+            Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
         }
     }//class
 }//namespace
