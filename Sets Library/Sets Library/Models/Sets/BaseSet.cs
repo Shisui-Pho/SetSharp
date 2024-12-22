@@ -133,6 +133,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
     /// <exception cref="ArgumentException">Thrown if <paramref name="expression"/> is null, empty, or whitespace.</exception>
     /// <exception cref="MissingBraceException">Thrown if the braces in the set expression are mismatched or invalid.</exception>
+    /// <exception cref="SetsException">Thrown if there was a problem when extracting the set tree.</exception>
     private ISetTree<T> Extractions(string expression)
     {
         // Check if the string is null, empty, or contains only whitespace
@@ -151,7 +152,14 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         }
 
         // Extract and return the set tree from the expression using the extraction configuration
-        return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
+        try
+        {
+            return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
+        }
+        catch (SetsException ex)
+        {
+            throw new SetsException("Failed to extract set string.", "", ex);
+        }
     } // Extractions
 
     #endregion Constructors

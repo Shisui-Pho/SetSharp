@@ -98,7 +98,7 @@ namespace SetsLibrary.Tests.Models.Sets
 
             // Act & Assert
             var exception = Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
-            Assert.Contains("Conversion failed", exception.Message);
+            Assert.Contains("Conversion failed", exception.InnerException?.Message);
         }
 
         [Fact]
@@ -234,7 +234,7 @@ namespace SetsLibrary.Tests.Models.Sets
 
             // Act & Assert
             var exception = Assert.Throws<SetsException>(() => new CustomObjectSet<Person>(expression, config));
-            Assert.Contains("Conversion failed", exception.Message);
+            Assert.Contains("Conversion failed", exception.InnerException?.Message ?? "");
         }
 
         // Test: Handling Special Characters in Fields
