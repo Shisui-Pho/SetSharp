@@ -83,7 +83,7 @@ namespace SetsLibrary
         {
             get
             {
-                return base.Message + (Details != null ? $" - Details: {Details}" : string.Empty);
+                return base.Message + (Details != null ? $"\n - Details: {Details}" : string.Empty);
             }
         }
 
