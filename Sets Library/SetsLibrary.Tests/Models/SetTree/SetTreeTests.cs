@@ -10,7 +10,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void Constructor_Should_Initialize_Empty_SetTree()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";",",");
+            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.NotNull(setTree);
             Assert.Empty(setTree.GetRootElementsEnumarator());
@@ -21,7 +21,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void Constructor_With_ExtractionSettings_Should_Initialize_SetTree()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";",",");
+            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.NotNull(setTree);
             Assert.Equal(extractionSettings, setTree.ExtractionSettings);
@@ -30,7 +30,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void Constructor_With_Elements_Should_Add_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";",",");
+            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var elements = new List<int> { 1, 2, 3 };
             var setTree = new SetTree<int>(extractionSettings, elements);
             Assert.Equal(3, setTree.CountRootElements);
@@ -306,7 +306,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree2 = new SetTree<int>(extractionSettings);
             setTree2.AddElement(30);
 
-            var mainTree = new SetTree<int>(extractionSettings );
+            var mainTree = new SetTree<int>(extractionSettings);
             mainTree.AddRange(new List<int> { 1, 2 });
             mainTree.AddSubSetTree(setTree1);
             mainTree.AddSubSetTree(setTree2);
@@ -336,7 +336,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         {
             var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
-            var emptySubset = new SetTree<int>(extractionSettings   );
+            var emptySubset = new SetTree<int>(extractionSettings);
 
             bool result = setTree.RemoveElement(emptySubset);
             Assert.False(result); // Should return false as there are no subsets to remove
@@ -345,7 +345,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_0_When_Trees_Are_Equal_But_Elements_Are_In_Different_Order()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ","); 
+            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddRange(new List<int> { 1, 3, 2 });
 
@@ -380,7 +380,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             // Nested subset
             setTree2.AddSubSetTree(setTree3);
 
-            var mainTree = new SetTree<int>(extractionSettings );
+            var mainTree = new SetTree<int>(extractionSettings);
             mainTree.AddSubSetTree(setTree1);
             mainTree.AddSubSetTree(setTree2);
 

@@ -73,7 +73,7 @@ public static class SetTreeUtility<T>
         }
         //Remove the last index of the row terminator
         int lastIndex = elementTree.LastIndexOf(currentTree.ExtractionSettings.RowTerminator);
-        
+
         if (lastIndex >= 0)
             elementTree = elementTree.Remove(lastIndex);
 

@@ -100,6 +100,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
         else
         {
             string det = $"The clear methods work only if a SetTree implementation is used.";
-            throw new SetsException("Cannot access the clear properties of underlying data structure.", det);        }
+            throw new SetsException("Cannot access the clear properties of underlying data structure.", det);
+        }
     }
 }//class

@@ -324,4 +324,4 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
 
     #endregion Methods
 } // class
-// namespace
+  // namespace

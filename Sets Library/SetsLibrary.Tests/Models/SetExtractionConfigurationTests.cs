@@ -1,5 +1,4 @@
 ﻿using Xunit;
-using SetsLibrary;
 namespace SetsLibrary.Tests.Models
 {
     public class SetExtractionConfigurationTests
@@ -13,7 +12,7 @@ namespace SetsLibrary.Tests.Models
         [Fact]
         public void Constructor_Should_Throw_ArgumentNullException_When_RowTerminator_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration<int>(",",null));
+            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration<int>(",", null));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
 
@@ -58,7 +57,7 @@ namespace SetsLibrary.Tests.Models
 
             //Check if the 'config variable is not null
             Assert.NotNull(config);
-            
+
             //Verify the terminators
             Assert.Equal(fieldTerminator, config.FieldTerminator);
             Assert.Equal(rowTerminator, config.RowTerminator);

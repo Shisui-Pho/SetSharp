@@ -1,7 +1,4 @@
-﻿using System.Text;
-using Xunit;
-using Moq;
-using SetsLibrary;
+﻿using Xunit;
 namespace SetsLibrary.Tests.Models.Sets
 {
     public class StringLiteralSetTests
@@ -43,7 +40,7 @@ namespace SetsLibrary.Tests.Models.Sets
             var stringSet = new StringLiteralSet(_extractionConfig);
 
             Assert.IsType<StringLiteralSet>(stringSet);
-            Assert.Equal("{\u2205}",stringSet.BuildStringRepresentation());  // Assumes the default set string is empty
+            Assert.Equal("{\u2205}", stringSet.BuildStringRepresentation());  // Assumes the default set string is empty
         }
 
         // Test for the GetString method

@@ -1,6 +1,5 @@
 ﻿using SetsLibrary.Utility;
 using Xunit;
-using SetsLibrary;
 namespace SetsLibrary.Tests.Utilities.Extract
 {
 

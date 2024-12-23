@@ -21,8 +21,6 @@
  * - System.Collections for IEnumerable support.
  */
 
-using System.Collections;
-
 namespace SetsLibrary.Collections;
 
 /// <summary>
@@ -44,4 +42,4 @@ public class SortedElements<T> : BaseSortedCollection<T>, ISortedElements<T>
     public SortedElements(IEnumerable<T> elements)
         : base(elements) { }//ctor 01
 }//class
-//namespace SetLibrary.Collections
+ //namespace SetLibrary.Collections
