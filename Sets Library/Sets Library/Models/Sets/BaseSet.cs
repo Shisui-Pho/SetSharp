@@ -484,7 +484,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <param name="setString">The string representation of the set to be created.</param>
     /// <returns>A new instance of a structured set.</returns>
-    protected abstract IStructuredSet<T> BuildNewSet(string setString);
+    public abstract IStructuredSet<T> BuildNewSet(string setString);
 
     /// <summary>
     /// Builds and returns a new, empty set.
@@ -492,7 +492,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// for creating an empty set.
     /// </summary>
     /// <returns>A new, empty instance of a structured set.</returns>
-    protected abstract IStructuredSet<T> BuildNewSet();
+    public abstract IStructuredSet<T> BuildNewSet();
     #endregion ABSTRACT METHODS
 }//class
  //namespace
