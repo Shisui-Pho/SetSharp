@@ -187,7 +187,7 @@ public static class SetsOperations
             }
 
             // Return the complement of A with respect to the universal set using the "Without" method
-            return A.Without(universalSet);
+            return universalSet.Without(A);
         }
         catch (Exception ex)
         {
