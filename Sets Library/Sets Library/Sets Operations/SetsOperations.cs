@@ -168,17 +168,18 @@ public static class SetsOperations
         ArgumentNullException.ThrowIfNull(A, nameof(A));
         ArgumentNullException.ThrowIfNull(universalSet, nameof(universalSet));
 
+
+        // The universal set must have a cardinality greater than or equal to the set A
+        if (A.Cardinality > universalSet.Cardinality)
+        {
+            throw new SetsOperationException(
+                $"Cardinality of the set {nameof(A)} must be less or equal to the cardinality of the {nameof(universalSet)}",
+                "The cardinality of set A exceeds that of the universal set."
+            );
+        }
+
         try
         {
-            // The universal set must have a cardinality greater than or equal to the set A
-            if (A.Cardinality > universalSet.Cardinality)
-            {
-                throw new SetsOperationException(
-                    $"Cardinality of the set {nameof(A)} must be less or equal to the cardinality of the {nameof(universalSet)}",
-                    "The cardinality of set A exceeds that of the universal set."
-                );
-            }
-
             // If the cardinality of set A is 0, the complement is the entire universal set
             if (A.Cardinality == 0)
             {
