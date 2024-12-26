@@ -63,7 +63,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// </summary>
     /// <param name="setString">The string representation of the set to be created.</param>
     /// <returns>A new instance of <see cref="CustomObjectSet{T}"/>.</returns>
-    protected override IStructuredSet<T> BuildNewSet(string setString)
+    public override IStructuredSet<T> BuildNewSet(string setString)
     {
         return new CustomObjectSet<T>(setString, this.ExtractionConfiguration);
     }//BuildNewSet
@@ -72,7 +72,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// Builds and returns a new, empty <see cref="CustomObjectSet{T}"/>.
     /// </summary>
     /// <returns>A new, empty instance of <see cref="CustomObjectSet{T}"/>.</returns>
-    protected override IStructuredSet<T> BuildNewSet()
+    public override IStructuredSet<T> BuildNewSet()
     {
         return new CustomObjectSet<T>(this.ExtractionConfiguration);
     }//BuildNewSet

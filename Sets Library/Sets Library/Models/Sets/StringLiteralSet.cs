@@ -57,7 +57,7 @@ public class StringLiteralSet : BaseSet<string>
     /// </summary>
     /// <param name="setString">The string representation of the set to be created.</param>
     /// <returns>A new instance of <see cref="StringLiteralSet"/>.</returns>
-    protected override IStructuredSet<string> BuildNewSet(string setString)
+    public override IStructuredSet<string> BuildNewSet(string setString)
     {
         return new StringLiteralSet(setString, this.ExtractionConfiguration);
     } // BuildNewSet
@@ -66,7 +66,7 @@ public class StringLiteralSet : BaseSet<string>
     /// Builds and returns a new, empty <see cref="StringLiteralSet"/>.
     /// </summary>
     /// <returns>A new, empty instance of <see cref="StringLiteralSet"/>.</returns>
-    protected override IStructuredSet<string> BuildNewSet()
+    public override IStructuredSet<string> BuildNewSet()
     {
         return new StringLiteralSet(this.ExtractionConfiguration);
     } // BuildNewSet

@@ -60,7 +60,7 @@ public class TypedSet<T> : BaseSet<T>
     /// </summary>
     /// <param name="setString">The string representation of the set to be created.</param>
     /// <returns>A new instance of <see cref="TypedSet{T}"/>.</returns>
-    protected override IStructuredSet<T> BuildNewSet(string setString)
+    public override IStructuredSet<T> BuildNewSet(string setString)
     {
         return new TypedSet<T>(setString, this.ExtractionConfiguration);
     } // BuildNewSet
@@ -69,7 +69,7 @@ public class TypedSet<T> : BaseSet<T>
     /// Builds and returns a new, empty <see cref="TypedSet{T}"/>.
     /// </summary>
     /// <returns>A new, empty instance of <see cref="TypedSet{T}"/>.</returns>
-    protected override IStructuredSet<T> BuildNewSet()
+    public override IStructuredSet<T> BuildNewSet()
     {
         return new TypedSet<T>(this.ExtractionConfiguration);
     } // BuildNewSet
