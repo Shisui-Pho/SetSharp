@@ -30,7 +30,7 @@ public interface ISortedSubSets<T> : ISortedSetCollection<T, ISetTree<T>>
     /// </summary>
     /// <param name="index">Zero based index of the element tree</param>
     /// <returns>The specified element tree in the given index</returns>
-    ISetTree<T> this[int index] { get;}
+    ISetTree<T> this[int index] { get; }
     /// <summary>
     /// Removes a tree from the sorted list.
     /// </summary>
@@ -64,4 +64,4 @@ public interface ISortedSubSets<T> : ISortedSetCollection<T, ISetTree<T>>
     /// <param name="coll">The collection of trees to be added.</param>
     void AddRange(IEnumerable<ISetTree<T>> coll);
 } // interface ISortedSubSets
-// namespace SetLibrary.Collections
+  // namespace SetLibrary.Collections

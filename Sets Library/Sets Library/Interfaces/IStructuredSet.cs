@@ -143,5 +143,16 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// </summary>
     /// <returns>An enumerable collection of subsets in the set.</returns>
     IEnumerable<ISetTree<T>> EnumerateSubsets();
+    /// <summary>
+    /// Builds and returns a new, empty set.
+    /// </summary>
+    /// <returns>A new, empty instance of a structured set.</returns>
+    IStructuredSet<T> BuildNewSet();
+    /// <summary>
+    /// Builds and returns a new set based on the provided string representation.
+    /// </summary>
+    /// <param name="setString">The string representation of the set to be created.</param>
+    /// <returns>A new instance of a structured set.</returns>
+    IStructuredSet<T> BuildNewSet(string setString);
 } // interface : IStructuredSet
 // namespace SetsLibrary.Interfaces

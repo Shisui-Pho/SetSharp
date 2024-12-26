@@ -1,5 +1,4 @@
-﻿using SetsLibrary;
-using Xunit;
+﻿using Xunit;
 
 namespace SetsLibrary.Tests.Models.Sets
 {
@@ -126,7 +125,7 @@ namespace SetsLibrary.Tests.Models.Sets
             var baseSet = new TypedSet<int>(expression, _extractionConfig);
 
             var subset = baseSet.EnumerateSubsets().ToList()[0]; // Get the subset {3,4}
-            
+
             var str = subset.ToString();
 
             subset?.AddElement(6);

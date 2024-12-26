@@ -111,7 +111,7 @@ namespace Tests.Utilities
         public void Test_LongBraceTheory(string expression, bool expected)
         {
             // Act
-            bool result = BraceEvaluator.AreBracesCorrect(expression, out _ );
+            bool result = BraceEvaluator.AreBracesCorrect(expression, out _);
 
             // Assert
             Assert.Equal(expected, result);

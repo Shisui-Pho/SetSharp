@@ -1,5 +1,4 @@
-﻿using SetsLibrary;
-using Xunit;
+﻿using Xunit;
 
 namespace SetsLibrary.Tests.Models.Sets
 {

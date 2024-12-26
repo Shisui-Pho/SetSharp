@@ -149,7 +149,7 @@ public class SetTreeExtractor<T>
             {
                 //Handle any exceptions during conversion (throwing is optional)
                 string det = $"Failed to convert the string \'{element}\' to type of \'{typeof(T)}\'";
-                throw new SetsException("Conversion failed due to invalid format",det, ex);
+                throw new SetsException("Conversion failed due to invalid format", det, ex);
             }
         }//end for each
 
@@ -157,4 +157,4 @@ public class SetTreeExtractor<T>
         return uniqueElements.OrderBy(x => x);
     }//SortAndRemoveDuplicates
 }//class
-//namespace
+ //namespace

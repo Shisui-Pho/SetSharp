@@ -23,7 +23,7 @@ namespace SetsLibrary.Collections;
 /// Represents a collection of sets that can be enumerated and manipulated.
 /// </summary>
 /// <typeparam name="T">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public interface ISetCollection<TSet, TType> : IEnumerable<KeyValuePair<string,TSet>>
+public interface ISetCollection<TSet, TType> : IEnumerable<KeyValuePair<string, TSet>>
     where TType : IComparable<TType>
 {
     /// <summary>

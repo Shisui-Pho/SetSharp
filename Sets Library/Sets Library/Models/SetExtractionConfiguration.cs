@@ -16,8 +16,6 @@
  * - Provides a method to convert string records into objects using the provided converter.
  */
 
-using System.Numerics;
-
 namespace SetsLibrary;
 
 /// <summary>
@@ -113,7 +111,7 @@ public class SetExtractionConfiguration<T>
                 //Get the index of the invalid character
                 int indexOfInvalidCharacter = _fieldTerminator.IndexOf(RESERVED_CHARACTERS[i]);
                 det += $"\nThe {nameof(_fieldTerminator)} contains a reserved character at index {indexOfInvalidCharacter}.";
-                
+
                 //Throw the exception here
                 throw new SetsConfigurationException("Cannot use reserved characters.", det);
             }
@@ -141,7 +139,7 @@ public class SetExtractionConfiguration<T>
     /// <exception cref="SetsConfigurationException">Thrown if the <see cref="Converter"/> is null.</exception>
     public T ToObject(string record)
     {
-        if(Converter is null)
+        if (Converter is null)
         {
             throw new SetsConfigurationException($"The property {nameof(Converter)} is null.", "", new ArgumentNullException(nameof(Converter)));
         }

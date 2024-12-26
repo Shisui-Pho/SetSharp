@@ -245,4 +245,4 @@ public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TEle
         return GetEnumerator();
     }//GetEnumerator
 }//class
-//namespace
+ //namespace

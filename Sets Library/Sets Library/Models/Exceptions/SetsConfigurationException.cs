@@ -13,8 +13,6 @@
  * - Inherits from the SetsException class.
  * - Supports the inclusion of both a custom message and detailed information when throwing the exception.
  */
-using System.Text.Json.Serialization;
-
 namespace SetsLibrary;
 
 /// <summary>

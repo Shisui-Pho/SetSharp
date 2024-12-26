@@ -185,7 +185,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     public void AddElement(ISetTree<T> tree)
     {
         //Check for nulls
-        ArgumentNullException.ThrowIfNull(tree,nameof(tree));
+        ArgumentNullException.ThrowIfNull(tree, nameof(tree));
 
         //Add to the tree
         _treeWrapper.AddSubSetTree(tree);
@@ -268,7 +268,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         if (this.Cardinality > setB.Cardinality)
             return false;
 
-        if(IsSameSet(setB))
+        if (IsSameSet(setB))
         {
             //Subset and a properset
             type = SetResultType.Same_Set & SetResultType.SubSet;
@@ -290,8 +290,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //First loop through the root elements
         var setBRootElements = setB.EnumerateRootElements().ToHashSet();
 
-        bool areRootElementsContained = Contains(setBRootElements, 
-                                        _treeWrapper.CountRootElements, 
+        bool areRootElementsContained = Contains(setBRootElements,
+                                        _treeWrapper.CountRootElements,
                                         _treeWrapper.GetRootElementByIndex);
 
         //Check if all current root elements are contained in setB
@@ -317,15 +317,15 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     }//Contains
     private bool IsSameSet(IStructuredSet<T> setB)
     {
-        ArgumentNullException.ThrowIfNull(setB, nameof (setB));
+        ArgumentNullException.ThrowIfNull(setB, nameof(setB));
 
         //Check cardinalities
         if (this.Cardinality != setB.Cardinality)
             return false;
-        
+
         BaseSet<T>? baseSetB = setB as BaseSet<T>;
 
-        if(baseSetB != null)
+        if (baseSetB != null)
             return baseSetB._treeWrapper.CompareTo(this._treeWrapper) == 0; //check if same set
 
         return CompareSetsNotBaseSet(setB);
@@ -335,13 +335,13 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Compare the root elements
         bool areRootElementsEqual = setB.EnumerateRootElements().SequenceEqual(EnumerateRootElements());
 
-        if(!areRootElementsEqual)
+        if (!areRootElementsEqual)
             return false;
 
         //Compare the subsets
         bool areSubSetsEqual = setB.EnumerateSubsets().SequenceEqual(EnumerateSubsets());
 
-        if(!areSubSetsEqual) return false;
+        if (!areSubSetsEqual) return false;
 
         //They are the same
         return true;
@@ -356,7 +356,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     public bool RemoveElement(ISetTree<T> tree)
     {
         //Check for null
-        ArgumentNullException.ThrowIfNull (tree, nameof (tree));
+        ArgumentNullException.ThrowIfNull(tree, nameof(tree));
 
         //Remove element
         return _treeWrapper.RemoveElement(tree);
@@ -414,7 +414,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     public IStructuredSet<T> MergeWith(IStructuredSet<T> set)
     {
         //Check for argument null exceptions
-        ArgumentNullException.ThrowIfNull(set,  nameof (set));
+        ArgumentNullException.ThrowIfNull(set, nameof(set));
 
         //Check if they have elements
         if (this.Cardinality <= 0)
@@ -454,7 +454,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Loop through the root elements and subsets of the current instance
         //-If the new set has the same elements as "setB" then all remaining elements
         //-the current instace need to be added in the newSet
-        for (int i = 0;i < _treeWrapper.CountRootElements; i++)
+        for (int i = 0; i < _treeWrapper.CountRootElements; i++)
         {
             //Check if setB contains the current element in it set
             var elem = _treeWrapper.GetRootElementByIndex(i);
@@ -484,7 +484,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <param name="setString">The string representation of the set to be created.</param>
     /// <returns>A new instance of a structured set.</returns>
-    protected abstract IStructuredSet<T> BuildNewSet(string setString);
+    public abstract IStructuredSet<T> BuildNewSet(string setString);
 
     /// <summary>
     /// Builds and returns a new, empty set.
@@ -492,7 +492,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// for creating an empty set.
     /// </summary>
     /// <returns>A new, empty instance of a structured set.</returns>
-    protected abstract IStructuredSet<T> BuildNewSet();
+    public abstract IStructuredSet<T> BuildNewSet();
     #endregion ABSTRACT METHODS
 }//class
-//namespace
+ //namespace

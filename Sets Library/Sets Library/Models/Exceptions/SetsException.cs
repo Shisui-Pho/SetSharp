@@ -15,9 +15,6 @@
  * - Provides properties for retrieving exception details.
  */
 
-using System;
-using System.Runtime.Serialization;
-
 namespace SetsLibrary
 {
     /// <summary>
