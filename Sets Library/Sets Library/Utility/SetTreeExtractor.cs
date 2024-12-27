@@ -44,7 +44,7 @@ public class SetTreeExtractor<T>
         // Base case: no subsets, return the root set elements as a tree
         if (!expression.Contains("}") && !expression.Contains("{"))
         {
-            //Remove last trailing separators
+            //Remove last trailing seperators
             if (expression.EndsWith(extractionConfig.RowTerminator))
                 expression = expression.Remove(expression.Length - 1);
 
@@ -57,23 +57,23 @@ public class SetTreeExtractor<T>
         }
 
         // Queues and stacks to manage braces and subsets
-        Queue<int> openingBraces = new Queue<int>(); // Holds indices of opening braces
-        Stack<int> closingBraces = new Stack<int>();  // Holds indices of closing braces
+        Queue<int> oppeningBraces = new Queue<int>(); // Holds indices of opening braces
+        Stack<int> clossingBraces = new Stack<int>();  // Holds indices of closing braces
         Stack<string> subsets = new Stack<string>();   // Holds the subsets at the first nesting level
 
         // Loop through all the characters in the expression to identify subsets
         for (int i = 0; i < expression.Length; i++)
         {
             if (expression[i] == '{')
-                openingBraces.Enqueue(i);
+                oppeningBraces.Enqueue(i);
             if (expression[i] == '}')
-                closingBraces.Push(i);
+                clossingBraces.Push(i);
 
-            if (openingBraces.Count > 0 && openingBraces.Count == closingBraces.Count)
+            if (oppeningBraces.Count > 0 && oppeningBraces.Count == clossingBraces.Count)
             {
                 // Extract the outermost elements (subsets)
-                int start = openingBraces.Dequeue();
-                int end = closingBraces.Pop();
+                int start = oppeningBraces.Dequeue();
+                int end = clossingBraces.Pop();
                 int length = end - start + 1;
 
                 string subset = expression.Substring(start, length);
@@ -83,8 +83,8 @@ public class SetTreeExtractor<T>
                 i = start; // Reset the index to continue from the correct position
 
                 // Clear the braces management stacks and add the subset
-                openingBraces = new Queue<int>();
-                closingBraces = new Stack<int>();
+                oppeningBraces = new Queue<int>();
+                clossingBraces = new Stack<int>();
                 subsets.Push(subset);
             }
         }
