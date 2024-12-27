@@ -79,7 +79,7 @@ public class SetTreeExtractor<T>
                 string subset = expression.Substring(start, length);
 
                 // Remove the subset from the original expression to prevent duplicates
-                expression = expression.Replace(subset, "");
+                expression = expression.Remove(start, length);
                 i = start; // Reset the index to continue from the correct position
 
                 // Clear the braces management stacks and add the subset
