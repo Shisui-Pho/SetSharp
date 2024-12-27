@@ -93,5 +93,15 @@ internal class MockSetStructure : IStructuredSet<int>
         throw new NotImplementedException();
     }
 
+    public IStructuredSet<int> BuildNewSet()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IStructuredSet<int> BuildNewSet(string setString)
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion No-Implementation needed
 }//mock class
