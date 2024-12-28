@@ -25,43 +25,4 @@ namespace SetsLibrary.Collections;
 public interface ISortedSubSets<T> : ISortedSetCollection<T, ISetTree<T>>
     where T : IComparable<T>
 {
-    /// <summary>
-    /// Gets the set tree in the specified index.
-    /// </summary>
-    /// <param name="index">Zero based index of the element tree</param>
-    /// <returns>The specified element tree in the given index</returns>
-    ISetTree<T> this[int index] { get; }
-    /// <summary>
-    /// Removes a tree from the sorted list.
-    /// </summary>
-    /// <param name="val">The tree to be removed.</param>
-    /// <returns>True if the tree was successfully removed; otherwise, false.</returns>
-    bool Remove(ISetTree<T> val);
-
-    /// <summary>
-    /// Checks if a particular tree is contained in the current collection.
-    /// </summary>
-    /// <param name="val">The tree to be found.</param>
-    /// <returns>True if the tree is found; otherwise, false.</returns>
-    bool Contains(ISetTree<T> val);
-
-    /// <summary>
-    /// Returns the index of the specified tree in the collection.
-    /// </summary>
-    /// <param name="val">The tree whose index is to be found.</param>
-    /// <returns>The index of the tree if found; otherwise, -1.</returns>
-    int IndexOf(ISetTree<T> val);
-
-    /// <summary>
-    /// Adds a tree to the collection in sorted order.
-    /// </summary>
-    /// <param name="value">The tree to be added, of type <typeparamref name="ISetTree{T}"/>.</param>
-    void Add(ISetTree<T> value);
-
-    /// <summary>
-    /// Adds a range of trees to the collection in sorted order.
-    /// </summary>
-    /// <param name="coll">The collection of trees to be added.</param>
-    void AddRange(IEnumerable<ISetTree<T>> coll);
-} // interface ISortedSubSets
-  // namespace SetLibrary.Collections
+    } // interface ISortedSubSets

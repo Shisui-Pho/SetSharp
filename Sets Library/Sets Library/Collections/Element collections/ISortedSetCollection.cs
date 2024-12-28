@@ -21,11 +21,18 @@ namespace SetsLibrary.Collections;
 /// <summary>
 /// Represents a collection of sorted sets that can be manipulated and enumerated.
 /// </summary>
-/// <typeparam name="T">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
-/// <typeparam name="TEnumerator">The type of enumerator used to iterate through the collection.</typeparam>
-public interface ISortedSetCollection<T, TEnumerator> : IEnumerable<TEnumerator>
-    where T : IComparable<T>
+/// <typeparam name="TElement">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
+/// <typeparam name="TElementContained">The type of enumerator/structure used to iterate through the collection.</typeparam>
+public interface ISortedSetCollection<TElement, TElementContained> : IEnumerable<TElementContained>
+    where TElement : IComparable<TElement>
 {
+    /// <summary>
+    /// Gets an element in the collection on the specified index.
+    /// </summary>
+    /// <param name="index">The zero based index.</param>
+    /// <returns>The element on the specified index</returns>
+    TElementContained this[int index] { get; }
+
     /// <summary>
     /// Gets the number of elements within the collection.
     /// </summary>
@@ -36,6 +43,47 @@ public interface ISortedSetCollection<T, TEnumerator> : IEnumerable<TEnumerator>
     /// </summary>
     /// <param name="index">The zero-based index of the element to be removed.</param>
     void RemoveAt(int index);
+
+    /// <summary>
+    /// Removes an element from the sorted list.
+    /// </summary>
+    /// <param name="val">The element to be removed.</param>
+    /// <returns>True if the element was successfully removed; otherwise, false.</returns>
+    bool Remove(TElementContained val);
+
+    /// <summary>
+    /// Checks if a particular element is contained in the current collection.
+    /// </summary>
+    /// <param name="val">The element to be found.</param>
+    /// <returns>True if the element is found; otherwise, false.</returns>
+    bool Contains(TElementContained val);
+
+    /// <summary>
+    /// Returns the index of the specified element in the collection.
+    /// </summary>
+    /// <param name="val">The element whose index is to be found.</param>
+    /// <returns>The index of the element if found; otherwise, -1.</returns>
+    int IndexOf(TElementContained val);
+
+
+    /// <summary>
+    /// Adds an element to the collection in sorted order. Repeated elements will be added.
+    /// </summary>
+    /// <param name="value">The value to be added, of type <typeparamref name="TElementContained"/>.</param>
+    void Add(TElementContained value);
+
+    /// <summary>
+    /// Adds an element to the collection in sorted order and ignore duplicates
+    /// </summary>
+    /// <param name="val">The value to be added, of type <typeparamref name="TElementContained"/></param>
+    void AddIfUnique(TElementContained val);
+
+    /// <summary>
+    /// Adds a range of elements to the collection in sorted order.
+    /// </summary>
+    /// <param name="coll">The collection of elements to be added.</param>
+    void AddRange(IEnumerable<TElementContained> coll);
+
     /// <summary>
     /// Clears the current collection.
     /// </summary>

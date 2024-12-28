@@ -149,8 +149,9 @@ public class SetTreeExtractor<T>
 
                 //This contains method uses a binary search algorithm 
                 //-The add method adds the elements in a sorted order
-                if (!uniqueElements.Contains(item))
-                    uniqueElements.Add(item);
+                //if (!uniqueElements.Contains(item))
+                //    uniqueElements.Add(item);
+                uniqueElements.AddIfUnique(item);
             }
             catch
             (Exception ex)
