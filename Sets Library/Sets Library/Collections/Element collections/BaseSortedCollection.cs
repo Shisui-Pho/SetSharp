@@ -84,7 +84,7 @@ public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TEle
     //Methods
 
     ///<summary>
-    ///Adds an element to the collection, ensuring the collection remains sorted.
+    ///Adds an element to the collection, ensuring the collection remains sorted. Duplicates will also be added.
     ///</summary>
     ///<param name="value">The element to add.</param>
     ///<exception cref="ArgumentNullException">Thrown if the element is null.</exception>
@@ -104,7 +104,32 @@ public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TEle
         int pointOfInsertion = FindIndexOfInsertion(value);
         _elements.Insert(pointOfInsertion, value);
     }//Add
+    ///<summary>
+    ///Adds an element to the collection, ensuring the collection remains sorted. Duplicates will not be added.
+    ///</summary>
+    ///<param name="val">The element to add.</param>
+    ///<exception cref="ArgumentNullException">Thrown if the element is null.</exception>
+    public void AddIfUnique(TElement val)
+    {
+        //Don't add if null
+        ArgumentNullException.ThrowIfNull(val, nameof(val));
 
+        //If first element
+        if (Count == 0)
+        {
+            _elements.Add(val);
+            return;
+        }
+
+        int indexOfInsertion = FindIndexOfInsertion(val);
+
+        //Check if element can be added
+        if (indexOfInsertion < Count && _elements[indexOfInsertion].CompareTo(val) == 0) //Here it means it is defined
+            return;
+
+        //Else add
+        _elements.Insert(indexOfInsertion, val);
+    }//AddIfUnique
     ///<summary>
     ///Finds the index at which the specified value should be inserted to maintain sorted order.
     ///</summary>
@@ -112,24 +137,24 @@ public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TEle
     ///<returns>The index where the value should be inserted.</returns>
     private int FindIndexOfInsertion(TElement valueToAdd)
     {
-        int lowerbound = 0;
-        int upperbound = Count; //Set upperbound to Count to allow insertion at the end
+        int lowerBound = 0;
+        int upperBound = Count; //Set upperBound to Count to allow insertion at the end
 
-        while (lowerbound < upperbound)
+        while (lowerBound < upperBound)
         {
-            int mid = (lowerbound + upperbound) / 2;
+            int mid = (lowerBound + upperBound) / 2;
             int comparer = _elements[mid].CompareTo(valueToAdd);
 
             if (comparer < 0)
             {
-                lowerbound = mid + 1; //Search right
+                lowerBound = mid + 1; //Search right
             }
             else
             {
-                upperbound = mid; //Search left
+                upperBound = mid; //Search left
             }
         }
-        return lowerbound; //This is the correct insertion index
+        return lowerBound; //This is the correct insertion index
     }//FindIndexOfInsertion
 
     ///<summary>
