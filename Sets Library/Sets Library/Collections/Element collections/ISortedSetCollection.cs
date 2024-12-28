@@ -67,10 +67,16 @@ public interface ISortedSetCollection<TElement, TElementContained> : IEnumerable
 
 
     /// <summary>
-    /// Adds an element to the collection in sorted order.
+    /// Adds an element to the collection in sorted order. Repeated elements will be added.
     /// </summary>
     /// <param name="value">The value to be added, of type <typeparamref name="TElementContained"/>.</param>
     void Add(TElementContained value);
+
+    /// <summary>
+    /// Adds an element to the collection in sorted order and ignore duplicates
+    /// </summary>
+    /// <param name="val">The value to be added, of type <typeparamref name="TElementContained"/></param>
+    void AddIfUnique(TElementContained val);
 
     /// <summary>
     /// Adds a range of elements to the collection in sorted order.
