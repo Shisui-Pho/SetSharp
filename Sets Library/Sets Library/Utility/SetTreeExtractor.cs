@@ -17,6 +17,8 @@
  * - Handles edge cases such as missing braces or malformed expressions gracefully.
  */
 
+using SetsLibrary.Collections;
+
 namespace SetsLibrary.Utility;
 
 /// <summary>
@@ -113,20 +115,21 @@ public class SetTreeExtractor<T>
         //Split elements based on the row terminator
         string[] elements = rootElements.Split(extractionConfig.RowTerminator, StringSplitOptions.RemoveEmptyEntries);
 
-        //Use a HashSet to ensure uniqueness of elements
-        HashSet<T> uniqueElements = new HashSet<T>();
+        //Use a sorted collection to handle sorting and duplicates
+        ISortedElements<T> uniqueElements = new SortedElements<T>();
 
         //Loop through all elements and add them to the HashSet after converting them to the appropriate type
         foreach (string element in elements)
         {
             try
             {
+                T? item = default(T);
                 //If a custom converter is used, convert using that; otherwise, attempt to convert to T
                 if (extractionConfig.IsICustomObject)
                 {
                     //Use the custom object converter
-                    T item = extractionConfig.ToObject(element);
-                    uniqueElements.Add(item);
+                    item = extractionConfig.ToObject(element);
+                    
                 }
                 else
                 {
@@ -140,9 +143,14 @@ public class SetTreeExtractor<T>
                         _elem = _elem.Trim();
 
                     //Convert to the specified type T
-                    T item = (T)Convert.ChangeType(_elem, typeof(T));
-                    uniqueElements.Add(item);
+                    item = (T)Convert.ChangeType(_elem, typeof(T));
+                    //uniqueElements.Add(item);
                 }
+
+                //This contains method uses a binary search algorithm 
+                //-The add method adds the elements in a sorted order
+                if (!uniqueElements.Contains(item))
+                    uniqueElements.Add(item);
             }
             catch
             (Exception ex)
@@ -153,8 +161,7 @@ public class SetTreeExtractor<T>
             }
         }//end for each
 
-        // Return the unique elements sorted
-        return uniqueElements.OrderBy(x => x);
+        return uniqueElements;
     }//SortAndRemoveDuplicates
 }//class
  //namespace
