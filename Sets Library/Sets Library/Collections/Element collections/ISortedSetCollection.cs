@@ -21,10 +21,10 @@ namespace SetsLibrary.Collections;
 /// <summary>
 /// Represents a collection of sorted sets that can be manipulated and enumerated.
 /// </summary>
-/// <typeparam name="T">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
+/// <typeparam name="TElement">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
 /// <typeparam name="TEnumerator">The type of enumerator used to iterate through the collection.</typeparam>
-public interface ISortedSetCollection<T, TEnumerator> : IEnumerable<TEnumerator>
-    where T : IComparable<T>
+public interface ISortedSetCollection<TElement, TEnumerator> : IEnumerable<TEnumerator>
+    where TElement : IComparable<TElement>
 {
     /// <summary>
     /// Gets the number of elements within the collection.
