@@ -44,53 +44,15 @@ public class SetTreeExtractor<T>
         // Base case: no subsets, return the root set elements as a tree
         if (!expression.Contains("}") && !expression.Contains("{"))
         {
-            //Remove last trailing seperators
-            if (expression.EndsWith(extractionConfig.RowTerminator))
-                expression = expression.Remove(expression.Length - 1);
-
-            if (expression.StartsWith(extractionConfig.RowTerminator))
-                expression = expression.Remove(expression.Length - 1);
-
-
             IEnumerable<T> rootElements = SortAndRemoveDuplicates(expression, extractionConfig);
             return new SetTree<T>(extractionConfig, rootElements);
         }
 
-        // Queues and stacks to manage braces and subsets
-        Queue<int> oppeningBraces = new Queue<int>(); // Holds indices of opening braces
-        Stack<int> clossingBraces = new Stack<int>();  // Holds indices of closing braces
-        Stack<string> subsets = new Stack<string>();   // Holds the subsets at the first nesting level
-
-        // Loop through all the characters in the expression to identify subsets
-        for (int i = 0; i < expression.Length; i++)
-        {
-            if (expression[i] == '{')
-                oppeningBraces.Enqueue(i);
-            if (expression[i] == '}')
-                clossingBraces.Push(i);
-
-            if (oppeningBraces.Count > 0 && oppeningBraces.Count == clossingBraces.Count)
-            {
-                // Extract the outermost elements (subsets)
-                int start = oppeningBraces.Dequeue();
-                int end = clossingBraces.Pop();
-                int length = end - start + 1;
-
-                string subset = expression.Substring(start, length);
-
-                // Remove the subset from the original expression to prevent duplicates
-                expression = expression.Remove(start, length);
-                i = start; // Reset the index to continue from the correct position
-
-                // Clear the braces management stacks and add the subset
-                oppeningBraces = new Queue<int>();
-                clossingBraces = new Stack<int>();
-                subsets.Push(subset);
-            }
-        }
+        //Get the subsets
+        var subsets = ExtractSubset(expression, out string root);
 
         // Create the root tree with the remaining elements after removing subsets
-        ISetTree<T> tree = Extract(expression, extractionConfig);
+        ISetTree<T> tree = Extract(root, extractionConfig);
 
         // Add all subsets as subtrees
         while (subsets.Count > 0)
@@ -101,7 +63,45 @@ public class SetTreeExtractor<T>
 
         return tree;
     }//Extract
+    private static Stack<string> ExtractSubset(string expression, out string rootElements)
+    {
+        rootElements = expression;
 
+        // Queues and stacks to manage braces and subsets
+        Queue<int> openingBraces = new Queue<int>(); // Holds indices of opening braces
+        Stack<int> closingBraces = new Stack<int>();  // Holds indices of closing braces
+        Stack<string> subsets = new Stack<string>();   // Holds the subsets at the first nesting level
+
+        // Loop through all the characters in the expression to identify subsets
+        for (int i = 0; i < rootElements.Length; i++)
+        {
+            if (rootElements[i] == '{')
+                openingBraces.Enqueue(i);
+            if (rootElements[i] == '}')
+                closingBraces.Push(i);
+
+            if (openingBraces.Count > 0 && openingBraces.Count == closingBraces.Count)
+            {
+                // Extract the outermost elements (subsets)
+                int start = openingBraces.Dequeue();
+                int end = closingBraces.Pop();
+                int length = end - start + 1;
+
+                string subset = rootElements.Substring(start, length);
+
+                // Remove the subset from the original expression to prevent duplicates
+                rootElements = rootElements.Remove(start, length);
+                i = start; // Reset the index to continue from the correct position
+
+                // Clear the braces management stacks and add the subset
+                openingBraces.Clear();
+                closingBraces.Clear();
+                subsets.Push(subset);
+            }
+        }//end for loop
+
+        return subsets;
+    }//ExtractSubset
     /// <summary>
     /// Sorts the root elements and removes duplicates, ensuring that the set only contains unique elements.
     /// </summary>
