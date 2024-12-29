@@ -141,8 +141,8 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// <summary>
     /// Enumerates and returns all subsets in the current set.
     /// </summary>
-    /// <returns>An enumerable collection of subsets in the set.</returns>
-    IEnumerable<ISetTree<T>> EnumerateSubsets();
+    /// <returns>An enumerable collection of subsets in the set as a set.</returns>
+    IEnumerable<IStructuredSet<T>> EnumerateSubsets();
     /// <summary>
     /// Builds and returns a new, empty set.
     /// </summary>
