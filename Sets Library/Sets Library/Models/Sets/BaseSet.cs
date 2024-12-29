@@ -222,7 +222,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <returns>True if the element exists; otherwise, false.</returns>
     public bool Contains(T element)
     {
-        //Check for nullss
+        //Check for nulls
         ArgumentNullException.ThrowIfNull(element, nameof(element));
 
         return _treeWrapper.IndexOf(element) >= 0;
@@ -235,7 +235,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <returns>True if the tree exists; otherwise, false.</returns>
     public bool Contains(ISetTree<T> tree)
     {
-        //Check for nullss
+        //Check for nulls
         ArgumentNullException.ThrowIfNull(tree, nameof(tree));
 
         return _treeWrapper.IndexOf(tree) >= 0;
@@ -270,7 +270,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         if (IsSameSet(setB))
         {
-            //Subset and a properset
+            //Subset and a proper set
             type = SetResultType.Same_Set & SetResultType.SubSet;
             return true;
         }//end if
@@ -448,12 +448,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         if (setB.Cardinality <= 0)
             return this;
 
-        //Start with the root elemets
+        //Start with the root elements
 
         var newSet = BuildNewSet();
         //Loop through the root elements and subsets of the current instance
         //-If the new set has the same elements as "setB" then all remaining elements
-        //-the current instace need to be added in the newSet
+        //-the current instance need to be added in the newSet
         for (int i = 0; i < _treeWrapper.CountRootElements; i++)
         {
             //Check if setB contains the current element in it set
@@ -462,10 +462,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
                 newSet.AddElement(elem);
         }//end for
 
-        //Loop througth the subsets of this instance
+        //Loop through the subsets of this instance
         for (int i = 0; i < _treeWrapper.CountSubsets; i++)
         {
-            //Check if setB contains the current subste in it set
+            //Check if setB contains the current subset in it set
             var sub = _treeWrapper.GetSubsetByIndex(i);
             if (!setB.Contains(sub))
                 newSet.AddElement(sub);
