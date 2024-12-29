@@ -1,10 +1,15 @@
-# Sets Library
 
-![C#](https://img.shields.io/badge/language-C%23-blue.svg)
-![.NET 8](https://img.shields.io/badge/.NET-8.0-blueviolet.svg)
-[![License](https://img.shields.io/github/license/Shisui-Pho/Sets-Library)](https://github.com/Shisui-Pho/Sets-Library/blob/main/LICENSE)
-
-**Sets Library** is a comprehensive and efficient framework for managing mathematical set operations. It supports advanced features such as nested subsets, dynamic collections, and custom data types, providing developers with the tools to work with structured data efficiently.
+<h1 align="center">Sets Library</h1>
+<div align="center" style="border:none;">
+  <img src="https://img.shields.io/badge/language-C%23-blue.svg" alt="C#" />
+  <img src="https://img.shields.io/badge/.NET-8.0-blueviolet.svg" alt=".NET 8" />
+  <a href="https://github.com/Shisui-Pho/Sets-Library/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/Shisui-Pho/Sets-Library" alt="License" />
+  </a>
+</div>
+<p align="center">
+  <strong>Sets Library</strong> is a comprehensive and efficient framework for managing mathematical set operations. It supports advanced features such as nested subsets, dynamic collections, and custom data types, providing developers with the tools to work with structured data efficiently.
+</p>
 
 ---
 
