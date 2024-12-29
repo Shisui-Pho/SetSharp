@@ -101,7 +101,7 @@ This section demonstrates how to leverage the Sets Library to perform common set
 ### Basic Set Creation
 The `BaseSet<T>` class and its derived classes (`TypedSet`, `StringLiteralSet`, etc.) allow you to define and manipulate sets.
 
-```
+```csharp
 using SetsLibrary;
 
 var config = new SetExtractionConfiguration<int>(',');
@@ -117,7 +117,7 @@ Console.WriteLine($"Set Elements: {setA.BuildStringRepresentation()}");
 ### Performing Set Operations
 Use `SetsOperations` to perform union, intersection, and other operations between sets.
 
-```
+```csharp
 using SetsLibrary.SetOperations;
 
 var setB = new TypedSet<int>("{3,4,5}", config);
@@ -134,7 +134,7 @@ Console.WriteLine($"Intersection: {intersectionSet.BuildStringRepresentation()}"
 ### Working with Set Collections
 The `SetCollection<T>` class allows you to manage multiple sets efficiently.
 
-```
+```csharp
 using SetsLibrary;
 using SetsLibrary.Collections;
 
@@ -154,7 +154,7 @@ Console.WriteLine($"Retrieved Set: {retrievedSet.BuildStringRepresentation()}");
 ### Debugging with Custom Exceptions
 The library provides custom exceptions for better debugging.
 
-```
+```csharp
 try
 {
     // Attempt an invalid operation
@@ -166,3 +166,183 @@ catch (SetsException ex)
     Console.WriteLine($"Details: {ex.Details}");
 }
 ```
+
+## Advanced Usage
+
+This section explores advanced functionalities of the Sets Library, such as nested subsets, custom object integration, and efficient set collection management.
+
+### Handling Nested Subsets
+The Sets Library supports hierarchical structures where sets can contain other sets as subsets.
+
+```csharp
+using SetsLibrary;
+
+var config = new SetExtractionConfiguration<int>(",", "\n");
+var nestedSet = new TypedSet<int>("{1, 2, {3, 4, {5}}}", config);
+
+Console.WriteLine($"Nested Set Representation: {nestedSet.BuildStringRepresentation()}");
+
+// Enumerate subsets
+foreach (var subset in nestedSet.EnumerateSubsets())
+{
+    Console.WriteLine($"Subset: {subset.BuildStringRepresentation()}");
+}
+```
+
+### Custom Data Type Integration
+The library allows defining and working with custom data types by implementing `ICustomObjectConverter<T>`.
+
+```csharp
+using SetsLibrary;
+
+class CustomType : IComparable<CustomType>, ICustomObjectConverter<CustomType>
+{
+    public string Name { get; set; }
+    public int Id { get; set; }
+
+    public int CompareTo(CustomType? other) => Id.CompareTo(other?.Id ?? 0);
+
+    public CustomType ToObject(string field, SetExtractionConfiguration<CustomType> settings)
+    {
+        var parts = field.Split(settings.FieldTerminator);
+        return new CustomType
+        {
+            Name = parts[0],
+            Id = int.Parse(parts[1])
+        };
+    }
+
+    public override string ToString() => $"{Name} ({Id})";
+}
+
+var customConfig = new SetExtractionConfiguration<CustomType>(";", "\n", new CustomType());
+var customSet = new CustomObjectSet<CustomType>("{John;1, Jane;2}", customConfig);
+
+Console.WriteLine($"Custom Set: {customSet.BuildStringRepresentation()}");
+```
+
+### Managing Large Collections with `SetCollection`
+The `SetCollection<T>` class helps organize and manage a large number of sets efficiently, using Excel-like naming conventions.
+
+```csharp
+using SetsLibrary;
+
+var collection = new SetCollection<IStructuredSet<int>>();
+
+// Add multiple sets
+for (int i = 0; i < 10; i++)
+{
+    var tempSet = new TypedSet<int>($"{{{i}, {i + 1}}}", new SetExtractionConfiguration<int>(",", "\n"));
+    collection.Add(tempSet);
+}
+
+// Access sets by name
+var firstSet = collection["A"];
+Console.WriteLine($"Set A: {firstSet?.BuildStringRepresentation()}");
+
+// Total number of sets
+Console.WriteLine($"Total Sets: {collection.Count}");
+```
+
+### **Troubleshooting and Common Issues**
+
+While the Sets Library is designed to be robust, you might encounter some issues. Below is a table of common problems and their resolutions:
+
+| **Issue**                                    | **Cause**                                                                                      | **Resolution**                                                                                       |
+|----------------------------------------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| **Invalid terminators in configuration**     | Field or row terminators include reserved characters (e.g., `{`, `}`).                         | Use valid terminators. Refer to the reserved character restrictions in the documentation.             |
+| **Null reference in `ToObject` method**      | `ICustomObjectConverter` is not provided, but the configuration requires it.                   | Ensure `SetExtractionConfiguration` is initialized with a valid `ICustomObjectConverter`.             |
+| **Incorrect set expression syntax**          | Set expression contains mismatched braces or invalid formatting.                               | Use the `BraceEvaluator` utility to verify and correct the set expression before processing.          |
+| **Unexpected behavior with `UnionWith`**     | One or both sets being merged are null or improperly initialized.                              | Validate input sets with `ArgumentNullException.ThrowIfNull` before performing operations.            |
+| **Error during set operations**              | Null or improperly configured sets are used in intersection, difference, or complement.        | Verify both sets are properly initialized and configured with valid terminators and converters.       |
+
+### **Debugging Tips**
+
+1. **Use `SetsException` for Detailed Error Context**:  
+   `SetsException` includes detailed error messages and a `Details` property for additional context. Here's an example:
+   ```csharp
+   try
+   {
+       var result = setA.IntersectWith(setB);
+   }
+   catch (SetsException ex)
+   {
+       Console.WriteLine(ex.Message);  // Displays the error message
+       Console.WriteLine(ex.Details); // Displays additional error details
+   }
+   ```
+
+2. **Trace Errors in Custom Operations**:  
+   When creating custom operations, use exception chaining to preserve the original error trace:
+   ```csharp
+   catch (Exception ex)
+   {
+       throw new SetsOperationException("Custom operation failed", "Additional details about the failure", ex);
+   }
+   ```
+
+3. **Test Your Configuration**:  
+   - Validate terminators and converters in `SetExtractionConfiguration` using unit tests.
+   - Ensure mock data aligns with the library's formatting and syntax rules.
+
+By following these tips and using the error-handling mechanisms built into the library, you can identify and resolve issues more effectively.
+
+---
+## **Contributing**
+
+We welcome contributions to the Sets Library! Whether it’s fixing a bug, improving the documentation, or adding new features, your input is highly valued. 
+
+### **How to Contribute**
+1. **Fork the Repository**:  
+   Create your own copy of the repository by clicking the "Fork" button at the top right corner of the GitHub page.
+
+2. **Clone Your Fork**:  
+   Clone your fork to your local machine using the following command:
+   ```
+   git clone https://github.com/<your-username>/Sets-Library.git
+   ```
+
+3. **Create a Branch**:  
+   Create a new branch for your feature or fix:
+   ```
+   git checkout -b feature/your-feature-name
+   ```
+
+4. **Make Your Changes**:  
+   Ensure your code follows the style and structure of the existing codebase. Write tests where applicable to verify your changes.
+
+5. **Run Tests**:  
+   Run the test suite to confirm that your changes don’t break existing functionality:
+   ```
+   dotnet test
+   ```
+
+6. **Commit Your Changes**:  
+   Use clear and descriptive commit messages:
+   ```
+   git add .
+   git commit -m "Add feature XYZ to Sets Library"
+   ```
+
+7. **Push Your Changes**:  
+   Push your changes to your fork:
+   ```
+   git push origin feature/your-feature-name
+   ```
+
+8. **Open a Pull Request**:  
+   Open a pull request on the main repository and provide a clear description of your changes and their purpose.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License.  
+You are free to use, modify, and distribute this library in your projects. See the [LICENSE](https://github.com/Shisui-Pho/Sets-Library/blob/main/LICENSE) file for details.
+
+---
+
+Thank you for using the Sets Library!  
+For questions or feedback, please open an issue or contact us through the [repository](https://github.com/Shisui-Pho/Sets-Library).
+
+
