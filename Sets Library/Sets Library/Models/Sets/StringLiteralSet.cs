@@ -70,7 +70,15 @@ public class StringLiteralSet : BaseSet<string>
     {
         return new StringLiteralSet(this.ExtractionConfiguration);
     } // BuildNewSet
-
+    /// <summary>
+    /// Builds and returns a new set based on the provided indexed set tree wrapper.
+    /// </summary>
+    /// <param name="tree">The indexed tree of the set</param>
+    /// <returns>A new instance of structered set</returns>
+    protected internal override IStructuredSet<string> BuildNewSet(IIndexedSetTree<string> tree)
+    {
+        return new StringLiteralSet(tree);
+    }//BuildNewSet
     #endregion Overrides
 } // class
 // namespace

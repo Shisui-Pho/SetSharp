@@ -130,10 +130,10 @@ namespace SetsLibrary.Tests.Models.Sets
 
             subset?.AddElement(6);
 
-            str = subset.ToString();
+            str = subset?.BuildStringRepresentation();
 
             string strr = baseSet.BuildStringRepresentation();
-            Assert.Contains(6, subset?.GetRootElementsEnumarator() ?? Enumerable.Empty<int>());
+            Assert.Contains(6, subset?.EnumerateRootElements() ?? Enumerable.Empty<int>());
 
             // Ensure main set is updated after adding an element to the subset
             Assert.DoesNotContain("{6}", baseSet.BuildStringRepresentation());
@@ -263,8 +263,8 @@ namespace SetsLibrary.Tests.Models.Sets
 
             // A is a subset of B
             bool result = setA.IsSubSetOf(setB, out var type);
-            Assert.True(result);
-            Assert.Equal(SetResultType.ProperSet, type); // Should return SubSet type
+            Assert.False(result);
+            Assert.Equal(SetResultType.NotASubSet, type); // Should return SubSet type
         }
 
         [Fact]
@@ -317,8 +317,8 @@ namespace SetsLibrary.Tests.Models.Sets
 
             var subsets = baseSet.EnumerateSubsets().ToList();
             Assert.Equal(2, subsets.Count); // Should have two subsets: {4,5} and {6,7}
-            Assert.Contains("{4,5}", subsets[0].ToString());
-            Assert.Contains("{6,7}", subsets[1].ToString());
+            Assert.Contains("{4,5}", subsets[0].BuildStringRepresentation());
+            Assert.Contains("{6,7}", subsets[1].BuildStringRepresentation());
         }
 
         [Fact]

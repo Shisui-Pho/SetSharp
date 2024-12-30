@@ -25,6 +25,7 @@
  */
 
 using SetsLibrary.Utility;
+using System.Xml.Linq;
 
 namespace SetsLibrary;
 
@@ -181,16 +182,26 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Adds a new tree as an element in the current set. If the tree already exists, it will not be added.
     /// </summary>
-    /// <param name="tree">The tree to be added.</param>
-    public void AddElement(ISetTree<T> tree)
+    /// <param name="subset">The tree to be added.</param>
+    public void AddElement(IStructuredSet<T> subset)
     {
         //Check for nulls
-        ArgumentNullException.ThrowIfNull(tree, nameof(tree));
+        ArgumentNullException.ThrowIfNull(subset, nameof(subset));
 
-        //Add to the tree
+        //Try get the underlying set
+        var _set = TryGetUnderlyingBaseSet(subset);
+
+        if(_set is not null)
+            _treeWrapper.AddSubSetTree(_set._treeWrapper);
+
+        #warning Temporary implementation, need to change this
+        var tree = Extractions(subset.BuildStringRepresentation());
         _treeWrapper.AddSubSetTree(tree);
     }//AddElement
-
+    private BaseSet<T>? TryGetUnderlyingBaseSet(IStructuredSet<T> set)
+    {
+        return set as BaseSet<T>;
+    }
     /// <summary>
     /// Adds a new subset to the current set from a string representation of the subset.
     /// </summary>
@@ -203,8 +214,9 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Extract the tree
         var tree = Extractions(subset);
 
+        var indexedTree = BuildNewSet(new SetTreeWrapper<T>(tree));
         //Add the tree
-        this.AddElement(tree);
+        this.AddElement(indexedTree);
     }//AddSubsetAsString
 
     /// <summary>
@@ -231,12 +243,23 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Checks if the specified tree exists in the set.
     /// </summary>
-    /// <param name="tree">The tree to check for.</param>
+    /// <param name="subSet">The tree to check for.</param>
     /// <returns>True if the tree exists; otherwise, false.</returns>
-    public bool Contains(ISetTree<T> tree)
+    public bool Contains(IStructuredSet<T> subSet)
     {
         //Check for nulls
-        ArgumentNullException.ThrowIfNull(tree, nameof(tree));
+        ArgumentNullException.ThrowIfNull(subSet, nameof(subSet));
+
+        //Try get the underlying base structre
+
+        var _set = TryGetUnderlyingBaseSet(subSet);
+
+        if(_set is not null)
+            return _treeWrapper.IndexOf(_set._treeWrapper) >= 0;
+
+
+#warning Temporary implementation, need to change this
+        var tree = Extractions(subSet.BuildStringRepresentation());
 
         return _treeWrapper.IndexOf(tree) >= 0;
     }//Contains
@@ -251,7 +274,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check for null
         ArgumentNullException.ThrowIfNull(setB, nameof(setB));
 
-        return setB.Contains(this._treeWrapper);
+        return setB.Contains(this);
     }//IsElementOf
 
     /// <summary>
@@ -287,34 +310,40 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(setB, nameof(setB));
 
-        //First loop through the root elements
-        var setBRootElements = setB.EnumerateRootElements().ToHashSet();
-
-        bool areRootElementsContained = Contains(setBRootElements,
-                                        _treeWrapper.CountRootElements,
-                                        _treeWrapper.GetRootElementByIndex);
-
-        //Check if all current root elements are contained in setB
-        if (!areRootElementsContained)
-            return false;
-
-        //Now check for the Subsets
-        var setBSubsets = setB.EnumerateSubsets().ToHashSet();
-
-        return Contains(setBSubsets,
-                        _treeWrapper.CountSubsets,
-                        _treeWrapper.GetSubsetByIndex); ;
-    }//IsProperSet
-    private bool Contains<TElement>(HashSet<TElement> elements, int count, Func<int, TElement> funcElement)
-    {
-        for (int i = 0; i < count; i++)
+        //Check if setB is of type BaseSet<T>
+        BaseSet<T>? setBBase = setB as BaseSet<T>;
+        
+        bool isSubset = false;
+        
+        if(setBBase is not null)
         {
-            if (!elements.Contains(funcElement(i)))
+            //Here do a sime contains expression
+            //-IIndexedTree is ISetTree
+            isSubset = this._treeWrapper.IndexOf((ISetTree<T>)(setBBase._treeWrapper)) >= 0;
+        }
+        else
+        {
+            isSubset = IsSubsetOfNoneBaseSet(setB);
+        }
+
+        return isSubset;
+    }//IsProperSet
+    private bool IsSubsetOfNoneBaseSet(IStructuredSet<T> setB)
+    {
+        //Perform loops
+        foreach(var rootElement in setB.EnumerateRootElements())
+        {
+            if (!this.Contains(rootElement))
                 return false;
         }
 
+        //Here loop through the subsets
+        foreach (var element in setB.EnumerateSubsets())
+            if (!this.Contains(element))
+                return false;
+
         return true;
-    }//Contains
+    }//IsSubsetOfWithBaseSet
     private bool IsSameSet(IStructuredSet<T> setB)
     {
         ArgumentNullException.ThrowIfNull(setB, nameof(setB));
@@ -351,14 +380,23 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Removes the specified tree from the current set.
     /// </summary>
-    /// <param name="tree">The tree to remove.</param>
+    /// <param name="subSet">The tree to remove.</param>
     /// <returns>True if the tree was found and removed; otherwise, false.</returns>
-    public bool RemoveElement(ISetTree<T> tree)
+    public bool RemoveElement(IStructuredSet<T> subSet)
     {
         //Check for null
-        ArgumentNullException.ThrowIfNull(tree, nameof(tree));
+        ArgumentNullException.ThrowIfNull(subSet, nameof(subSet));
 
-        //Remove element
+        //Try get the underlying base set
+        var _set = TryGetUnderlyingBaseSet(subSet);
+
+        if(_set is not null)
+            return _treeWrapper.RemoveElement(_set._treeWrapper);
+
+#warning Temporary implementation, need to change this
+
+        var tree = Extractions(subSet.BuildStringRepresentation());
+
         return _treeWrapper.RemoveElement(tree);
     }//RemoveElement
 
@@ -398,12 +436,14 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
     /// <summary>
     /// Enumerates and returns all subsets in the current set.
-    /// This method has not been implemented yet, and calling it will throw a <see cref="NotImplementedException"/>.
     /// </summary>
     /// <returns>An enumerable collection of subsets in the set.</returns>
-    public IEnumerable<ISetTree<T>> EnumerateSubsets()
+    public IEnumerable<IStructuredSet<T>> EnumerateSubsets()
     {
-        return _treeWrapper.GetSubsetsEnumarator();
+        foreach (var item in _treeWrapper.GetSubsetsEnumarator())
+        {
+            yield return BuildNewSet(new SetTreeWrapper<T>(item));
+        }
     }//EnumerateSubsets
 
     /// <summary>
@@ -458,6 +498,9 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Check if setB contains the current element in it set
             var elem = _treeWrapper.GetRootElementByIndex(i);
+
+            ArgumentNullException.ThrowIfNull(elem, nameof(elem));
+
             if (!setB.Contains(elem))
                 newSet.AddElement(elem);
         }//end for
@@ -467,8 +510,13 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             //Check if setB contains the current subset in it set
             var sub = _treeWrapper.GetSubsetByIndex(i);
-            if (!setB.Contains(sub))
-                newSet.AddElement(sub);
+
+            ArgumentNullException.ThrowIfNull(sub, nameof(sub));
+            
+            //Make sub element a set
+            var _subSet = BuildNewSet(new SetTreeWrapper<T>(sub));
+            if (!setB.Contains(_subSet))
+                newSet.AddElement(_subSet);
         }//end for 
 
         //return the new set
@@ -493,6 +541,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <returns>A new, empty instance of a structured set.</returns>
     public abstract IStructuredSet<T> BuildNewSet();
+    /// <summary>
+    /// Builds and returns a new set based on the provided indexed set tree wrapper.
+    /// </summary>
+    /// <param name="tree">The indexed tree of the set</param>
+    /// <returns>A new instance of structered set</returns>
+    protected internal abstract IStructuredSet<T> BuildNewSet(IIndexedSetTree<T> tree);
     #endregion ABSTRACT METHODS
 }//class
  //namespace
