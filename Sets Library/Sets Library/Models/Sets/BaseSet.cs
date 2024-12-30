@@ -506,7 +506,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// Builds and returns a new set based on the provided indexed set tree wrapper.
     /// </summary>
     /// <param name="tree">The indexed tree of the set</param>
-    /// <returns></returns>
+    /// <returns>A new instance of structered set</returns>
     protected internal abstract IStructuredSet<T> BuildNewSet(IIndexedSetTree<T> tree);
     #endregion ABSTRACT METHODS
 }//class

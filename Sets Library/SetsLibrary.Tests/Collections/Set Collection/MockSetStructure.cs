@@ -58,7 +58,7 @@ internal class MockSetStructure : IStructuredSet<int>
         throw new NotImplementedException();
     }
 
-    public IEnumerable<ISetTree<int>> EnumerateSubsets()
+    public IEnumerable<IStructuredSet<int>> EnumerateSubsets()
     {
         throw new NotImplementedException();
     }

@@ -73,7 +73,15 @@ public class TypedSet<T> : BaseSet<T>
     {
         return new TypedSet<T>(this.ExtractionConfiguration);
     } // BuildNewSet
-
+    /// <summary>
+    /// Builds and returns a new set based on the provided indexed set tree wrapper.
+    /// </summary>
+    /// <param name="tree">The indexed tree of the set</param>
+    /// <returns>A new instance of structered set</returns>
+    protected internal override IStructuredSet<T> BuildNewSet(IIndexedSetTree<T> tree)
+    {
+        return new TypedSet<T>(tree);
+    }//BuildNewSet
     #endregion Overrides
 } // class
 // namespace
