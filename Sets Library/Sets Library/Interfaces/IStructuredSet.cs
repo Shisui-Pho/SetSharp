@@ -54,7 +54,7 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// This element will be at the first nesting level.
     /// </summary>
     /// <param name="tree">The tree (set or element) to add to the set.</param>
-    void AddElement(ISetTree<T> tree);
+    void AddElement(IStructuredSet<T> tree);
 
     /// <summary>
     /// Adds a new subset to the set, represented as a string. This string will be extracted and treated as a subset.
@@ -68,7 +68,7 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// </summary>
     /// <param name="tree">The tree (set or element) to remove from the set.</param>
     /// <returns>True if the element was found and removed, otherwise false.</returns>
-    bool RemoveElement(ISetTree<T> tree);
+    bool RemoveElement(IStructuredSet<T> tree);
 
     /// <summary>
     /// Merges the current set with another set, adding elements from the other set at the first nesting level.
@@ -103,7 +103,7 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// </summary>
     /// <param name="tree">The tree (set or element) to check for.</param>
     /// <returns>True if the tree exists in the set, otherwise false.</returns>
-    bool Contains(ISetTree<T> tree);
+    bool Contains(IStructuredSet<T> tree);
 
     /// <summary>
     /// Checks if the current set is a subset of another set.
