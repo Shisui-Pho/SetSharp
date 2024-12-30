@@ -23,7 +23,7 @@ internal class MockSetStructure : IStructuredSet<int>
         throw new NotImplementedException();
     }
 
-    public void AddElement(ISetTree<int> tree)
+    public void AddElement(IStructuredSet<int> tree)
     {
         throw new NotImplementedException();
     }
@@ -48,7 +48,7 @@ internal class MockSetStructure : IStructuredSet<int>
         throw new NotImplementedException();
     }
 
-    public bool Contains(ISetTree<int> tree)
+    public bool Contains(IStructuredSet<int> tree)
     {
         throw new NotImplementedException();
     }
@@ -78,7 +78,7 @@ internal class MockSetStructure : IStructuredSet<int>
         throw new NotImplementedException();
     }
 
-    public bool RemoveElement(ISetTree<int> tree)
+    public bool RemoveElement(IStructuredSet<int> tree)
     {
         throw new NotImplementedException();
     }

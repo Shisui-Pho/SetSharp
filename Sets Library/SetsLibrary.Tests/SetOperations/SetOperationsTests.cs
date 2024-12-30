@@ -31,6 +31,11 @@ namespace SetsLibrary.Tests
             {
                 return new StructuredSet<T>(ExtractionConfiguration);
             }
+
+            protected override IStructuredSet<T> BuildNewSet(IIndexedSetTree<T> tree)
+            {
+                return new StructuredSet<T>(tree);
+            }
         }
 
         // Test helper method to create a set with elements
@@ -503,15 +508,17 @@ namespace SetsLibrary.Tests
             // Arrange
             var setA = CreateSet(new[] { 1, 2, 3, 4 });
             var setB = CreateSet(new[] { 3, 4, 5, 6 });
-            var t1 = CreateTree(new[] { 1 });
-            var t2 = CreateTree(new[] { 1, 3, 2, 4, 5, 8, 4, 6 });
-            var t3 = CreateTree(new[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1 });
+            var t1 = CreateSet(new[] { 1 });
+            var t2 = CreateSet(new[] { 1, 3, 2, 4, 5, 8, 4, 6 });
+            var t3 = CreateSet(new[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1 });
+
+
             setA.AddElement(t1);
             setA.AddElement(t2);
             setA.AddElement(t3);
             setB.AddElement(t1);
-            var t4 = CreateTree(new[] { 1 });
-            t4.AddSubSetTree(t2);
+            var t4 = CreateSet(new[] { 1 });
+            t4.AddElement(t2);
             setB.AddElement(t4);
 
             // Act
@@ -525,10 +532,10 @@ namespace SetsLibrary.Tests
             Assert.Contains(6, result.EnumerateRootElements());
             Assert.DoesNotContain(3, result.EnumerateRootElements());
             Assert.DoesNotContain(4, result.EnumerateRootElements());
-            Assert.Contains(t2, result.EnumerateSubsets());
+            Assert.Contains(t2.BuildStringRepresentation(), result.BuildStringRepresentation());
 
-#warning This need to be fixed
-            Assert.Contains(t4, result.EnumerateSubsets());
+            #warning This need to be fixed
+            Assert.Contains(t4.BuildStringRepresentation(), result.BuildStringRepresentation());
         }
 
         // Test for CartesianProduct method (NotImplementedException expected)
@@ -675,8 +682,8 @@ namespace SetsLibrary.Tests
             var setB = CreateSet(new int[1000]);
             for (int i = 0; i < 1000; i++)
             {
-                setA.AddElement(CreateTree(new[] { i }));
-                setB.AddElement(CreateTree(new[] { i + 500 }));
+                setA.AddElement(CreateSet(new[] { i }));
+                setB.AddElement(CreateSet(new[] { i + 500 }));
             }
 
             // Act
@@ -740,8 +747,8 @@ namespace SetsLibrary.Tests
             var setB = CreateSet([1000]);
             for (int i = 0; i < 8; i++)
             {
-                setA.AddElement(CreateTree(new[] { i + 1}));
-                setB.AddElement(CreateTree(new[] { i + 1000 }));
+                setA.AddElement(CreateSet(new[] { i + 1}));
+                setB.AddElement(CreateSet(new[] { i + 1000 }));
             }
 
             // Act
