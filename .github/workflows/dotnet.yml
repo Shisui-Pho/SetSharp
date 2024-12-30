@@ -1,4 +1,4 @@
-# This workflow will build and test the SetsLibrary project using .NET on Windows.
+# Windows-only workflow for building and testing the SetsLibrary project
 
 name: .NET Windows Workflow
 
@@ -11,7 +11,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest  # Ensures the workflow runs on a Windows environment.
+    runs-on: windows-latest
 
     steps:
     - name: Checkout Code
@@ -20,14 +20,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x  # Specify .NET version
+        dotnet-version: 8.0.x
 
     - name: Restore Dependencies
-      run: dotnet restore "./Sets Library/Sets Library.csproj"
+      run: dotnet restore "./Sets Library/Sets Library/Sets Library.csproj"
 
     - name: Build Solution
-      run: dotnet build "./Sets Library/Sets Library.csproj" --no-restore --configuration Release
-                         
+      run: dotnet build "./Sets Library/Sets Library/Sets Library.csproj" --no-restore --configuration Release
 
     - name: Run Tests
-      run: dotnet test "./SetsLibrary.Tests/SetsLibrary.Tests.csproj" --no-build --verbosity normal
+      run: dotnet test "./Sets Library/SetsLibrary.Tests/SetsLibrary.Tests.csproj" --no-build --verbosity normal
