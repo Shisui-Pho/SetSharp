@@ -25,7 +25,6 @@ namespace SetsLibrary;
 public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     where T : IComparable<T>
 {
-    private readonly SetTree<T>? _assSetTree = null;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SetTreeWrapper{T}"/> class.
@@ -33,8 +32,6 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     /// <param name="setTree">The SetTree instance to wrap.</param>
     public SetTreeWrapper(ISetTree<T> setTree) : base(setTree)
     {
-        if (setTree is SetTree<T>) // if they are the same, cast the setTree structure
-            _assSetTree = setTree as SetTree<T>;
     }
     internal SetTreeWrapper(SetExtractionConfiguration<T> config) : base(config) { }
     /// <summary>
@@ -47,6 +44,8 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     {
         if (index >= Count || index < 0)
             throw new ArgumentOutOfRangeException("index");
+
+        var _assSetTree = base.setTree as SetTree<T>;
 
         if (_assSetTree != null)
             return _assSetTree._elements[index]; // Access directly from the internal collection
@@ -92,6 +91,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     /// <exception cref="SetsException">Thrown if the internal SetTree structure is not available.</exception>
     public override void Clear()
     {
+        var _assSetTree = base.setTree as SetTree<T>;
         if (_assSetTree != null)
         {
             _assSetTree._elements.Clear();
