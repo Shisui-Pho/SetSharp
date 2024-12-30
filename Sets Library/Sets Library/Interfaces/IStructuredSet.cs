@@ -53,8 +53,8 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// Adds a new tree (set or element) as an element to the set. If the tree already exists, it will not be added.
     /// This element will be at the first nesting level.
     /// </summary>
-    /// <param name="tree">The tree (set or element) to add to the set.</param>
-    void AddElement(IStructuredSet<T> tree);
+    /// <param name="subset">The tree (set or element) to add to the set.</param>
+    void AddElement(IStructuredSet<T> subset);
 
     /// <summary>
     /// Adds a new subset to the set, represented as a string. This string will be extracted and treated as a subset.
@@ -66,9 +66,9 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// Removes an element (set or individual element) from the first nesting level of the set.
     /// If the tree does not exist, no action is taken.
     /// </summary>
-    /// <param name="tree">The tree (set or element) to remove from the set.</param>
+    /// <param name="subset.">The tree (set or element) to remove from the set.</param>
     /// <returns>True if the element was found and removed, otherwise false.</returns>
-    bool RemoveElement(IStructuredSet<T> tree);
+    bool RemoveElement(IStructuredSet<T> subset);
 
     /// <summary>
     /// Merges the current set with another set, adding elements from the other set at the first nesting level.
@@ -101,9 +101,9 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// <summary>
     /// Checks whether a specific tree (set or element) exists in the current set at the first nesting level.
     /// </summary>
-    /// <param name="tree">The tree (set or element) to check for.</param>
+    /// <param name="subset">The tree (set or element) to check for.</param>
     /// <returns>True if the tree exists in the set, otherwise false.</returns>
-    bool Contains(IStructuredSet<T> tree);
+    bool Contains(IStructuredSet<T> subset);
 
     /// <summary>
     /// Checks if the current set is a subset of another set.
