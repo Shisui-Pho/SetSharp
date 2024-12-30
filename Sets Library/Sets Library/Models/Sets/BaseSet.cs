@@ -25,6 +25,7 @@
  */
 
 using SetsLibrary.Utility;
+using System.Xml.Linq;
 
 namespace SetsLibrary;
 
@@ -287,34 +288,40 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(setB, nameof(setB));
 
-        //First loop through the root elements
-        var setBRootElements = setB.EnumerateRootElements().ToHashSet();
-
-        bool areRootElementsContained = Contains(setBRootElements,
-                                        _treeWrapper.CountRootElements,
-                                        _treeWrapper.GetRootElementByIndex);
-
-        //Check if all current root elements are contained in setB
-        if (!areRootElementsContained)
-            return false;
-
-        //Now check for the Subsets
-        var setBSubsets = setB.EnumerateSubsets().ToHashSet();
-
-        return Contains(setBSubsets,
-                        _treeWrapper.CountSubsets,
-                        _treeWrapper.GetSubsetByIndex); ;
-    }//IsProperSet
-    private bool Contains<TElement>(HashSet<TElement> elements, int count, Func<int, TElement> funcElement)
-    {
-        for (int i = 0; i < count; i++)
+        //Check if setB is of type BaseSet<T>
+        BaseSet<T>? setBBase = setB as BaseSet<T>;
+        
+        bool isSubset = false;
+        
+        if(setBBase is not null)
         {
-            if (!elements.Contains(funcElement(i)))
+            //Here do a sime contains expression
+            //-IIndexedTree is ISetTree
+            isSubset = this._treeWrapper.IndexOf((ISetTree<T>)(setBBase._treeWrapper)) >= 0;
+        }
+        else
+        {
+            isSubset = IsSubsetOfNoneBaseSet(setB);
+        }
+
+        return isSubset;
+    }//IsProperSet
+    private bool IsSubsetOfNoneBaseSet(IStructuredSet<T> setB)
+    {
+        //Perform loops
+        foreach(var rootElement in setB.EnumerateRootElements())
+        {
+            if (!this.Contains(rootElement))
                 return false;
         }
 
+        //Here loop through the subsets
+        foreach (var element in setB.EnumerateSubsets())
+            if (!this.Contains(element))
+                return false;
+
         return true;
-    }//Contains
+    }//IsSubsetOfWithBaseSet
     private bool IsSameSet(IStructuredSet<T> setB)
     {
         ArgumentNullException.ThrowIfNull(setB, nameof(setB));
@@ -398,12 +405,14 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
     /// <summary>
     /// Enumerates and returns all subsets in the current set.
-    /// This method has not been implemented yet, and calling it will throw a <see cref="NotImplementedException"/>.
     /// </summary>
     /// <returns>An enumerable collection of subsets in the set.</returns>
-    public IEnumerable<ISetTree<T>> EnumerateSubsets()
+    public IEnumerable<IStructuredSet<T>> EnumerateSubsets()
     {
-        return _treeWrapper.GetSubsetsEnumarator();
+        foreach (var item in _treeWrapper.GetSubsetsEnumarator())
+        {
+            yield return BuildNewSet(new SetTreeWrapper<T>(item));
+        }
     }//EnumerateSubsets
 
     /// <summary>
@@ -493,6 +502,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <returns>A new, empty instance of a structured set.</returns>
     public abstract IStructuredSet<T> BuildNewSet();
+    /// <summary>
+    /// Builds and returns a new set based on the provided indexed set tree wrapper.
+    /// </summary>
+    /// <param name="tree">The indexed tree of the set</param>
+    /// <returns></returns>
+    protected internal abstract IStructuredSet<T> BuildNewSet(IIndexedSetTree<T> tree);
     #endregion ABSTRACT METHODS
 }//class
  //namespace
