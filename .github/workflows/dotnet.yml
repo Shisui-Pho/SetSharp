@@ -23,10 +23,10 @@ jobs:
         dotnet-version: 8.0.x  # Specify .NET version
 
     - name: Restore Dependencies
-      run: dotnet restore ./SetsLibrary/SetsLibrary.csproj
+      run: dotnet restore "./Sets Library/Sets Library.csproj"
 
     - name: Build Solution
-      run: dotnet build ./SetsLibrary/SetsLibrary.csproj --no-restore --configuration Release
+      run: dotnet build "./Sets Library/Sets Library.csproj" --no-restore --configuration Release
 
     - name: Run Tests
-      run: dotnet test ./SetsLibrary.Tests/SetsLibrary.Tests.csproj --no-build --verbosity normal
+      run: dotnet test "./Sets Library.Tests/Sets Library.Tests.csproj" --no-build --verbosity normal
