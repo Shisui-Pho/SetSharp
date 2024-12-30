@@ -27,6 +27,7 @@ jobs:
 
     - name: Build Solution
       run: dotnet build "./Sets Library/Sets Library.csproj" --no-restore --configuration Release
+                         
 
     - name: Run Tests
-      run: dotnet test "./Sets Library.Tests/Sets Library.Tests.csproj" --no-build --verbosity normal
+      run: dotnet test "./SetsLibrary.Tests/SetsLibrary.Tests.csproj" --no-build --verbosity normal
