@@ -1,0 +1,44 @@
+# GitHub Actions Workflow for .NET Library and Tests
+# This workflow builds, tests, and validates the SetsLibrary project
+# on multiple operating systems.
+
+name: .NET Library CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        configuration: [Debug, Release]
+
+    steps:
+    # Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Setup .NET SDK
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # Restore dependencies for both projects
+    - name: Restore Dependencies
+      run: |
+        dotnet restore "Sets Library/Sets Library/Sets Library.csproj"
+        dotnet restore "Sets Library/SetsLibrary.Tests/SetsLibrary.Tests.csproj"
+
+    # Build the library in the specified configuration
+    - name: Build Solution
+      run: dotnet build --no-restore -c ${{ matrix.configuration }} "Sets Library/Sets Library/Sets Library.csproj"
+
+    # Execute tests with xUnit
+    - name: Run Tests
+      run: dotnet test --no-build --verbosity normal -c ${{ matrix.configuration }} "Sets Library/SetsLibrary.Tests/SetsLibrary.Tests.csproj"
