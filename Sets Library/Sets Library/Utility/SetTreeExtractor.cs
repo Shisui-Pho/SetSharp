@@ -18,6 +18,7 @@
  */
 
 using SetsLibrary.Collections;
+using System.Text;
 
 namespace SetsLibrary.Utility;
 
@@ -51,7 +52,7 @@ public class SetTreeExtractor<T>
         }
 
         //Get the subsets
-        var subsets = ExtractSubset(expression, out string root);
+        var subsets = ExtractSubsets(expression,out string root);
 
         // Create the root tree with the remaining elements after removing subsets
         ISetTree<T> tree = Extract(root, extractionConfig);
@@ -65,45 +66,86 @@ public class SetTreeExtractor<T>
 
         return tree;
     }//Extract
-    private static Stack<string> ExtractSubset(string expression, out string rootElements)
+    private static Stack<string> ExtractSubsets(string expression,out string rootElements)
     {
-        rootElements = expression;
+        //Here the first braces have been removed 
+        Stack<string> subsets = [];
 
-        // Queues and stacks to manage braces and subsets
-        Queue<int> openingBraces = new Queue<int>(); // Holds indices of opening braces
-        Stack<int> closingBraces = new Stack<int>();  // Holds indices of closing braces
-        Stack<string> subsets = new Stack<string>();   // Holds the subsets at the first nesting level
+        //String builders to hold the current subset and current root
+        StringBuilder _roots = new();
+        StringBuilder _subSet = new();
 
-        // Loop through all the characters in the expression to identify subsets
-        for (int i = 0; i < rootElements.Length; i++)
+        //Stack to keep track of the braces
+        Stack<int> stBraces = [];
+
+        //Loop through the entire string
+        for(int i = 0; i < expression.Length; i++)
         {
-            if (rootElements[i] == '{')
-                openingBraces.Enqueue(i);
-            if (rootElements[i] == '}')
-                closingBraces.Push(i);
+            //Get the current character
+            char _current = expression[i];
 
-            if (openingBraces.Count > 0 && openingBraces.Count == closingBraces.Count)
+            //Check for the opening brace
+            if( _current == '{')
             {
-                // Extract the outermost elements (subsets)
-                int start = openingBraces.Dequeue();
-                int end = closingBraces.Pop();
-                int length = end - start + 1;
+                //Push something to the stack
+                stBraces.Push(i);
 
-                string subset = rootElements.Substring(start, length);
+                //Attach the brace to the current subset
+                _subSet.Append(_current);
 
-                // Remove the subset from the original expression to prevent duplicates
-                rootElements = rootElements.Remove(start, length);
-                i = start; // Reset the index to continue from the correct position
-
-                // Clear the braces management stacks and add the subset
-                openingBraces.Clear();
-                closingBraces.Clear();
-                subsets.Push(subset);
+                //Move to the next character
+                continue;
             }
-        }//end for loop
 
+            //Check for the closing brace
+            if(_current == '}')
+            {
+                //If there's nothing in the stack then we have an error
+                if( stBraces.Count == 0)
+                {
+                    string details = $"Encountered a closing without an opening brace\n {expression}\n{"".PadLeft(i)}";
+                    throw new MissingBraceException("Missing an opening brace matching.",details);
+                }
+                _subSet.Append(_current);//Attach the closing braces
+
+                //Remove one opening brace
+                _ = stBraces.Pop();
+
+                if(stBraces.Count == 0)
+                {
+                    //Here it means that the subset has been extracted
+                    //-We need to add the subset
+                    subsets.Push(_subSet.ToString());
+
+                    //Reset the subset 
+                    _subSet.Clear();
+                }
+
+                //Move to the next character
+                continue;
+            }
+
+            //When the code reaches here, it means tha we either add to the subset
+            // or the root elements
+
+            if(stBraces.Count == 0)// THis goes to the root
+                _roots.Append(_current);
+            else
+                _subSet.Append(_current);
+        }//end for
+
+        //Check if the stack is empty
+        //- If it is then we have an error
+        if( stBraces.Count > 0)
+        {
+            string details = $"Encountered {stBraces.Count} opening brace(s) without corresponding closing braces." +
+                $"\nThe indexes are as follows : {string.Join(" , ", stBraces)}";
+            throw new MissingBraceException("Missing closing braces.", details);
+        }//end if invalid brace
+
+        rootElements = _roots.ToString();
         return subsets;
-    }//ExtractSubset
+    }//ExtractSubSets
     /// <summary>
     /// Sorts the root elements and removes duplicates, ensuring that the set only contains unique elements.
     /// </summary>
