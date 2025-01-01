@@ -74,7 +74,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Set the extraction configuration
         this.ExtractionConfiguration = extractionConfiguration;
-
+        this.ExtractionConfiguration.IsICustomObject = IsCustomObjectConverter();
         // Create a new instance of SetTreeWrapper using the provided configuration
         _treeWrapper = new SetTreeWrapper<T>(extractionConfiguration);
     } // Default constructor (uses SetExtractionConfiguration)
@@ -98,7 +98,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Assign the configurations
         this.ExtractionConfiguration = config;
-
+        this.ExtractionConfiguration.IsICustomObject = IsCustomObjectConverter();
         // Extract the set tree from the provided expression and configuration
         _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
@@ -123,6 +123,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Set the extraction configuration and original expression based on the injected tree
         this.ExtractionConfiguration = indexedSetTree.ExtractionSettings;
+        this.ExtractionConfiguration.IsICustomObject = IsCustomObjectConverter();
         this.OriginalExpression = indexedSetTree.ToString(); // Set the original expression from the tree's ToString method
     } // Constructor 2 (accepts injected IIndexedSetTree)
 
@@ -162,7 +163,13 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             throw new SetsException("Failed to extract set string.", "", ex);
         }
     } // Extractions
-
+    
+    /// <summary>
+    /// Checks if the current instance is a custom object set.
+    /// </summary>
+    /// <returns>True if it is a custom object set.</returns>
+    protected virtual bool IsCustomObjectConverter()
+        => false;
     #endregion Constructors
 
     #region Implemented Methods
