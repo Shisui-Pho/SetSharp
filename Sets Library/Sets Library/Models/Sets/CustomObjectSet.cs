@@ -66,6 +66,9 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <returns>True if it is a custom object set.</returns>
     protected sealed override bool IsCustomObjectConverter()
     {
+        if (SetExtractionConfiguration<T>.ToObject is null)
+            SetExtractionConfiguration<T>.ToObject = ToObject;
+
         return true;
     }
 
