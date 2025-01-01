@@ -35,8 +35,6 @@ public class CustomObjectSet<T> : BaseSet<T>
     public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration)
         : base(extractionConfiguration)
     {
-        //Mark the this as a custom object converter
-        extractionConfiguration.IsICustomObject = true;
     }
 
     /// <summary>
@@ -47,8 +45,6 @@ public class CustomObjectSet<T> : BaseSet<T>
     public CustomObjectSet(string expression, SetExtractionConfiguration<T> config)
         : base(expression, config)
     {
-        //Mark the this as a custom object converter
-        config.IsICustomObject = true;
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class by injecting an existing instance of IIndexedSetTree.
@@ -59,12 +55,19 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexedSetTree"/> is null.</exception>
     public CustomObjectSet(IIndexedSetTree<T> indexedSetTree) : base(indexedSetTree) 
     {
-        //Mark the this as a custom object converter
-        indexedSetTree.ExtractionSettings.IsICustomObject = true;
     }
     #endregion Constructors
 
     #region Overrides
+
+    /// <summary>
+    /// Checks if the current instance is a custom object set.
+    /// </summary>
+    /// <returns>True if it is a custom object set.</returns>
+    protected sealed override bool IsCustomObjectConverter()
+    {
+        return true;
+    }
 
     /// <summary>
     /// Builds and returns a new <see cref="CustomObjectSet{T}"/> based on the provided string representation of the set.
