@@ -170,8 +170,13 @@ public class SetTreeExtractor<T>
                 if (extractionConfig.IsICustomObject)
                 {
                     //Use the custom object converter
-                    item = extractionConfig.ToObject(element);
+                    if (SetExtractionConfiguration<T>.ToObject is not null)
+                        item = SetExtractionConfiguration<T>.ToObject(element, extractionConfig);
                     
+                    //The above code works
+                    //But I can't do this ????
+                    //item = SetExtractionConfiguration<T>.ToObject?.Invoke(element);// Why????
+
                 }
                 else
                 {
@@ -193,7 +198,14 @@ public class SetTreeExtractor<T>
                 //-The add method adds the elements in a sorted order
                 //if (!uniqueElements.Contains(item))
                 //    uniqueElements.Add(item);
-                uniqueElements.AddIfUnique(item);
+                if (item is not null)
+                {
+                    uniqueElements.AddIfUnique(item);
+                }
+                else
+                {
+                    throw new SetsException("Unable to complete conversion, check confiurations.");
+                }
             }
             catch
             (Exception ex)

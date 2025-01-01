@@ -57,7 +57,7 @@ public class SortAndRemoveDuplicatesTests
     {
         // Arrange
         var customConverter = new CustomStringToIntConverter();
-        var config = new SetExtractionConfiguration<int>(",", ";", customConverter);
+        var config = new SetExtractionConfiguration<int>(",", ";");
 
         string input = "10;5;3;5;10";
 
@@ -76,7 +76,7 @@ public class SortAndRemoveDuplicatesTests
     {
         // Arrange
         var invalidCustomConverter = new InvalidCustomConverter();
-        var config = new SetExtractionConfiguration<int>(";", ",", invalidCustomConverter);
+        var config = new SetExtractionConfiguration<int>(";", ",");
 
         string input = "invalid,values";
 
@@ -181,7 +181,7 @@ public class SortAndRemoveDuplicatesTests
 // Custom converter for testing
 public class CustomStringToIntConverter : ICustomObjectConverter<int>
 {
-    public int ToObject(string field, SetExtractionConfiguration<int> settings)
+    public static int ToObject(string field, SetExtractionConfiguration<int> settings)
     {
         // Convert custom string representation of numbers (e.g., "10" => 10)
         return int.Parse(field);
@@ -191,7 +191,7 @@ public class CustomStringToIntConverter : ICustomObjectConverter<int>
 // Invalid custom converter to simulate an error
 public class InvalidCustomConverter : ICustomObjectConverter<int>
 {
-    public int ToObject(string field, SetExtractionConfiguration<int> settings)
+    public static int ToObject(string field, SetExtractionConfiguration<int> settings)
     {
         // Invalid conversion, simulate FormatException
         return int.Parse("invalid"); // Will throw FormatException

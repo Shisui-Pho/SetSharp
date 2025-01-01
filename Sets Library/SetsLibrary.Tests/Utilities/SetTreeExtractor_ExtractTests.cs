@@ -159,7 +159,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{1,2,3}";
             var customConverter = new CustomStringToIntConverter();
-            var config = new SetExtractionConfiguration<int>(";", ",", customConverter);
+            var config = new SetExtractionConfiguration<int>(";", ",");
 
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
@@ -214,7 +214,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
     // Custom converter for testing
     public class CustomStringToIntConverter : ICustomObjectConverter<int>
     {
-        public int ToObject(string field, SetExtractionConfiguration<int> settings)
+        public static int ToObject(string field, SetExtractionConfiguration<int> settings)
         {
             // For simplicity, parse the string into an integer
             return int.Parse(field);
