@@ -16,6 +16,8 @@
  * - Provides a method to convert string records into objects using the provided converter.
  */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace SetsLibrary;
 
 /// <summary>
@@ -43,6 +45,8 @@ public class SetExtractionConfiguration<T>
     /// Gets a value indicating whether a custom object converter is provided.
     /// </summary>
     public bool IsICustomObject { get; internal set; }
+
+    internal static Func<string, SetExtractionConfiguration<T>,T?>? ToObject { get; set; } = null;
 
     // Constructors
     /// <summary>
@@ -120,20 +124,4 @@ public class SetExtractionConfiguration<T>
         FieldTerminator = _fieldTerminator;
         RowTerminator = _rowTerminator;
     }
-
-    /// <summary>
-    /// Converts a record string to an object of type <typeparamref name="T"/> using the specified converter.
-    /// </summary>
-    /// <param name="record">The record string to convert to an object.</param>
-    /// <returns>An object of type <typeparamref name="T"/> representing the record.</returns>
-    /// <exception cref="SetsConfigurationException">Thrown if the <see cref="Converter"/> is null.</exception>
-    public T ToObject(string record)
-    {
-        throw new NotImplementedException();
-        //if (Converter is null)
-        //{
-        //    throw new SetsConfigurationException($"The property {nameof(Converter)} is null.", "", new ArgumentNullException(nameof(Converter)));
-        //}
-        //return this.Converter.ToObject(record, this);
-    }
-}
+}//namespace
