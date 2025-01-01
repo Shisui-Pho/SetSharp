@@ -35,6 +35,8 @@ public class CustomObjectSet<T> : BaseSet<T>
     public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration)
         : base(extractionConfiguration)
     {
+        //Mark the this as a custom object converter
+        extractionConfiguration.IsICustomObject = true;
     }
 
     /// <summary>
@@ -45,6 +47,8 @@ public class CustomObjectSet<T> : BaseSet<T>
     public CustomObjectSet(string expression, SetExtractionConfiguration<T> config)
         : base(expression, config)
     {
+        //Mark the this as a custom object converter
+        config.IsICustomObject = true;
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class by injecting an existing instance of IIndexedSetTree.
@@ -53,7 +57,11 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <param name="indexedSetTree">An existing instance of an IIndexedSetTree that provides both the set elements 
     /// and configuration for extraction.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexedSetTree"/> is null.</exception>
-    public CustomObjectSet(IIndexedSetTree<T> indexedSetTree) : base(indexedSetTree) { }
+    public CustomObjectSet(IIndexedSetTree<T> indexedSetTree) : base(indexedSetTree) 
+    {
+        //Mark the this as a custom object converter
+        indexedSetTree.ExtractionSettings.IsICustomObject = true;
+    }
     #endregion Constructors
 
     #region Overrides
@@ -87,4 +95,24 @@ public class CustomObjectSet<T> : BaseSet<T>
     }//BuildNewSet
 
     #endregion Overrides
+
+    /// <summary>
+    /// Converts a record string to an object of type <typeparamref name="T"/> using the specified converter.
+    /// </summary>
+    /// <param name="record">The record string to convert to an object.</param>
+    /// <param name="config">The configurations of extracting the object from a string representation.</param>
+    /// <returns>An object of type <typeparamref name="T"/> representing the record.</returns>
+    /// <exception cref="SetsConfigurationException">Thrown if conversion failed.</exception>
+    public static T ToObject(string record, SetExtractionConfiguration<T> config)
+    {
+        try
+        {
+            return T.ToObject(record, config);
+        }
+        catch
+        (Exception e)
+        {
+            throw new SetsConfigurationException("Unable to complete conversion.","Check the stack trace.", e);
+        }
+    }//ToObject
 } // class
