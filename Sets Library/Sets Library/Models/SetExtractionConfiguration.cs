@@ -40,14 +40,9 @@ public class SetExtractionConfiguration<T>
     public string RowTerminator { get; private set; }
 
     /// <summary>
-    /// Gets the optional custom converter used to convert a string literal into an object of type <typeparamref name="T"/>.
-    /// </summary>
-    public ICustomObjectConverter<T>? Converter { get; private set; }
-
-    /// <summary>
     /// Gets a value indicating whether a custom object converter is provided.
     /// </summary>
-    public bool IsICustomObject { get; private set; }
+    public bool IsICustomObject { get; internal set; }
 
     // Constructors
     /// <summary>
@@ -76,24 +71,6 @@ public class SetExtractionConfiguration<T>
         VerifyProperties(fieldTerminator, rowTerminator);
         IsICustomObject = false;
     }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SetExtractionConfiguration{T}"/> class with field and row terminators and a custom object converter.
-    /// </summary>
-    /// <param name="fieldTerminator">The string used to separate fields in a record.</param>
-    /// <param name="rowTerminator">The string used to separate rows in the data.</param>
-    /// <param name="_converter">The custom converter used to convert a string literal into an object of type <typeparamref name="T"/>.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="_converter"/> is null.</exception>
-    /// <exception cref="SetsConfigurationException">Thrown if <paramref name="fieldTerminator"/> is the same as <paramref name="rowTerminator"/> or if they contain reserved characters.</exception>
-    public SetExtractionConfiguration(string fieldTerminator, string rowTerminator, ICustomObjectConverter<T> _converter)
-        : this(fieldTerminator, rowTerminator)
-    {
-        ArgumentNullException.ThrowIfNull(_converter, nameof(_converter));
-        Converter = _converter;
-        IsICustomObject = true;
-    }
-
-    // Methods
 
     /// <summary>
     /// Verifies that the field and row terminators are not null, not the same, and do not contain reserved characters.
@@ -152,10 +129,11 @@ public class SetExtractionConfiguration<T>
     /// <exception cref="SetsConfigurationException">Thrown if the <see cref="Converter"/> is null.</exception>
     public T ToObject(string record)
     {
-        if (Converter is null)
-        {
-            throw new SetsConfigurationException($"The property {nameof(Converter)} is null.", "", new ArgumentNullException(nameof(Converter)));
-        }
-        return this.Converter.ToObject(record, this);
+        throw new NotImplementedException();
+        //if (Converter is null)
+        //{
+        //    throw new SetsConfigurationException($"The property {nameof(Converter)} is null.", "", new ArgumentNullException(nameof(Converter)));
+        //}
+        //return this.Converter.ToObject(record, this);
     }
 }
