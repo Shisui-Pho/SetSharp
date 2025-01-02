@@ -208,7 +208,7 @@ class CustomType : IComparable<CustomType>, ICustomObjectConverter<CustomType>
 
     public int CompareTo(CustomType? other) => Id.CompareTo(other?.Id ?? 0);
 
-    public CustomType ToObject(string field, SetExtractionConfiguration<CustomType> settings)
+    public static CustomType ToObject(string field, SetExtractionConfiguration<CustomType> settings)
     {
         var parts = field.Split(settings.FieldTerminator);
         return new CustomType
@@ -221,7 +221,7 @@ class CustomType : IComparable<CustomType>, ICustomObjectConverter<CustomType>
     public override string ToString() => $"{Name} ({Id})";
 }
 
-var customConfig = new SetExtractionConfiguration<CustomType>(";", "\n", new CustomType());
+var customConfig = new SetExtractionConfiguration<CustomType>(";", "\n");
 var customSet = new CustomObjectSet<CustomType>("{John;1, Jane;2}", customConfig);
 
 Console.WriteLine($"Custom Set: {customSet.BuildStringRepresentation()}");
