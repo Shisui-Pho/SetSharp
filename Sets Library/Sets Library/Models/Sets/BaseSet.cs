@@ -144,6 +144,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Evaluate brace correctness
         if (!BraceEvaluator.AreBracesCorrect(expression, out int indexOfInvalidBrace))
         {
+            if (indexOfInvalidBrace == -1)
+                indexOfInvalidBrace = 0;
+            if(indexOfInvalidBrace == expression.Length)
+                indexOfInvalidBrace = expression.Length -1;
             string details = $"The index of the invalid/missing brace is \"{indexOfInvalidBrace}\"." +
                              $"\n{expression}" +
                              $"\n{"".PadLeft(indexOfInvalidBrace)}^" +
@@ -257,7 +261,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(subSet, nameof(subSet));
 
-        //Try get the underlying base structre
+        //Try get the underlying base structure
 
         var _set = TryGetUnderlyingBaseSet(subSet);
 
@@ -552,7 +556,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// Builds and returns a new set based on the provided indexed set tree wrapper.
     /// </summary>
     /// <param name="tree">The indexed tree of the set</param>
-    /// <returns>A new instance of structered set</returns>
+    /// <returns>A new instance of structured set</returns>
     protected internal abstract IStructuredSet<T> BuildNewSet(IIndexedSetTree<T> tree);
     #endregion ABSTRACT METHODS
 }//class
