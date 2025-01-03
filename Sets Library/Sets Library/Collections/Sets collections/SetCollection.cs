@@ -22,6 +22,7 @@
 
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace SetsLibrary.Collections;
 
@@ -37,103 +38,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
     private Dictionary<string, IStructuredSet<T>> _dicCollection;
 
     // This will keep track of the current key/last key.
-    private Key _lastKey;
-
-    #region Embedded class
-    /// <summary>
-    /// Represents a key used to uniquely identify sets within the collection.
-    /// </summary>
-    private class Key : IEqualityComparer<Key>
-    {
-        private readonly List<char> _keyChars;
-
-        /// <summary>
-        /// Gets the full key value as a string.
-        /// </summary>
-        public string FullKeyValue { get; private set; }
-
-        /// <summary>
-        /// Default constructor initializing an empty key.
-        /// </summary>
-        public Key()
-        {
-            _keyChars = new List<char>();
-            FullKeyValue = "";
-        }
-
-        /// <summary>
-        /// Initializes a key with a list of character values.
-        /// </summary>
-        /// <param name="characterKeys">The collection of characters representing the key.</param>
-        public Key(IEnumerable<char> characterKeys)
-            : this()
-        {
-            ArgumentNullException.ThrowIfNull(characterKeys, nameof(characterKeys));
-
-            _keyChars.AddRange(characterKeys);
-
-            FullKeyValue = string.Join("", characterKeys);
-        }
-
-        /// <summary>
-        /// Generates the next sequential key by incrementing the current key value.
-        /// </summary>
-        public Key GenerateNextKey()
-        {
-            // If the current list is empty
-            if (_keyChars.Count == 0)
-                return new Key("A");
-
-            // Create a copy
-            // Check the last and first elements if they are 'Z'
-            char[]? newValues = null;
-
-            if (_keyChars[0] == 'Z' && _keyChars[_keyChars.Count - 1] == 'Z')
-                newValues = new char[_keyChars.Count + 1];
-            else
-                newValues = new char[_keyChars.Count];
-
-            // Here the length of the array is already been determined
-            bool isIncremented = false;
-            for (int i = _keyChars.Count - 1; i >= 0; i--)
-            {
-                char current = _keyChars[i];
-                if (current == 'Z' && !isIncremented)
-                    current = 'A';
-                else if (!isIncremented)
-                {
-                    current++;
-                    isIncremented = true;
-                }
-
-                newValues[i] = current;
-            }
-
-            if (_keyChars.Count < newValues.Length) // It means that the values array has one extra slot
-                newValues[newValues.Length - 1] = 'A';
-
-            return new Key(newValues);
-        }
-
-        /// <summary>
-        /// Resets the key to an empty state.
-        /// </summary>
-        public void ResetKey()
-        {
-            _keyChars.Clear();
-        }
-
-        public bool Equals(Key? x, Key? y)
-        {
-            return x.FullKeyValue == y.FullKeyValue;
-        }
-
-        public int GetHashCode([DisallowNull] Key obj)
-        {
-            return obj.FullKeyValue.GetHashCode();
-        }
-    } // Embedded class
-    #endregion Embedded class
+    private int _lastKeyValue;
 
     #region Properties
 
@@ -190,15 +95,32 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
     /// <param name="item">The set to add.</param>
     public void Add(IStructuredSet<T> item)
     {
-        _lastKey = _lastKey.GenerateNextKey();
+        string key = GenerateNextKey();
 
         // Check for nulls
         ArgumentNullException.ThrowIfNull(item, nameof(item));
 
         // Add the element
-        _dicCollection.Add(_lastKey.FullKeyValue, item);
+        _dicCollection.Add(key, item);
     }
+    private string GenerateNextKey()
+    {
+        //Increment the key
+        _lastKeyValue++;
 
+        int current = _lastKeyValue;
+
+        string nextKey = "";
+
+        while(current > 0)
+        {
+            int rem = (current - 1) % 26;
+            nextKey = Convert.ToChar('A' + rem) + nextKey;
+            current = (current - rem) / 26;
+        }
+
+        return nextKey;
+    }
     /// <summary>
     /// Adds multiple sets to the collection.
     /// </summary>
@@ -218,7 +140,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
     public void Clear()
     {
         _dicCollection = new Dictionary<string, IStructuredSet<T>>();
-        _lastKey = new Key();
+        _lastKeyValue = 0;
     }
 
     /// <summary>
@@ -245,10 +167,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
         // Check for nulls
         ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
-        // Get the key value
-        Key key = new Key(name);
-
-        return _dicCollection.ContainsKey(key.FullKeyValue);
+        return _dicCollection.ContainsKey(name);
     }
 
     /// <summary>
@@ -261,12 +180,9 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
         // Check for nulls
         ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
-        // Generate the key
-        Key key = new Key(name);
-
         // Check if the key exists
-        if (_dicCollection.ContainsKey(key.FullKeyValue))
-            return _dicCollection[key.FullKeyValue];
+        if (_dicCollection.ContainsKey(name))
+            return _dicCollection[name];
 
         return null;
     }
@@ -281,9 +197,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
         // Check for nulls
         ArgumentNullException.ThrowIfNullOrWhiteSpace(name, nameof(name));
 
-        Key key = new Key(name);
-
-        return _dicCollection.Remove(key.FullKeyValue);
+        return _dicCollection.Remove(name);
     }
 
     /// <summary>
