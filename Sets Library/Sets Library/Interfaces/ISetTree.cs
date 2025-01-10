@@ -72,7 +72,7 @@ public interface ISetTree<T> : IComparable<ISetTree<T>>
     /// <returns>
     /// An enumerator that can be used to iterate through the subsets of the current set.
     /// </returns>
-    IEnumerable<ISetTree<T>> GetSubsetsEnumarator();
+    IEnumerable<ISetTree<T>> GetSubsetsEnumerator();
 
     /// <summary>
     /// Returns an enumerator that iterates through the root elements of the current set.
@@ -80,7 +80,7 @@ public interface ISetTree<T> : IComparable<ISetTree<T>>
     /// <returns>
     /// An enumerator that can be used to iterate through the root elements of the current set.
     /// </returns>
-    IEnumerable<T> GetRootElementsEnumarator();
+    IEnumerable<T> GetRootElementsEnumerator();
 
     /// <summary>
     /// Adds a subset inside the current set.

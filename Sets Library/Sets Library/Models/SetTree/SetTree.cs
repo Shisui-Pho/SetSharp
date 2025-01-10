@@ -10,7 +10,13 @@ namespace SetsLibrary;
 public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 {
     #region Data-fields
+    /// <summary>
+    /// Collection of root elements.
+    /// </summary>
     protected internal readonly ISortedElements<T> _elements;
+    /// <summary>
+    /// Collection of subsets in the root of the tree.
+    /// </summary>
     protected internal readonly ISortedSubSets<T> _subSets;
     #endregion Data-fields
 
@@ -119,11 +125,8 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(element, nameof(element));
 
-        //Check if element exists
-        int index = _elements.IndexOf(element);
-
-        if (index == -1)//Element does not exist
-            _elements.Add(element);
+        //Add element if it is unique
+        _elements.AddIfUnique(element);
     }
 
     /// <summary>
@@ -149,11 +152,8 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(tree, nameof(tree));
 
-        //Check if element exists
-        int index = _subSets.IndexOf(tree);
-
-        if (index == -1)//Tree does not exist
-            this._subSets.Add(tree);
+        //Add if unique
+        _subSets.AddIfUnique(tree);
     }
 
     /// <summary>
@@ -284,7 +284,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         int elementIndex = 0;
         //Here they have the same number of root elements and subsets
         //-Enumerate through all the root elements of other and compare them with the elements of this
-        foreach (T element in other.GetRootElementsEnumarator())
+        foreach (T element in other.GetRootElementsEnumerator())
         {
             //Compare correspond elements
             int comparer = this._elements[elementIndex].CompareTo(element);
@@ -293,14 +293,14 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
             if (comparer != 0)
                 return comparer;
 
-            //increament the index
+            //increment the index
             elementIndex++;
         }
 
         elementIndex = 0;
         //Here it means that the root elements are the same
         //-We need to check each subset
-        foreach (ISetTree<T> tree in other.GetSubsetsEnumarator())
+        foreach (ISetTree<T> tree in other.GetSubsetsEnumerator())
         {
             //Do it recursively
             int comparer = this._subSets[elementIndex].CompareTo(tree);
@@ -309,7 +309,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
             if (comparer != 0)
                 return comparer;
 
-            //increament the index
+            //increment the index
             elementIndex++;
         }
 
@@ -330,7 +330,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// Gets an enumerator for the root elements of the set tree.
     /// </summary>
     /// <returns>An enumerator for the root elements.</returns>
-    public IEnumerable<T> GetRootElementsEnumarator()
+    public IEnumerable<T> GetRootElementsEnumerator()
     {
         return this._elements;
     }
@@ -339,7 +339,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// Gets an enumerator for the subset trees of the set tree.
     /// </summary>
     /// <returns>An enumerator for the subset trees.</returns>
-    public IEnumerable<ISetTree<T>> GetSubsetsEnumarator()
+    public IEnumerable<ISetTree<T>> GetSubsetsEnumerator()
     {
         return this._subSets;
     }

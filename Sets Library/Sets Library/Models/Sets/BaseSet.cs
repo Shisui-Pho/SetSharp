@@ -442,7 +442,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <returns>An enumerable collection of root elements in the set.</returns>
     public IEnumerable<T> EnumerateRootElements()
     {
-        return _treeWrapper.GetRootElementsEnumarator();
+        return _treeWrapper.GetRootElementsEnumerator();
     }//EnumerateRootElements
 
     /// <summary>
@@ -451,7 +451,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <returns>An enumerable collection of subsets in the set.</returns>
     public IEnumerable<IStructuredSet<T>> EnumerateSubsets()
     {
-        foreach (var item in _treeWrapper.GetSubsetsEnumarator())
+        foreach (var item in _treeWrapper.GetSubsetsEnumerator())
         {
             yield return BuildNewSet(new SetTreeWrapper<T>(item));
         }

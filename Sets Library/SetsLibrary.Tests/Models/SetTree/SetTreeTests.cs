@@ -13,8 +13,8 @@ namespace SetsLibrary.Tests.Models.SetTree
             var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.NotNull(setTree);
-            Assert.Empty(setTree.GetRootElementsEnumarator());
-            Assert.Empty(setTree.GetSubsetsEnumarator());
+            Assert.Empty(setTree.GetRootElementsEnumerator());
+            Assert.Empty(setTree.GetSubsetsEnumerator());
             Assert.Equal(0, setTree.Count);
         }
 
@@ -34,9 +34,9 @@ namespace SetsLibrary.Tests.Models.SetTree
             var elements = new List<int> { 1, 2, 3 };
             var setTree = new SetTree<int>(extractionSettings, elements);
             Assert.Equal(3, setTree.CountRootElements);
-            Assert.Contains(1, setTree.GetRootElementsEnumarator());
-            Assert.Contains(2, setTree.GetRootElementsEnumarator());
-            Assert.Contains(3, setTree.GetRootElementsEnumarator());
+            Assert.Contains(1, setTree.GetRootElementsEnumerator());
+            Assert.Contains(2, setTree.GetRootElementsEnumerator());
+            Assert.Contains(3, setTree.GetRootElementsEnumerator());
         }
 
         #endregion Constructor Tests
@@ -49,7 +49,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
-            Assert.Contains(10, setTree.GetRootElementsEnumarator());
+            Assert.Contains(10, setTree.GetRootElementsEnumerator());
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
             setTree.AddElement(10); // Adding again
-            Assert.Single(setTree.GetRootElementsEnumarator()); // Only one occurrence of 10
+            Assert.Single(setTree.GetRootElementsEnumerator()); // Only one occurrence of 10
         }
 
         [Fact]
@@ -81,9 +81,9 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddRange(new List<int> { 1, 2, 3 });
             Assert.Equal(3, setTree.CountRootElements);
-            Assert.Contains(1, setTree.GetRootElementsEnumarator());
-            Assert.Contains(2, setTree.GetRootElementsEnumarator());
-            Assert.Contains(3, setTree.GetRootElementsEnumarator());
+            Assert.Contains(1, setTree.GetRootElementsEnumerator());
+            Assert.Contains(2, setTree.GetRootElementsEnumerator());
+            Assert.Contains(3, setTree.GetRootElementsEnumerator());
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace SetsLibrary.Tests.Models.SetTree
 
             setTree.AddSubSetTree(subsetTree);
 
-            Assert.Single(setTree.GetSubsetsEnumarator());
+            Assert.Single(setTree.GetSubsetsEnumerator());
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             setTree.AddElement(10);
             bool result = setTree.RemoveElement(10);
             Assert.True(result);
-            Assert.DoesNotContain(10, setTree.GetRootElementsEnumarator());
+            Assert.DoesNotContain(10, setTree.GetRootElementsEnumerator());
         }
 
         [Fact]
@@ -166,7 +166,7 @@ namespace SetsLibrary.Tests.Models.SetTree
 
             bool result = setTree.RemoveElement(subsetTree);
             Assert.True(result);
-            Assert.Empty(setTree.GetSubsetsEnumarator());
+            Assert.Empty(setTree.GetSubsetsEnumerator());
         }
 
         [Fact]
@@ -264,7 +264,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(1);
             setTree.AddElement(2);
-            var rootElements = setTree.GetRootElementsEnumarator();
+            var rootElements = setTree.GetRootElementsEnumerator();
             Assert.Contains(1, rootElements);
             Assert.Contains(2, rootElements);
         }
@@ -277,7 +277,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
             setTree.AddSubSetTree(subsetTree);
-            var subsets = setTree.GetSubsetsEnumarator();
+            var subsets = setTree.GetSubsetsEnumerator();
             Assert.Contains(subsetTree, subsets);
         }
         #endregion Root Elements and Subsets Enumerator Tests
@@ -292,7 +292,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             setTree.AddElement(5);
             setTree.AddElement(5); //Adding duplicate element
 
-            Assert.Single(setTree.GetRootElementsEnumarator()); //Should only contain 5 once
+            Assert.Single(setTree.GetRootElementsEnumerator()); //Should only contain 5 once
         }
 
         [Fact]
@@ -403,7 +403,7 @@ namespace SetsLibrary.Tests.Models.SetTree
 
             bool result = setTree.RemoveElement(10); // Removing an element from the root set
             Assert.True(result); // Should remove 10 successfully
-            Assert.DoesNotContain(10, setTree.GetRootElementsEnumarator());
+            Assert.DoesNotContain(10, setTree.GetRootElementsEnumerator());
         }
 
         [Fact]
@@ -521,7 +521,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             // Remove an element
             bool removed = setTree.RemoveElement(2);
             Assert.True(removed);
-            Assert.False(setTree.GetRootElementsEnumarator().Contains(2)); // Should not contain 2 anymore
+            Assert.False(setTree.GetRootElementsEnumerator().Contains(2)); // Should not contain 2 anymore
 
             // Try removing an element that doesn't exist
             removed = setTree.RemoveElement(10);

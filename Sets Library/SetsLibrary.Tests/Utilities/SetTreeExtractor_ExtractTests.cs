@@ -41,8 +41,8 @@ namespace SetsLibrary.Tests.Utilities.Extract
                 Count += elements is ICollection<T> collection ? collection.Count : 0;
             }
 
-            public IEnumerable<ISetTree<T>> GetSubsetsEnumarator() => _subsets;
-            public IEnumerable<T> GetRootElementsEnumarator() => _elements;
+            public IEnumerable<ISetTree<T>> GetSubsetsEnumerator() => _subsets;
+            public IEnumerable<T> GetRootElementsEnumerator() => _elements;
             public bool RemoveElement(T element) => _elements.Remove(element);
             public bool RemoveElement(ISetTree<T> element) => _subsets.Remove(element);
             public int IndexOf(T element) => _elements.IndexOf(element);
@@ -117,7 +117,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             Assert.Equal(1, tree.CountSubsets);
 
             // Assert for the first subset
-            ISetTree<int> subsetTree = tree.GetSubsetsEnumarator().First();
+            ISetTree<int> subsetTree = tree.GetSubsetsEnumerator().First();
             Assert.Equal("3,4", subsetTree.RootElements);
             Assert.Equal(2, subsetTree.Count);
             Assert.Equal(2, subsetTree.CountRootElements);
@@ -142,12 +142,12 @@ namespace SetsLibrary.Tests.Utilities.Extract
             Assert.Equal(2, tree.CountSubsets);
 
             // Assert for the first subset
-            ISetTree<int> subsetTree1 = tree.GetSubsetsEnumarator().ElementAt(0);
+            ISetTree<int> subsetTree1 = tree.GetSubsetsEnumerator().ElementAt(0);
             Assert.Equal("3,4", subsetTree1.RootElements);
             Assert.Equal(2, subsetTree1.Count);
 
             // Assert for the second subset
-            ISetTree<int> subsetTree2 = tree.GetSubsetsEnumarator().ElementAt(1);
+            ISetTree<int> subsetTree2 = tree.GetSubsetsEnumerator().ElementAt(1);
             Assert.Equal("5,6", subsetTree2.RootElements);
             Assert.Equal(2, subsetTree2.Count);
         }
