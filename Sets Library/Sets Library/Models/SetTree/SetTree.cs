@@ -10,7 +10,13 @@ namespace SetsLibrary;
 public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 {
     #region Data-fields
+    /// <summary>
+    /// Collection of root elements.
+    /// </summary>
     protected internal readonly ISortedElements<T> _elements;
+    /// <summary>
+    /// Collection of subsets in the root of the tree.
+    /// </summary>
     protected internal readonly ISortedSubSets<T> _subSets;
     #endregion Data-fields
 
@@ -119,11 +125,8 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(element, nameof(element));
 
-        //Check if element exists
-        int index = _elements.IndexOf(element);
-
-        if (index == -1)//Element does not exist
-            _elements.Add(element);
+        //Add element if it is unique
+        _elements.AddIfUnique(element);
     }
 
     /// <summary>
@@ -149,11 +152,8 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(tree, nameof(tree));
 
-        //Check if element exists
-        int index = _subSets.IndexOf(tree);
-
-        if (index == -1)//Tree does not exist
-            this._subSets.Add(tree);
+        //Add if unique
+        _subSets.AddIfUnique(tree);
     }
 
     /// <summary>
@@ -293,7 +293,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
             if (comparer != 0)
                 return comparer;
 
-            //increament the index
+            //increment the index
             elementIndex++;
         }
 
@@ -309,7 +309,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
             if (comparer != 0)
                 return comparer;
 
-            //increament the index
+            //increment the index
             elementIndex++;
         }
 
