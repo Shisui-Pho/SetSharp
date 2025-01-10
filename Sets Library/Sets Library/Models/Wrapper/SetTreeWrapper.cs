@@ -52,7 +52,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
 
         // Else, do a loop
         int currentIndex = 0;
-        foreach (T item in base.GetRootElementsEnumarator())
+        foreach (T item in base.GetRootElementsEnumerator())
         {
             if (currentIndex == index)
                 return item;
@@ -75,7 +75,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
 
         // Else, do a loop
         int currentIndex = 0;
-        foreach (ISetTree<T> item in base.GetSubsetsEnumarator())
+        foreach (ISetTree<T> item in base.GetSubsetsEnumerator())
         {
             if (currentIndex == index)
                 return item;

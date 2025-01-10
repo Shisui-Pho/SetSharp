@@ -123,18 +123,18 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
     /// Gets an enumerator for the root elements in the set.
     /// </summary>
     /// <returns>An enumerator for the root elements.</returns>
-    public IEnumerable<T> GetRootElementsEnumarator()
+    public IEnumerable<T> GetRootElementsEnumerator()
     {
-        return setTree.GetRootElementsEnumarator();
+        return setTree.GetRootElementsEnumerator();
     }
 
     /// <summary>
     /// Gets an enumerator for the subsets in the set.
     /// </summary>
     /// <returns>An enumerator for the subsets.</returns>
-    public IEnumerable<ISetTree<T>> GetSubsetsEnumarator()
+    public IEnumerable<ISetTree<T>> GetSubsetsEnumerator()
     {
-        return setTree.GetSubsetsEnumarator();
+        return setTree.GetSubsetsEnumerator();
     }
 
     /// <summary>
