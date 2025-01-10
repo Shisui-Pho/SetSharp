@@ -29,4 +29,4 @@ jobs:
       run: dotnet build "./Sets Library/Sets Library/Sets Library.csproj" --no-restore --configuration Release
 
     - name: Run Tests
-      run: dotnet test "./Sets Library/SetsLibrary.Tests/SetsLibrary.Tests.csproj" --no-build --verbosity detailed
+      run: dotnet test "./Sets Library/SetsLibrary.Tests/SetsLibrary.Tests.csproj" --no-build --verbosity minimal
