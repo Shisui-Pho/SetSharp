@@ -95,10 +95,11 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
     /// <param name="item">The set to add.</param>
     public void Add(IStructuredSet<T> item)
     {
-        string key = GenerateNextKey();
-
         // Check for nulls
         ArgumentNullException.ThrowIfNull(item, nameof(item));
+
+        //Generate the next key
+        string key = GenerateNextKey();
 
         // Add the element
         _dicCollection.Add(key, item);
