@@ -23,7 +23,7 @@ namespace SetsLibrary.Collections;
 /// </summary>
 /// <typeparam name="TElement">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
 /// <typeparam name="TElementContained">The type of enumerator/structure used to iterate through the collection.</typeparam>
-public interface ISortedSetCollection<TElement, TElementContained> : IEnumerable<TElementContained>
+public interface ISortedCollection<TElement, TElementContained> : IEnumerable<TElementContained>
     where TElement : IComparable<TElement>
 {
     /// <summary>
