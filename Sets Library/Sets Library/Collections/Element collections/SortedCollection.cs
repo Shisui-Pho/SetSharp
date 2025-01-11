@@ -29,7 +29,7 @@ namespace SetsLibrary.Collections;
 ///Provides functionality for adding, removing, and searching elements.
 ///</summary>
 ///<typeparam name="TElement">The type of elements in the collection, which must implement <see cref="IComparable{TElement}"/>.</typeparam>
-public class SortedCollection<TElement> : ISortedCollection<TElement, TElement>
+public class SortedCollection<TElement> : ISortedCollection<TElement>
     where TElement : IComparable<TElement>
 {
     //Data field to store elements
