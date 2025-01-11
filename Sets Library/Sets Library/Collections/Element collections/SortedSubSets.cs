@@ -26,7 +26,7 @@ namespace SetsLibrary.Collections;
 /// Represents a collection of sorted subsets, each being a <see cref="ISetTree{T}"/>.
 /// </summary>
 /// <typeparam name="T">The type of elements in the subsets, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SortedSubSets<T> : BaseSortedCollection<ISetTree<T>>, ISortedSubSets<T>
+public class SortedSubSets<T> : SortedCollection<ISetTree<T>>, ISortedSubSets<T>
     where T : IComparable<T>
 {
     /// <summary>

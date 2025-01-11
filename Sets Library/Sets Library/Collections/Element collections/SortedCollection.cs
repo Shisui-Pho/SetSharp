@@ -29,7 +29,7 @@ namespace SetsLibrary.Collections;
 ///Provides functionality for adding, removing, and searching elements.
 ///</summary>
 ///<typeparam name="TElement">The type of elements in the collection, which must implement <see cref="IComparable{TElement}"/>.</typeparam>
-public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TElement, TElement>
+public class SortedCollection<TElement> : ISortedSetCollection<TElement, TElement>
     where TElement : IComparable<TElement>
 {
     //Data field to store elements
@@ -64,18 +64,18 @@ public abstract class BaseSortedCollection<TElement> : ISortedSetCollection<TEle
     //Constructors
 
     ///<summary>
-    ///Initializes a new instance of the <see cref="BaseSortedCollection{TElement}"/> class.
+    ///Initializes a new instance of the <see cref="SortedCollection{TElement}"/> class.
     ///</summary>
-    public BaseSortedCollection()
+    public SortedCollection()
     {
         Clear();
     }//ctor main
 
     ///<summary>
-    ///Initializes a new instance of the <see cref="BaseSortedCollection{TElement}"/> class with an existing set of elements.
+    ///Initializes a new instance of the <see cref="SortedCollection{TElement}"/> class with an existing set of elements.
     ///</summary>
     ///<param name="elements">The collection of elements to initialize the sorted collection with.</param>
-    public BaseSortedCollection(IEnumerable<TElement> elements)
+    public SortedCollection(IEnumerable<TElement> elements)
     {
         Clear();
         AddRange(elements);
