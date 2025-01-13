@@ -145,7 +145,7 @@ namespace SetsLibrary.Extensions
 
                 if (internalElements is SortedCollection<TItem> sortedElements)
                 {
-                    elements = new List<TItem>(sortedElements);
+                    elements = sortedElements.ToList();
                 }
                 else
                 {
@@ -336,4 +336,4 @@ namespace SetsLibrary.Extensions
 
         #endregion
     }
-}//class
+}//namespace
