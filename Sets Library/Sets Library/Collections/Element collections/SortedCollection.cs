@@ -269,13 +269,5 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     {
         return GetEnumerator();
     }//GetEnumerator
-    /// <summary>
-    /// Converts the current structure to a list.
-    /// </summary>
-    /// <returns>A list of elements.</returns>
-    public List<TElement> ToList()
-    {
-        return _elements;
-    }
 }//class
  //namespace
