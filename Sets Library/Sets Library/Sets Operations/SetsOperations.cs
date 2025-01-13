@@ -265,21 +265,184 @@ public static class SetsOperations
             );
         }
     }//SymmetricDifference
+    /// <summary>
+    /// Defines the possible types of pairs in the Cartesian product and their order.
+    /// </summary>
+    public enum CartesianPairType
+    {
+        /// <summary>
+        /// A pair consisting of two elements.
+        /// </summary>
+        Element1Element2 = 0,
 
+        /// <summary>
+        /// A pair consisting of an element and a subset.
+        /// </summary>
+        Element1Set1 = 1,
+
+        /// <summary>
+        /// A pair consisting of a set and an element.
+        /// </summary>
+        Set1Element1 = 3,
+
+        /// <summary>
+        /// A pair consisting of two sets (subsets).
+        /// </summary>
+        Set1Set2 = 4
+    }
+
+    /// <summary>
+    /// Represents a pair in the Cartesian product, which could be a combination of elements and/or sets.
+    /// </summary>
+    /// <typeparam name="TElement">The type of the elements in the pair, which must implement <see cref="IComparable{TElement}"/>.</typeparam>
+    public class CartesianProductPair<TElement>
+        where TElement : IComparable<TElement>
+    {
+        // The pairs can be of four types:
+        // - (element, element)       -> CartesianPairType.Element1Element2
+        // - (element, subset)        -> CartesianPairType.Element1Subset1
+        // - (subset, element)        -> CartesianPairType.Set1Element1
+        // - (subset, subset)         -> CartesianPairType.Set1Subset2
+
+        //Some of the properties can be nulls
+
+
+        /// <summary>
+        /// Gets the first element of the pair.
+        /// </summary>
+        public TElement Element1 { get; private set; }
+
+        /// <summary>
+        /// Gets the second element of the pair.
+        /// </summary>
+        public TElement Element2 { get; private set; }
+
+        /// <summary>
+        /// Gets the first set in the pair.
+        /// </summary>
+        public IStructuredSet<TElement> Set1 { get; private set; }
+
+        /// <summary>
+        /// Gets the second set in the pair.
+        /// </summary>
+        public IStructuredSet<TElement> Set2 { get; private set; }
+
+        /// <summary>
+        /// Gets the type of the pair (element-element, element-subset, etc.).
+        /// </summary>
+        public CartesianPairType PairType { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartesianProductPair{TElement}"/> class with two elements.
+        /// </summary>
+        /// <param name="elem1">The first element of the pair.</param>
+        /// <param name="elem2">The second element of the pair.</param>
+        public CartesianProductPair(TElement elem1, TElement elem2)
+        {
+            Element1 = elem1;
+            Element2 = elem2;
+
+            PairType = CartesianPairType.Element1Element2;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartesianProductPair{TElement}"/> class with an element and a set.
+        /// </summary>
+        /// <param name="elem1">The element of the pair.</param>
+        /// <param name="set1">The set in the pair.</param>
+        public CartesianProductPair(TElement elem1, IStructuredSet<TElement> set1)
+        {
+            Element1 = elem1;
+            Set1 = set1;
+
+            PairType = CartesianPairType.Element1Set1;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartesianProductPair{TElement}"/> class with a set and an element.
+        /// </summary>
+        /// <param name="set1">The set in the pair.</param>
+        /// <param name="elem1">The element of the pair.</param>
+        public CartesianProductPair(IStructuredSet<TElement> set1, TElement elem1)
+        {
+            Set1 = set1;
+            Element1 = elem1;
+
+            PairType = CartesianPairType.Set1Element1;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CartesianProductPair{TElement}"/> class with two sets.
+        /// </summary>
+        /// <param name="set1">The first set in the pair.</param>
+        /// <param name="set2">The second set in the pair.</param>
+        public CartesianProductPair(IStructuredSet<TElement> set1, IStructuredSet<TElement> set2)
+        {
+            Set1 = set1;
+            Set2 = set2;
+
+            PairType = CartesianPairType.Set1Set2;
+        }
+    }
     /// <summary>
     /// Computes the Cartesian product of two sets, returning a new set containing all
     /// possible ordered pairs of elements from <paramref name="A"/> and <paramref name="B"/>.
+    /// The resulting pairs can be of different types, depending on whether they involve 
+    /// elements or subsets of the sets.
     /// </summary>
     /// <typeparam name="TElement">The type of elements in the sets, which must implement <see cref="IComparable{TElement}"/>.</typeparam>
     /// <param name="A">The first set.</param>
     /// <param name="B">The second set.</param>
-    /// <returns>A new set containing the Cartesian product of <paramref name="A"/> and <paramref name="B"/>.</returns>
-    /// <exception cref="NotImplementedException">Thrown because this operation is not yet implemented.</exception>
-    public static IStructuredSet<(TElement, TElement)> CartesianProduct<TElement>(this IStructuredSet<TElement> A, IStructuredSet<TElement> B)
+    /// <returns>
+    /// A new set containing the Cartesian product of <paramref name="A"/> and <paramref name="B"/>.
+    /// Each element in the returned set is an instance of <see cref="CartesianProductPair{TElement}"/>.
+    /// The pairs can be of the following types:
+    /// - (element, element)       -> <see cref="CartesianPairType.Element1Element2"/>
+    /// - (element, subset)        -> <see cref="CartesianPairType.Element1Set1"/>
+    /// - (subset, element)        -> <see cref="CartesianPairType.Set1Element1"/>
+    /// - (subset, subset)         -> <see cref="CartesianPairType.Set1Set2"/>
+    /// </returns>
+    /// <remarks>
+    /// Some properties of the resulting <see cref="CartesianProductPair{TElement}"/> may be null 
+    /// depending on the pair type, such as when a subset is paired with an element.
+    /// </remarks>
+    public static IEnumerable<CartesianProductPair<TElement>> CartesianProduct<TElement>(this IStructuredSet<TElement> A, IStructuredSet<TElement> B)
         where TElement : IComparable<TElement>
     {
-        throw new NotImplementedException("A very complex procedure");
-    }//CartesianProduct
+        // The pairs can be of four types:
+        // - (element, element)       -> CartesianPairType.Element1Element2
+        // - (element, subset)        -> CartesianPairType.Element1Subset1
+        // - (subset, element)        -> CartesianPairType.Set1Element1
+        // - (subset, subset)         -> CartesianPairType.Set1Subset2
+
+        // Properties
+        // - Some properties may be null depending on the pair type.
+
+        // Start with the root elements of A
+        foreach (var elem1 in A.EnumerateRootElements())
+        {
+            // Enumerate the root elements of B
+            foreach (var elem2 in B.EnumerateRootElements())
+                yield return new(elem1, elem2);
+
+            // Enumerate the subsets of B
+            foreach (var set1 in B.EnumerateSubsets())
+                yield return new(elem1, set1);
+        }
+
+        // Now do the subsets of A
+        foreach (var set1 in A.EnumerateSubsets())
+        {
+            // Enumerate the root elements of B
+            foreach (var elem1 in B.EnumerateRootElements())
+                yield return new(set1, elem1);
+
+            // Enumerate the subsets of B
+            foreach (var set2 in B.EnumerateSubsets())
+                yield return new(set1, set2);
+        }
+    }
+
 
     /// <summary>
     /// Determines whether two sets are disjoint (i.e., they have no elements in common).
