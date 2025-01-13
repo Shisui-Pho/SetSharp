@@ -21,8 +21,6 @@
  */
 
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace SetsLibrary.Collections;
 
@@ -113,7 +111,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
 
         string nextKey = "";
 
-        while(current > 0)
+        while (current > 0)
         {
             int rem = (current - 1) % 26;
             nextKey = Convert.ToChar('A' + rem) + nextKey;

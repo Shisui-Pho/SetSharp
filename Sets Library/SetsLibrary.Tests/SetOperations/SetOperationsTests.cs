@@ -1,8 +1,5 @@
-﻿using Xunit;
-using SetsLibrary.SetOperations;
-using SetsLibrary;
-using System.Collections;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
+﻿using SetsLibrary.SetOperations;
+using Xunit;
 namespace SetsLibrary.Tests
 {
     public class SetsOperationsTests
@@ -52,9 +49,9 @@ namespace SetsLibrary.Tests
         private ISetTree<int> CreateTree(IEnumerable<int> elements)
         {
             var config = new SetExtractionConfiguration<int>("-", ",");
-            
+
             var tree = new SetTree<int>(config, elements);
-            
+
             return tree;
         }//CreateTree
 
@@ -354,8 +351,8 @@ namespace SetsLibrary.Tests
         [Theory]
         [InlineData(new int[] { 1, 2, 3, 4 }, new int[] { 5, 6, 7 })]
         [InlineData(new int[] { 5, 6, 7 }, new int[] { 1, 2, 3, 4 })]
-        [InlineData(new int[] { 7, 6, 1, 4}, new int[] { 3, 2, 8, 5, 9 })]
-        [InlineData(new int[] { 3, 2, 8, 5, 9 },new int[] { 7, 6, 1, 4})]
+        [InlineData(new int[] { 7, 6, 1, 4 }, new int[] { 3, 2, 8, 5, 9 })]
+        [InlineData(new int[] { 3, 2, 8, 5, 9 }, new int[] { 7, 6, 1, 4 })]
         [InlineData(new int[] { 9228, 4620, 192, 466, 7187 }, new int[] { 4121, 6973, 4341, 617, 1088, 6887, 1721, 9650 })]
         [InlineData(new int[] { 2138, 5591, 5825, 5677, 2870, 7458, 3740, 4980, 3757 }, new int[] { 8936, 4849, 7490, 7455, 97, 6569 })]
         [InlineData(new int[] { 2943, 3762, 8083, 7121, 5908, 7441, 4168, 5502, 8477, 9184, 6948, 1444 }, new int[] { 8957, 8119, 9072, 1515 })]
@@ -382,7 +379,7 @@ namespace SetsLibrary.Tests
             // Assert
             Assert.Equal(result.EnumerateRootElements(), setA.EnumerateRootElements());
         }//Difference_DisjointSets_ReturnsSameSets
-        
+
         [Fact]
         public void UnionWith_OverlappingSets_ReturnsUniqueUnion()
         {
@@ -534,7 +531,7 @@ namespace SetsLibrary.Tests
             Assert.DoesNotContain(4, result.EnumerateRootElements());
             Assert.Contains(t2.BuildStringRepresentation(), result.BuildStringRepresentation());
 
-            #warning This need to be fixed
+#warning This need to be fixed
             Assert.Contains(t4.BuildStringRepresentation(), result.BuildStringRepresentation());
         }
 
@@ -747,7 +744,7 @@ namespace SetsLibrary.Tests
             var setB = CreateSet([1000]);
             for (int i = 0; i < 8; i++)
             {
-                setA.AddElement(CreateSet(new[] { i + 1}));
+                setA.AddElement(CreateSet(new[] { i + 1 }));
                 setB.AddElement(CreateSet(new[] { i + 1000 }));
             }
 

@@ -21,10 +21,9 @@ namespace SetsLibrary.Collections;
 /// <summary>
 /// Represents a collection of sorted sets that can be manipulated and enumerated.
 /// </summary>
-/// <typeparam name="TElement">The type of elements in the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
 /// <typeparam name="TElementContained">The type of enumerator/structure used to iterate through the collection.</typeparam>
-public interface ISortedSetCollection<TElement, TElementContained> : IEnumerable<TElementContained>
-    where TElement : IComparable<TElement>
+public interface ISortedCollection<TElementContained> : IEnumerable<TElementContained>
+    where TElementContained : IComparable<TElementContained>
 {
     /// <summary>
     /// Gets an element in the collection on the specified index.

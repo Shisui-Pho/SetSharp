@@ -27,7 +27,7 @@ namespace SetsLibrary.Collections;
 /// Represents a collection of sorted elements that allows for addition, removal, and searching within the collection.
 /// </summary>
 /// <typeparam name="T">The type of elements in the collection, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SortedElements<T> : BaseSortedCollection<T>, ISortedElements<T>
+public class SortedElements<T> : SortedCollection<T>, ISortedElements<T>
     where T : IComparable<T>
 {
     /// <summary>
