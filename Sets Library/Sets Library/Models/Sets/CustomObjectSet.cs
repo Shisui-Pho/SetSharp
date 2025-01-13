@@ -53,7 +53,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <param name="indexedSetTree">An existing instance of an IIndexedSetTree that provides both the set elements 
     /// and configuration for extraction.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="indexedSetTree"/> is null.</exception>
-    public CustomObjectSet(IIndexedSetTree<T> indexedSetTree) : base(indexedSetTree) 
+    public CustomObjectSet(IIndexedSetTree<T> indexedSetTree) : base(indexedSetTree)
     {
     }
     #endregion Constructors
@@ -118,7 +118,7 @@ public class CustomObjectSet<T> : BaseSet<T>
         catch
         (Exception e)
         {
-            throw new SetsConfigurationException("Unable to complete conversion.","Check the stack trace.", e);
+            throw new SetsConfigurationException("Unable to complete conversion.", "Check the stack trace.", e);
         }
     }//ToObject
 } // class

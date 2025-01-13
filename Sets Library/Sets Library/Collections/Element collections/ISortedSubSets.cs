@@ -25,4 +25,4 @@ namespace SetsLibrary.Collections;
 public interface ISortedSubSets<T> : ISortedCollection<ISetTree<T>>
     where T : IComparable<T>
 {
-    } // interface ISortedSubSets
+} // interface ISortedSubSets

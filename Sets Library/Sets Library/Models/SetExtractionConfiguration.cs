@@ -16,8 +16,6 @@
  * - Provides a method to convert string records into objects using the provided converter.
  */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace SetsLibrary;
 
 /// <summary>
@@ -46,7 +44,7 @@ public class SetExtractionConfiguration<T>
     /// </summary>
     public bool IsICustomObject { get; internal set; }
 
-    internal static Func<string, SetExtractionConfiguration<T>,T?>? ToObject { get; set; } = null;
+    internal static Func<string, SetExtractionConfiguration<T>, T?>? ToObject { get; set; } = null;
 
     // Constructors
     /// <summary>

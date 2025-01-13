@@ -52,7 +52,7 @@ public class SetTreeExtractor<T>
         }
 
         //Get the subsets
-        var subsets = ExtractSubsets(expression,out string root);
+        var subsets = ExtractSubsets(expression, out string root);
 
         // Create the root tree with the remaining elements after removing subsets
         ISetTree<T> tree = Extract(root, extractionConfig);
@@ -66,7 +66,7 @@ public class SetTreeExtractor<T>
 
         return tree;
     }//Extract
-    private static Stack<string> ExtractSubsets(string expression,out string rootElements)
+    private static Stack<string> ExtractSubsets(string expression, out string rootElements)
     {
         //Here the first braces have been removed 
         Stack<string> subsets = [];
@@ -79,13 +79,13 @@ public class SetTreeExtractor<T>
         Stack<int> stBraces = [];
 
         //Loop through the entire string
-        for(int i = 0; i < expression.Length; i++)
+        for (int i = 0; i < expression.Length; i++)
         {
             //Get the current character
             char _current = expression[i];
 
             //Check for the opening brace
-            if( _current == '{')
+            if (_current == '{')
             {
                 //Push something to the stack
                 stBraces.Push(i);
@@ -98,20 +98,20 @@ public class SetTreeExtractor<T>
             }
 
             //Check for the closing brace
-            if(_current == '}')
+            if (_current == '}')
             {
                 //If there's nothing in the stack then we have an error
-                if( stBraces.Count == 0)
+                if (stBraces.Count == 0)
                 {
                     string details = $"Encountered a closing without an opening brace\n {expression}\n{"".PadLeft(i)}";
-                    throw new MissingBraceException("Missing an opening brace matching.",details);
+                    throw new MissingBraceException("Missing an opening brace matching.", details);
                 }
                 _subSet.Append(_current);//Attach the closing braces
 
                 //Remove one opening brace
                 _ = stBraces.Pop();
 
-                if(stBraces.Count == 0)
+                if (stBraces.Count == 0)
                 {
                     //Here it means that the subset has been extracted
                     //-We need to add the subset
@@ -128,7 +128,7 @@ public class SetTreeExtractor<T>
             //When the code reaches here, it means tha we either add to the subset
             // or the root elements
 
-            if(stBraces.Count == 0)// THis goes to the root
+            if (stBraces.Count == 0)// THis goes to the root
                 _roots.Append(_current);
             else
                 _subSet.Append(_current);
@@ -136,7 +136,7 @@ public class SetTreeExtractor<T>
 
         //Check if the stack is empty
         //- If it is then we have an error
-        if( stBraces.Count > 0)
+        if (stBraces.Count > 0)
         {
             string details = $"Encountered {stBraces.Count} opening brace(s) without corresponding closing braces." +
                 $"\nThe indexes are as follows : {string.Join(" , ", stBraces)}";
@@ -172,7 +172,7 @@ public class SetTreeExtractor<T>
                     //Use the custom object converter
                     if (SetExtractionConfiguration<T>.ToObject is not null)
                         item = SetExtractionConfiguration<T>.ToObject(element, extractionConfig);
-                    
+
                     //The above code works
                     //But I can't do this ????
                     //item = SetExtractionConfiguration<T>.ToObject?.Invoke(element);// Why????

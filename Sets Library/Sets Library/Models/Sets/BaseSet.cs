@@ -25,7 +25,6 @@
  */
 
 using SetsLibrary.Utility;
-using System.Xml.Linq;
 
 namespace SetsLibrary;
 
@@ -146,8 +145,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         {
             if (indexOfInvalidBrace == -1)
                 indexOfInvalidBrace = 0;
-            if(indexOfInvalidBrace == expression.Length)
-                indexOfInvalidBrace = expression.Length -1;
+            if (indexOfInvalidBrace == expression.Length)
+                indexOfInvalidBrace = expression.Length - 1;
             string details = $"The index of the invalid/missing brace is \"{indexOfInvalidBrace}\"." +
                              $"\n{expression}" +
                              $"\n{"".PadLeft(indexOfInvalidBrace)}^" +
@@ -167,7 +166,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             throw new SetsException("Failed to extract set string.", "", ex);
         }
     } // Extractions
-    
+
     /// <summary>
     /// Checks if the current instance is a custom object set.
     /// </summary>
@@ -202,10 +201,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Try get the underlying set
         var _set = TryGetUnderlyingBaseSet(subset);
 
-        if(_set is not null)
+        if (_set is not null)
             _treeWrapper.AddSubSetTree(_set._treeWrapper);
 
-        #warning Temporary implementation, need to change this
+#warning Temporary implementation, need to change this
         var tree = Extractions(subset.BuildStringRepresentation());
         _treeWrapper.AddSubSetTree(tree);
     }//AddElement
@@ -265,7 +264,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         var _set = TryGetUnderlyingBaseSet(subSet);
 
-        if(_set is not null)
+        if (_set is not null)
             return _treeWrapper.IndexOf(_set._treeWrapper) >= 0;
 
 
@@ -323,10 +322,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         //Check if setB is of type BaseSet<T>
         BaseSet<T>? setBBase = setB as BaseSet<T>;
-        
+
         bool isSubset = false;
-        
-        if(setBBase is not null)
+
+        if (setBBase is not null)
         {
             //Here do a sime contains expression
             //-IIndexedTree is ISetTree
@@ -342,7 +341,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     private bool IsSubsetOfNoneBaseSet(IStructuredSet<T> setB)
     {
         //Perform loops
-        foreach(var rootElement in setB.EnumerateRootElements())
+        foreach (var rootElement in setB.EnumerateRootElements())
         {
             if (!this.Contains(rootElement))
                 return false;
@@ -401,7 +400,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Try get the underlying base set
         var _set = TryGetUnderlyingBaseSet(subSet);
 
-        if(_set is not null)
+        if (_set is not null)
             return _treeWrapper.RemoveElement(_set._treeWrapper);
 
 #warning Temporary implementation, need to change this
@@ -523,7 +522,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             var sub = _treeWrapper.GetSubsetByIndex(i);
 
             ArgumentNullException.ThrowIfNull(sub, nameof(sub));
-            
+
             //Make sub element a set
             var _subSet = BuildNewSet(new SetTreeWrapper<T>(sub));
             if (!setB.Contains(_subSet))
