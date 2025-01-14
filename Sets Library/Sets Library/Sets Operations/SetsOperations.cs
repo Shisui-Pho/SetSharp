@@ -409,6 +409,10 @@ public static class SetsOperations
     public static IEnumerable<CartesianProductPair<TElement>> CartesianProduct<TElement>(this IStructuredSet<TElement> A, IStructuredSet<TElement> B)
         where TElement : IComparable<TElement>
     {
+        //Check for nulls 
+        ArgumentNullException.ThrowIfNull(A, nameof(A));
+        ArgumentNullException.ThrowIfNull(B, nameof(B));
+
         // The pairs can be of four types:
         // - (element, element)       -> CartesianPairType.Element1Element2
         // - (element, subset)        -> CartesianPairType.Element1Subset1
