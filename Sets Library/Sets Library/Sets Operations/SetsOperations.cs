@@ -413,6 +413,11 @@ public static class SetsOperations
         ArgumentNullException.ThrowIfNull(A, nameof(A));
         ArgumentNullException.ThrowIfNull(B, nameof(B));
 
+        //Check for empty sets
+        if (A.Cardinality == 0 || B.Cardinality == 0)
+            yield break;
+
+
         // The pairs can be of four types:
         // - (element, element)       -> CartesianPairType.Element1Element2
         // - (element, subset)        -> CartesianPairType.Element1Subset1
