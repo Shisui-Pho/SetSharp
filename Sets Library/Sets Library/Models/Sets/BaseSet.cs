@@ -203,10 +203,21 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         if (_set is not null)
             _treeWrapper.AddSubSetTree(_set._treeWrapper);
+        else
+        {
+            if(subset.Cardinality == 0)
+            {
+                //add an empty set
+                _treeWrapper.AddSubSetTree(Extractions("{}"));
+            }
+            else
+            {
+                #warning Temporary implementation, need to change this
+                var tree = Extractions(subset.BuildStringRepresentation());
+                _treeWrapper.AddSubSetTree(tree);
+            }
+        }
 
-#warning Temporary implementation, need to change this
-        var tree = Extractions(subset.BuildStringRepresentation());
-        _treeWrapper.AddSubSetTree(tree);
     }//AddElement
     private BaseSet<T>? TryGetUnderlyingBaseSet(IStructuredSet<T> set)
     {
