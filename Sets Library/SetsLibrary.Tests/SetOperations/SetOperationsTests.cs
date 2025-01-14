@@ -1,5 +1,6 @@
 ﻿using SetsLibrary.SetOperations;
 using Xunit;
+using static SetsLibrary.SetOperations.SetsOperations;
 namespace SetsLibrary.Tests
 {
     public class SetsOperationsTests
@@ -534,20 +535,6 @@ namespace SetsLibrary.Tests
 #warning This need to be fixed
             Assert.Contains(t4.BuildStringRepresentation(), result.BuildStringRepresentation());
         }
-
-        // Test for CartesianProduct method (NotImplementedException expected)
-        [Fact]
-        public void CartesianProduct_ThrowsNotImplementedException()
-        {
-            // Arrange
-            var setA = CreateSet(new[] { 1, 2 });
-            var setB = CreateSet(new[] { 3, 4 });
-
-            // Act & Assert
-            var exception = Assert.Throws<NotImplementedException>(() => setA.CartesianProduct(setB));
-            Assert.Equal("A very complex procedure", exception.Message);
-        }
-
         // Test for IsDisjoint method when sets are disjoint
         [Fact]
         public void IsDisjoint_DisjointSets_ReturnsTrue()
@@ -776,5 +763,298 @@ namespace SetsLibrary.Tests
                 Assert.Contains(elem, result.EnumerateRootElements());
             }
         }
+        [Fact]
+        public void CartesianProduct_ValidSets_ReturnsCartesianProduct()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2 });
+            var setB = CreateSet(new[] { 3, 4 });
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert Element-Element pairs (CartesianPairType.Element1Element2)
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 1 && pair.Element2 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 1 && pair.Element2 == 4);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 2 && pair.Element2 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 2 && pair.Element2 == 4);
+
+            // Assert Element-Set pairs (CartesianPairType.Element1Set1)
+            var subsetB = CreateSet(new[] { 3 }); // Subset of setB
+            setB.AddElement(subsetB);  // Add subset to setB
+            Assert.DoesNotContain(result, pair => pair.PairType == CartesianPairType.Element1Set1 && pair.Element1 == 1 && pair.Set1 == subsetB);
+            Assert.DoesNotContain(result, pair => pair.PairType == CartesianPairType.Element1Set1 && pair.Element1 == 2 && pair.Set1 == subsetB);
+
+            // Assert Set-Element pairs (CartesianPairType.Set1Element1)
+            var subsetA = CreateSet(new[] { 1 }); // Subset of setA
+            setA.AddElement(subsetA);  // Add subset to setA
+
+            result = setA.CartesianProduct(setB).ToList();
+
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA) && pair.Set2.SetStructuresEqual(subsetB));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA) && pair.Element1 == 3);
+
+            // Assert Set-Set pairs (CartesianPairType.Set1Set2)
+            var subsetB2 = CreateSet(new[] { 4 }); // Another subset of setB
+            setB.AddElement(subsetB2);  // Add another subset to setB
+            result = setA.CartesianProduct(setB).ToList();
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA) && pair.Set2.SetStructuresEqual( subsetB));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA) && pair.Set2.SetStructuresEqual(subsetB2));
+
+            // Ensure all possible pair types have been tested
+            Assert.Equal(12, result.Count);  // Expecting 4 Element1Element2 pairs, 2 Element1Set1 pairs, 2 Set1Element1 pairs, 8 Set1Set2 pairs
+        }
+
+        [Fact]
+        public void CartesianProduct_EmptySets_ReturnsNoPairs()
+        {
+            // Arrange
+            var setA = CreateSet(new int[] { });
+            var setB = CreateSet(new int[] { });
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert
+            Assert.Empty(result); // Should return no pairs
+        }
+
+        [Fact]
+        public void CartesianProduct_OneEmptySet_ReturnsNoPairs()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2 });
+            var setB = CreateSet(new int[] { });
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert
+            Assert.Empty(result); // Should return no pairs
+
+            // Also test with the reverse situation
+            result = setB.CartesianProduct(setA).ToList();
+
+            // Assert
+            Assert.Empty(result); // Should return no pairs
+        }
+
+        [Fact]
+        public void CartesianProduct_SetAOnlySubsets_ReturnsCorrectPairs()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2 });
+            var setB = CreateSet(new[] { 3, 4 });
+
+            var subsetA1 = CreateSet(new[] { 1 }); // Subset of setA
+            var subsetA2 = CreateSet(new[] { 2 }); // Subset of setA
+            setA.AddElement(subsetA1);
+            setA.AddElement(subsetA2);
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert: Set1Element1 pairs (Subset of A with Element of B)
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Element1 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Element1 == 4);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Element1 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Element1 == 4);
+
+            // Assert: Set1Set2 pairs (Subset of A with Subset of B)
+            var subsetB1 = CreateSet(new[] { 3 });
+            var subsetB2 = CreateSet(new[] { 4 });
+            setB.AddElement(subsetB1);
+            setB.AddElement(subsetB2);
+
+            result = setA.CartesianProduct(setB).ToList();
+
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Set2.SetStructuresEqual(subsetB1));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Set2.SetStructuresEqual(subsetB2));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Set2.SetStructuresEqual(subsetB1));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Set2.SetStructuresEqual(subsetB2));
+        }
+        [Fact]
+        public void CartesianProduct_SetsWithDuplicates_ReturnsUniquePairs()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 1, 2 }); // Duplicate elements in A
+            var setB = CreateSet(new[] { 3, 4, 4 }); // Duplicate elements in B
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert: Ensure the Cartesian product handles duplicates properly
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 1 && pair.Element2 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 1 && pair.Element2 == 4);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 2 && pair.Element2 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 2 && pair.Element2 == 4);
+
+            // Assert that duplicate elements don't cause duplicates in the result
+            Assert.Equal(4, result.Count); // 42 unique element-element pairs
+        }
+
+        [Fact]
+        public void CartesianProduct_SubsetsWithDifferentElements_ReturnsCorrectPairs()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2 });
+            var setB = CreateSet(new[] { 3, 4 });
+
+            var subsetA1 = CreateSet(new[] { 1, 2 }); // Subset A contains both elements
+            var subsetA2 = CreateSet(new[] { 2 });    // Subset A contains only one element
+            setA.AddElement(subsetA1);
+            setA.AddElement(subsetA2);
+
+            var subsetB1 = CreateSet(new[] { 3 });    // Subset B contains only one element
+            var subsetB2 = CreateSet(new[] { 4, 3 }); // Subset B contains both elements
+            setB.AddElement(subsetB1);
+            setB.AddElement(subsetB2);
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert: Set1Element1 pairs (Subset of A with Element of B)
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Element1 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Element1 == 4);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Element1 == 3);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Element1 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Element1 == 4);
+
+            // Assert: Set1Set2 pairs (Subset of A with Subset of B)
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Set2.SetStructuresEqual(subsetB1));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA1) && pair.Set2.SetStructuresEqual(subsetB2));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Set2.SetStructuresEqual(subsetB1));
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA2) && pair.Set2.SetStructuresEqual(subsetB2));
+        }
+        [Fact]
+        public void CartesianProduct_LargeSets_ReturnsCorrectPairs()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2, 3 });
+            var setB = CreateSet(new[] { 4, 5, 6 });
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert: There should be 9 pairs (3 elements from A x 3 elements from B)
+            Assert.Equal(9, result.Count);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 1 && pair.Element2 == 4);
+            Assert.Contains(result, pair => pair.PairType == CartesianPairType.Element1Element2 && pair.Element1 == 3 && pair.Element2 == 6);
+        }
+
+        [Fact]
+        public void CartesianProduct_LargeSets_ReturnsCorrectResult()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2, 3, 4, 5 });
+            var setB = CreateSet(new[] { 6, 7, 8, 9, 10 });
+
+            // Expected result: all combinations of setA and setB elements
+            List<CartesianProductPair<int>> expectedSet =
+            [
+                new CartesianProductPair<int>(1, 6),
+                new CartesianProductPair<int>(1, 7),
+                new CartesianProductPair<int>(1, 8),
+                new CartesianProductPair<int>(1, 9),
+                new CartesianProductPair<int>(1, 10),
+                new CartesianProductPair<int>(2, 6),
+                new CartesianProductPair<int>(2, 7),
+                new CartesianProductPair<int>(2, 8),
+                new CartesianProductPair<int>(2, 9),
+                new CartesianProductPair<int>(2, 10),
+                new CartesianProductPair<int>(3, 6),
+                new CartesianProductPair<int>(3, 7),
+                new CartesianProductPair<int>(3, 8),
+                new CartesianProductPair<int>(3, 9),
+                new CartesianProductPair<int>(3, 10),
+                new CartesianProductPair<int>(4, 6),
+                new CartesianProductPair<int>(4, 7),
+                new CartesianProductPair<int>(4, 8),
+                new CartesianProductPair<int>(4, 9),
+                new CartesianProductPair<int>(4, 10),
+                new CartesianProductPair<int>(5, 6),
+                new CartesianProductPair<int>(5, 7),
+                new CartesianProductPair<int>(5, 8),
+                new CartesianProductPair<int>(5, 9),
+                new CartesianProductPair<int>(5, 10)
+            ];
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            Assert.Equal(expectedSet.Count, result.Count);
+
+            for (int i = 0; i < expectedSet.Count; i++)
+            {
+                var exp = expectedSet[i];
+                var res = result[i];
+
+                Assert.True(exp.PairType == res.PairType && exp.Element1 == res.Element1 && exp.Element2 == res.Element2 && exp.Set1 == res.Set1 && exp.Set2 == res.Set2);
+            }
+        }
+
+        [Fact]
+        public void CartesianProduct_EmptySetAndNullHandling_ReturnsNonEmptyResult()
+        {
+            // Arrange
+            var setA = CreateSet(new[] { 1, 2, 3 }); // A set with elements
+            var setB = CreateSet(new int[] { }); // Empty set B
+
+            // Add subsets to set A
+            var subsetA = CreateSet(new[] { 1, 2 });
+            setA.AddElement(subsetA);
+
+            // Add a subset to set B (empty set has no root elements or subsets)
+            var subsetB = CreateSet(new[] { 4, 5 });
+            setB.AddElement(subsetB);
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert: Since setB is not empty, the Cartesian product should return pairs.
+            Assert.NotEmpty(result);
+        }
+        // [Theory] attribute allows multiple sets of input data
+        [Theory]
+        [InlineData(new[] { 1, 2 }, new[] { 3, 4 }, 4)] // Simple test with 2 elements each
+        [InlineData(new[] { 1, 2, 3 }, new[] { 4, 5, 6 }, 9)] // 3 elements each
+        [InlineData(new[] { 1, 2 }, new int[] { }, 0)] // Empty second set
+        [InlineData(new int[] { }, new[] { 1, 2 }, 0)] // Empty first set
+        [InlineData(new[] { 1 }, new[] { 2 }, 1)] // Single element sets
+        public void CartesianProduct_MultipleInputs_ReturnsCorrectNumberOfPairs(int[] setAElements, int[] setBElements, int expectedCount)
+        {
+            // Arrange
+            var setA = CreateSet(setAElements); // Create set A from input
+            var setB = CreateSet(setBElements); // Create set B from input
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert
+            Assert.Equal(expectedCount, result.Count);
+        }
+
+        // This test will check if the cartesian product works with sets containing subsets as well
+        [Theory]
+        [InlineData(new[] { 1, 2 }, new[] { 3 }, new[] { 4, 5 }, 4)] // Subset involved
+        [InlineData(new[] { 1, 2 }, new[] { 3, 4 }, new int[0], 6)] // Empty subset in B
+        public void CartesianProduct_WithSubsets_ReturnsCorrectPairs(int[] setAElements, int[] setBElements, int[] subsetElements, int expectedCount)
+        {
+            // Arrange
+            var setA = CreateSet(setAElements); // Create set A from input
+            var setB = CreateSet(setBElements); // Create set B from input
+            var subset = CreateSet(subsetElements); // Create a subset
+
+            // Add the subset to set B (we assume subsets can be added to sets)
+            setB.AddElement(subset);
+
+            // Act
+            var result = setA.CartesianProduct(setB).ToList();
+
+            // Assert
+            Assert.Equal(expectedCount, result.Count);
+        }
+
+
+
     }//class
 }//namespace
