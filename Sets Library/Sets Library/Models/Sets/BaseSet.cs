@@ -24,7 +24,9 @@
  * functionality specific to the type of set being created.
  */
 
+using SetsLibrary.SetOperations;
 using SetsLibrary.Utility;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SetsLibrary;
 
@@ -35,6 +37,59 @@ namespace SetsLibrary;
 public abstract class BaseSet<T> : IStructuredSet<T>
     where T : IComparable<T>
 {
+    #region Embedded class
+
+    /// <summary>
+    /// Provides an equality comparison mechanism for <see cref="IStructuredSet{T}"/> instances.
+    /// </summary>
+    private class StructuredSetEqualityComparer : IEqualityComparer<IStructuredSet<T>>
+    {
+        /// <summary>
+        /// Compares two <see cref="IStructuredSet{T}"/> instances for equality.
+        /// </summary>
+        /// <param name="x">The first <see cref="IStructuredSet{T}"/> instance to compare.</param>
+        /// <param name="y">The second <see cref="IStructuredSet{T}"/> instance to compare.</param>
+        /// <returns>
+        ///   <see langword="true"/> if the two <see cref="IStructuredSet{T}"/> instances are equal; otherwise, <see langword="false"/>.
+        /// </returns>
+        public bool Equals(IStructuredSet<T>? x, IStructuredSet<T>? y)
+        {
+            // Check for nulls first
+            // If both x and y are null, they are considered equal
+            if (x is null && y is null)
+            {
+                return true;
+            }
+
+            // If one of them is null, they are not equal
+            if (x is null || y is null)
+            {
+                return false;
+            }
+
+            // Check if x and y refer to the same object in memory (same reference)
+            if (ReferenceEquals(x, y))
+            {
+                return true; // They are the same object, so they are equal
+            }
+
+            // If none of the above, compare their structure to check equality
+            return x.SetStructuresEqual(y); // Assumes that IStructuredSet<T> has a method SetStructuresEqual for deep comparison
+        }
+
+        /// <summary>
+        /// Gets the hash code for the specified <see cref="IStructuredSet{T}"/> instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="IStructuredSet{T}"/> instance for which the hash code is to be generated.</param>
+        /// <returns>The hash code of the <see cref="IStructuredSet{T}"/> instance.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="obj"/> is <see langword="null"/>.</exception>
+        public int GetHashCode([DisallowNull] IStructuredSet<T> obj)
+        {
+            return obj.GetHashCode(); // Return the hash code of the set itself
+        }
+    }
+
+    #endregion Embedded class
     // Data fields
     private readonly IIndexedSetTree<T> _treeWrapper;
 
@@ -389,7 +444,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             return false;
 
         //Compare the subsets
-        bool areSubSetsEqual = setB.EnumerateSubsets().SequenceEqual(EnumerateSubsets());
+        bool areSubSetsEqual = setB.EnumerateSubsets().SequenceEqual(EnumerateSubsets(), new StructuredSetEqualityComparer());
 
         if (!areSubSetsEqual) return false;
 
@@ -545,6 +600,40 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     }//Without
     #endregion Implemented methods
 
+    #region ovverides 
+    /// <summary>
+    /// Serves as the default hash function.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    /// <summary>
+    /// Compares the current <see cref="BaseSet{T}"/> instance with another object for equality.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current instance.</param>
+    /// <returns>
+    ///   <see langword="true"/> if the specified object is equal to the current <see cref="BaseSet{T}"/> instance; otherwise, <see langword="false"/>.
+    /// </returns>
+    public override bool Equals(object? obj)
+    {
+        // Create a new instance of the comparer used to compare IStructuredSet<T> objects
+        StructuredSetEqualityComparer comP = new StructuredSetEqualityComparer();
+
+        // Attempt to cast the object into an IStructuredSet<T> (the type we're comparing against)
+        var y = obj as IStructuredSet<T>;
+
+        // We accept nulls, so handle the case where obj is null
+        // If obj is null, comP.Equals(this, y) will return false
+        bool equal = comP.Equals(this, y);
+
+        return equal; // Return the result of comparison
+    }
+
+
+    #endregion ovverides
     #region Abstract methods
     /// <summary>
     /// Builds and returns a new set based on the provided string representation.
