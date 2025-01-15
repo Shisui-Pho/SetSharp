@@ -63,7 +63,7 @@ public static class SetTreeUtility<T>
         string elementTree = "";
 
         // Loop through all subsets of the current tree
-        foreach (ISetTree<T> subtree in currentTree.GetSubsetsEnumerator().ToList())
+        foreach (ISetTree<T> subtree in currentTree.GetSubsetsEnumerator())
         {
             // Recursively retrieve the string representation of the subtree
             string sub = BuildTree(subtree);
