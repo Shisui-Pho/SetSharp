@@ -276,10 +276,10 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 
         //First preference is given to one with less root elements
         if (this.CountRootElements < other.CountRootElements)
-            return -1;
+            return 1;
 
         if (this.CountRootElements > other.CountRootElements)
-            return 1;
+            return -1;
 
         int elementIndex = 0;
         //Here they have the same number of root elements and subsets
