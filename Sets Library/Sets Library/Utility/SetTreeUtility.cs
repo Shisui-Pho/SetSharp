@@ -38,7 +38,7 @@ public static class SetTreeUtility<T>
         // Recursively build the tree string representation
         string tree = BuildTree(setTree);
 
-        return /*"{"+*/ tree /*+ "}"*/;
+        return tree;
     }//ToElementString
 
     /// <summary>
@@ -48,36 +48,30 @@ public static class SetTreeUtility<T>
     /// <returns>A string representing the set tree, where subsets are enclosed in curly braces and empty sets are represented as ∅.</returns>
     private static string BuildTree(ISetTree<T> currentTree)
     {
-        // Base case: if there are no subsets, return the root elements or the empty set symbol
-        if (currentTree.CountSubsets == 0)
-        {
-            string _elements = currentTree.RootElements;
-            if (string.IsNullOrEmpty(_elements) || string.IsNullOrWhiteSpace(_elements))
-                return "{\u2205}"; // This is the empty set/element (∅)
+        string representation = "{";
+        //Get the root elements
+        var root = currentTree.RootElements;
 
-            // Return the root elements as a string
-            return "{" + _elements + "}";
+        if(currentTree.CountSubsets == 0 && string.IsNullOrEmpty(root))
+        {
+            //This is an empty set
+            representation += "\u2205";
+        }
+        else
+        {
+            //Attach the root elements
+            representation += root;
         }
 
-        // Initialize a string to build the element tree
-        string elementTree = "";
-
-        // Loop through all subsets of the current tree
-        foreach (ISetTree<T> subtree in currentTree.GetSubsetsEnumerator())
+        //Loop through the subsets
+        foreach (var subset in currentTree.GetSubsetsEnumerator())
         {
-            // Recursively retrieve the string representation of the subtree
-            string sub = BuildTree(subtree);
-
-            // Add the subset to the element tree, enclosing it in curly braces
-            elementTree += sub + currentTree.ExtractionSettings.RowTerminator;
+            //Attach each subset in the representation
+            string subsetTree = BuildTree(subset);
+            representation += subset.ExtractionSettings.RowTerminator + subsetTree;
         }
-        //Remove the last index of the row terminator
-        int lastIndex = elementTree.LastIndexOf(currentTree.ExtractionSettings.RowTerminator);
 
-        if (lastIndex >= 0)
-            elementTree = elementTree.Remove(lastIndex);
-
-        //Add it's root elements and return it
-        return "{" + currentTree.RootElements + currentTree.ExtractionSettings.RowTerminator + elementTree + "}";
+        //Attach the closing brace
+        return representation + "}";
     }
 }//BuildTree
