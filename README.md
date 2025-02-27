@@ -19,13 +19,14 @@
 | Feature                           | Description                                                                                         |
 |-----------------------------------|-----------------------------------------------------------------------------------------------------|
 | **Structured Sets**               | Create and manipulate sets with support for nesting and complex operations.                        |
-| **Custom Data Types**             | Use custom types that implement `IComparable` for greater flexibility.                            |
+| **Custom Data Types**             | Use custom types that implement IComparable for greater flexibility.                               |
 | **Dynamic Collections**           | Manage sets dynamically with unique, human-readable naming conventions.                           |
 | **Advanced Set Operations**       | Perform intersection, union, complement, symmetric difference, and more.                          |
 | **Error Handling**                | Includes robust custom exceptions with detailed error messages.                                   |
 | **Extensible Design**             | Easily extend functionality using interfaces and abstract classes.                                |
 
 ---
+
 ## Why Use Sets Library?
 
 The Sets Library is an indispensable tool for developers and researchers working with structured data, mathematical modeling, or data analysis. It provides:
@@ -38,6 +39,7 @@ The Sets Library is an indispensable tool for developers and researchers working
 Whether you're building educational tools, solving complex data problems, or modeling mathematical systems, this library empowers you to focus on the logic without worrying about implementation nuances.
 
 ---
+
 ## Namespace Overview
 
 The library is modularized for clarity and scalability. The namespaces group functionalities logically to ensure maintainable and understandable code.
@@ -47,7 +49,7 @@ The core namespace for interfaces and classes handling structured sets and opera
 
 | Component               | Description                                                                          |
 |-------------------------|--------------------------------------------------------------------------------------|
-| `ICustomObjectConverter`| Interface for converting custom objects into structured set elements.                |
+| `ICustomObjectConverter` | Interface for converting custom objects into structured set elements.                |
 | `ISetTree`              | Interface representing nested sets in a tree-like structure.                         |
 | `IStructuredSet`        | Interface for structured sets, supporting advanced set operations.                   |
 | `SetResultType`         | Enum defining relationships like subset and proper set.                              |
@@ -56,8 +58,8 @@ The core namespace for interfaces and classes handling structured sets and opera
 | `StringLiteralSet`      | Specialized implementation for sets of string literals.                              |
 | `CustomObjectSet`       | Designed for sets of user-defined objects.                                           |
 | `SetTree`               | Core class for managing tree-like set structures.                                    |
-| `SetTreeBaseWrapper`    | Base wrapper for delegating `SetTree` operations.                                    |
-| `SetTreeWrapper`        | Advanced wrapper adding indexed access to `SetTree`.                                 |
+| `SetTreeBaseWrapper`    | Base wrapper for delegating SetTree operations.                                      |
+| `SetTreeWrapper`        | Advanced wrapper adding indexed access to SetTree.                                  |
 
 ---
 
@@ -81,31 +83,32 @@ Contains utility classes for set parsing, validation, and extraction.
 |-------------------------|--------------------------------------------------------------------------------------|
 | `BraceEvaluator`        | Validates braces in set expressions.                                                 |
 | `SetTreeExtractor`      | Parses and constructs sets from string representations.                              |
-| `SetTreeUtility`        | Provides helper methods for working with `SetTree` structures.                       |
+| `SetTreeUtility`        | Provides helper methods for working with SetTree structures.                       |
 
 ---
 
 ### **SetsLibrary.SetOperations**
 A new namespace providing advanced set operations for `IStructuredSet<T>` objects.
 
-| Operation                 | Description                                                                          |
-|---------------------------|--------------------------------------------------------------------------------------|
-| `IntersectWith`           | Computes the intersection of two sets.                                               |
-| `UnionWith`               | Combines two sets into one, retaining unique elements.                               |
-| `Complement`              | Computes the complement of a set with respect to a universal set.                    |
-| `Difference`              | Returns elements in one set that are not in another.                                 |
-| `SymmetricDifference`     | Returns elements in either set but not both.                                         |
-| `CartesianProduct`        | Generates all ordered pairs of elements from two sets (not yet implemented).         |
-| `IsDisjoint`              | Checks if two sets have no common elements.                                          |
-| `SetStructuresEqual`      | Compares the structures of two sets for equality.                                    |
+| Operation               | Description                                                                          |
+|-------------------------|--------------------------------------------------------------------------------------|
+| `IntersectWith`         | Computes the intersection of two sets.                                               |
+| `UnionWith`             | Combines two sets into one, retaining unique elements.                               |
+| `Complement`            | Computes the complement of a set with respect to a universal set.                    |
+| `Difference`            | Returns elements in one set that are not in another.                                 |
+| `SymmetricDifference`   | Returns elements in either set but not both.                                         |
+| `CartesianProduct`      | Generates all ordered pairs of elements from two sets (not yet implemented).         |
+| `IsDisjoint`            | Checks if two sets have no common elements.                                          |
+| `SetStructuresEqual`    | Compares the structures of two sets for equality.                                    |
 
 ---
+
 ## Example Usage
 
 This section demonstrates how to leverage the Sets Library to perform common set operations and manage collections of structured sets.
 
 ### Basic Set Creation
-The `BaseSet<T>` class and its derived classes (`TypedSet`, `StringLiteralSet`, etc.) allow you to define and manipulate sets.
+The `BaseSet<T>` class and its derived classes (e.g., `TypedSet`, `StringLiteralSet`) allow you to define and manipulate sets.
 
 ```csharp
 using SetsLibrary;
