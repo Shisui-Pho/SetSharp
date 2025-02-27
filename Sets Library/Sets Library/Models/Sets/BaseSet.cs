@@ -192,26 +192,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <exception cref="SetsException">Thrown if there was a problem when extracting the set tree.</exception>
     private ISetTree<T> Extractions(string expression)
     {
-        // Check if the string is null, empty, or contains only whitespace
+        //Check if the string is null, empty, or contains only whitespace
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
-        // Evaluate brace correctness
-        if (!BraceEvaluator.AreBracesCorrect(expression, out int indexOfInvalidBrace))
-        {
-            if (indexOfInvalidBrace == -1)
-                indexOfInvalidBrace = 0;
-            if (indexOfInvalidBrace == expression.Length)
-                indexOfInvalidBrace = expression.Length - 1;
-            string details = $"The index of the invalid/missing brace is \"{indexOfInvalidBrace}\"." +
-                             $"\n{expression}" +
-                             $"\n{"".PadLeft(indexOfInvalidBrace)}^" +
-                             $"\n{"".PadRight(indexOfInvalidBrace)}pos({indexOfInvalidBrace})";
-
-            // Throw MissingBraceException if brace validation fails
-            throw new MissingBraceException("Missing/Invalid brace", details);
-        }
-
-        // Extract and return the set tree from the expression using the extraction configuration
+        //Extract and return the set tree from the expression using the extraction configuration
         try
         {
             return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
