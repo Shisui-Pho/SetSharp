@@ -47,13 +47,13 @@ public class SetExtractionConfiguration
     /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with a row terminators. The
     /// default field is tab character(\t). 
     /// </summary>
-    /// <param name="rowTerminator">The string used to separate rows in the data.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="rowTerminator"/> is null.</exception>
-    /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="rowTerminator"/> or if they contain reserved characters.</exception>
-    public SetExtractionConfiguration(string rowTerminator)
+    /// <param name="elementSeperator">The string used to separate rows in the data.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementSeperator"/> is null.</exception>
+    /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="elementSeperator"/> or if they contain reserved characters.</exception>
+    public SetExtractionConfiguration(string elementSeperator)
     {
         string fieldTerminator = "\t";
-        VerifyProperties(fieldTerminator, rowTerminator);
+        VerifyProperties(fieldTerminator, elementSeperator);
         IsICustomObject = false;
     }
 
