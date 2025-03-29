@@ -66,9 +66,12 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <returns>True if it is a custom object set.</returns>
     protected sealed override bool IsCustomObjectConverter()
     {
-        //if (SetExtractionConfiguration.ToObject is null)
-        //    SetExtractionConfiguration.ToObject = ToObject;
-
+        //Here we create a new instance of the Extraction settings using the properties we had
+        var config = new CustomSetExtractionConfiguration<T>(base.ExtractionConfiguration.FieldTerminator, base.ExtractionConfiguration.RowTerminator);
+        //Set the method for converting
+        config.Funct_ToObject = ToObject;
+        //Ovverride the base configuration with the new one
+        ExtractionConfiguration = config;
         return true;
     }
 

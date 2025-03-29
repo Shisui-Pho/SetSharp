@@ -169,14 +169,17 @@ public class SetTreeExtractor<T>
                 //If a custom converter is used, convert using that; otherwise, attempt to convert to T
                 if (extractionConfig.IsICustomObject)
                 {
-                    ////Use the custom object converter
-                    //if (SetExtractionConfiguration.ToObject is not null)
-                    //    item = SetExtractionConfiguration.ToObject(element, extractionConfig);
+                    //Call api to convert to custom object
+                    var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
 
-                    //The above code works
-                    //But I can't do this ????
-                    //item = SetExtractionConfiguration.ToObject?.Invoke(element);// Why????
+                    if(converter is null)
+                    {
+                        string details = $"The object \'{typeof(T)}\' was marked as an element of a custom object set, but no parameter of converter wass passed.";
+                        throw new SetsConfigurationException("Failed to convert object to set.", details);
+                    }
 
+                    //Do the conversion
+                    item = converter(element, extractionConfig);
                 }
                 else
                 {
