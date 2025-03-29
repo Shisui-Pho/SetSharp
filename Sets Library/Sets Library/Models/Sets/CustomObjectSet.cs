@@ -64,15 +64,14 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// Checks if the current instance is a custom object set.
     /// </summary>
     /// <returns>True if it is a custom object set.</returns>
-    protected sealed override bool IsCustomObjectConverter()
+    protected sealed override SetExtractionConfiguration ModifyConfigurations(SetExtractionConfiguration config)
     {
         //Here we create a new instance of the Extraction settings using the properties we had
-        var config = new CustomSetExtractionConfiguration<T>(base.ExtractionConfiguration.FieldTerminator, base.ExtractionConfiguration.RowTerminator);
+        var configNew = new CustomSetExtractionConfiguration<T>(config.FieldTerminator, config.RowTerminator);
         //Set the method for converting
-        config.Funct_ToObject = ToObject;
+        configNew.Funct_ToObject = ToObject;
         //Ovverride the base configuration with the new one
-        ExtractionConfiguration = config;
-        return true;
+        return configNew;
     }
 
     /// <summary>
