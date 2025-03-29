@@ -214,7 +214,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
     // Custom converter for testing
     public class CustomStringToIntConverter : ICustomObjectConverter<int>
     {
-        public static int ToObject(string?[] field, SetExtractionConfiguration settings)
+        public static int ToObject(string?[] field)
         {
             // For simplicity, parse the string into an integer
             return int.Parse(field[0] ?? "0");

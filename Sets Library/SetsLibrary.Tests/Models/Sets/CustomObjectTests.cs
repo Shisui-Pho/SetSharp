@@ -28,7 +28,7 @@ namespace SetsLibrary.Tests.Models.Sets
         }
 
         // ICustomObjectConverter implementation
-        public static Person ToObject(string?[] field, SetExtractionConfiguration settings)
+        public static Person ToObject(string?[] field)
         {
             if (field.Length != 3)
                 throw new ArgumentException("Invalid format.");

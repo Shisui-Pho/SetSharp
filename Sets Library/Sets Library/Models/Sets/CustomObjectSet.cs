@@ -108,14 +108,13 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// Converts a record string to an object of type <typeparamref name="T"/> using the specified converter.
     /// </summary>
     /// <param name="fields">The record string to convert to an object.</param>
-    /// <param name="config">The configurations of extracting the object from a string representation.</param>
     /// <returns>An object of type <typeparamref name="T"/> representing the record.</returns>
     /// <exception cref="SetsConfigurationException">Thrown if conversion failed.</exception>
-    public static T ToObject(string?[] fields, SetExtractionConfiguration config)
+    public static T ToObject(string?[] fields)
     {
         try
         {
-            return T.ToObject(fields, config);
+            return T.ToObject(fields);
         }
         catch
         (Exception e)
