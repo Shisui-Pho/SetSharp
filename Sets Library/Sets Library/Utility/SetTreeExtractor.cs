@@ -35,7 +35,7 @@ public class SetTreeExtractor<T>
     /// <param name="expression">The string representation of the set expression to extract into a set tree.</param>
     /// <param name="extractionConfig">The configuration used for extracting the set, including terminators and optional custom object conversion.</param>
     /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
-    public static ISetTree<T> Extract(string expression, SetExtractionConfiguration<T> extractionConfig)
+    public static ISetTree<T> Extract(string expression, SetExtractionConfiguration extractionConfig)
     {
         // Remove the first and last brace if they exist
         if (expression.StartsWith("{") && expression.EndsWith("}"))
@@ -152,7 +152,7 @@ public class SetTreeExtractor<T>
     /// <param name="rootElements">A string representing the root elements to be processed.</param>
     /// <param name="extractionConfig">The configuration that specifies terminators and custom object converters.</param>
     /// <returns>An <see cref="IEnumerable{T}"/> containing the sorted and unique root elements.</returns>
-    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration<T> extractionConfig)
+    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration extractionConfig)
     {
         //Split elements based on the row terminator
         string[] elements = rootElements.Split(extractionConfig.RowTerminator, StringSplitOptions.RemoveEmptyEntries);
@@ -169,14 +169,17 @@ public class SetTreeExtractor<T>
                 //If a custom converter is used, convert using that; otherwise, attempt to convert to T
                 if (extractionConfig.IsICustomObject)
                 {
-                    //Use the custom object converter
-                    if (SetExtractionConfiguration<T>.ToObject is not null)
-                        item = SetExtractionConfiguration<T>.ToObject(element, extractionConfig);
+                    //Call api to convert to custom object
+                    var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
 
-                    //The above code works
-                    //But I can't do this ????
-                    //item = SetExtractionConfiguration<T>.ToObject?.Invoke(element);// Why????
+                    if(converter is null)
+                    {
+                        string details = $"The object \'{typeof(T)}\' was marked as an element of a custom object set, but no parameter of converter wass passed.";
+                        throw new SetsConfigurationException("Failed to convert object to set.", details);
+                    }
 
+                    //Do the conversion
+                    item = converter(element, extractionConfig);
                 }
                 else
                 {

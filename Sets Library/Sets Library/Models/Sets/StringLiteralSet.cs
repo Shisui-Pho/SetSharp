@@ -28,7 +28,7 @@ public class StringLiteralSet : BaseSet<string>
     /// Initializes a new instance of the <see cref="StringLiteralSet"/> class with the specified extraction configuration.
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
-    public StringLiteralSet(SetExtractionConfiguration<string> extractionConfiguration) : base(extractionConfiguration)
+    public StringLiteralSet(SetExtractionConfiguration extractionConfiguration) : base(extractionConfiguration)
     {
     }
 
@@ -37,7 +37,7 @@ public class StringLiteralSet : BaseSet<string>
     /// </summary>
     /// <param name="expression">The string representation of the set expression.</param>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
-    public StringLiteralSet(string expression, SetExtractionConfiguration<string> config) : base(expression, config)
+    public StringLiteralSet(string expression, SetExtractionConfiguration config) : base(expression, config)
     {
     }
     /// <summary>

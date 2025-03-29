@@ -233,7 +233,7 @@ namespace SetsLibrary.Extensions
             try
             {
                 // Clone the configurations
-                var config = new SetExtractionConfiguration<string>(tree.ExtractionSettings.FieldTerminator, tree.ExtractionSettings.RowTerminator);
+                var config = new SetExtractionConfiguration(tree.ExtractionSettings.FieldTerminator, tree.ExtractionSettings.RowTerminator);
 
                 // Get the string representation
                 var expression = tree.ToString();

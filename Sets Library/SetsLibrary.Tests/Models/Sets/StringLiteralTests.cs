@@ -3,12 +3,12 @@ namespace SetsLibrary.Tests.Models.Sets
 {
     public class StringLiteralSetTests
     {
-        private SetExtractionConfiguration<string> _extractionConfig;
+        private SetExtractionConfiguration _extractionConfig;
 
         public StringLiteralSetTests()
         {
             // Setup an example extraction configuration to use in the tests
-            _extractionConfig = new SetExtractionConfiguration<string>("none", ",");
+            _extractionConfig = new SetExtractionConfiguration("none", ",");
         }
 
         // Test constructor that uses the SetExtractionConfiguration

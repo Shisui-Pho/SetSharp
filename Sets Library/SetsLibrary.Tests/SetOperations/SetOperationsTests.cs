@@ -8,7 +8,7 @@ namespace SetsLibrary.Tests
         // Dummy implementation of IStructuredSet<T> for testing purposes
         public class StructuredSet<T> : BaseSet<T>, IStructuredSet<T> where T : IComparable<T>
         {
-            public StructuredSet(SetExtractionConfiguration<T> extractionConfiguration) : base(extractionConfiguration)
+            public StructuredSet(SetExtractionConfiguration extractionConfiguration) : base(extractionConfiguration)
             {
             }
 
@@ -16,7 +16,7 @@ namespace SetsLibrary.Tests
             {
             }
 
-            public StructuredSet(string expression, SetExtractionConfiguration<T> config) : base(expression, config)
+            public StructuredSet(string expression, SetExtractionConfiguration config) : base(expression, config)
             {
             }
 
@@ -39,7 +39,7 @@ namespace SetsLibrary.Tests
         // Test helper method to create a set with elements
         private IStructuredSet<int> CreateSet(IEnumerable<int> elements)
         {
-            var config = new SetExtractionConfiguration<int>("-", ",");
+            var config = new SetExtractionConfiguration("-", ",");
             var set = new StructuredSet<int>(config);
             foreach (var elem in elements)
             {
@@ -49,7 +49,7 @@ namespace SetsLibrary.Tests
         }
         private ISetTree<int> CreateTree(IEnumerable<int> elements)
         {
-            var config = new SetExtractionConfiguration<int>("-", ",");
+            var config = new SetExtractionConfiguration("-", ",");
 
             var tree = new SetTree<int>(config, elements);
 

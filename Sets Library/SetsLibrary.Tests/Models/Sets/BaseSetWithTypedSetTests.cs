@@ -4,11 +4,11 @@ namespace SetsLibrary.Tests.Models.Sets
 {
     public class BaseSetWithTypedSetTests
     {
-        private readonly SetExtractionConfiguration<int> _extractionConfig;
+        private readonly SetExtractionConfiguration _extractionConfig;
 
         public BaseSetWithTypedSetTests()
         {
-            _extractionConfig = new SetExtractionConfiguration<int>("nothing", ",");
+            _extractionConfig = new SetExtractionConfiguration("nothing", ",");
         }
 
         [Fact]

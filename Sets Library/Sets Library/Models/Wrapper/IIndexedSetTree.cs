@@ -13,7 +13,7 @@ public interface IIndexedSetTree<T> : ISetTree<T>
     /// <param name="index">The index of the root element to retrieve.</param>
     /// <returns>The root element at the specified index, or <c>null</c> if not found.</returns>
     T? GetRootElementByIndex(int index);
-
+    /// <summary>
     /// Gets the subset at the specified index.
     /// </summary>
     /// <param name="index">The index of the subset to retrieve.</param>

@@ -62,9 +62,9 @@ public interface ISetTree<T> : IComparable<ISetTree<T>>
     /// Gets the set extraction settings associated with the current set.
     /// </summary>
     /// <value>
-    /// The <see cref="SetExtractionConfiguration{T}"/> settings for extracting the set.
+    /// The <see cref="SetExtractionConfiguration"/> settings for extracting the set.
     /// </value>
-    SetExtractionConfiguration<T> ExtractionSettings { get; }
+    SetExtractionConfiguration ExtractionSettings { get; }
 
     /// <summary>
     /// Returns an enumerator that iterates through the subsets of the current set.

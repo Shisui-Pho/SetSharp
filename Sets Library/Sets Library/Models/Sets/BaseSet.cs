@@ -108,7 +108,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Gets the current settings of the set extractor.
     /// </summary>
-    public SetExtractionConfiguration<T> ExtractionConfiguration { get; private set; }
+    public SetExtractionConfiguration ExtractionConfiguration { get; private set; }
 
     #endregion Properties
 
@@ -121,14 +121,13 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="extractionConfiguration"/> is null.</exception>
-    public BaseSet(SetExtractionConfiguration<T> extractionConfiguration)
+    public BaseSet(SetExtractionConfiguration extractionConfiguration)
     {
         // Ensure the extraction configuration is not null, as it is required for proper set extraction
         ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
 
         // Set the extraction configuration
-        this.ExtractionConfiguration = extractionConfiguration;
-        this.ExtractionConfiguration.IsICustomObject = IsCustomObjectConverter();
+        this.ExtractionConfiguration = ModifyConfigurations(extractionConfiguration);
         // Create a new instance of SetTreeWrapper using the provided configuration
         _treeWrapper = new SetTreeWrapper<T>(extractionConfiguration);
     } // Default constructor (uses SetExtractionConfiguration)
@@ -142,7 +141,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="config"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown if <paramref name="expression"/> is null or whitespace.</exception>
-    public BaseSet(string expression, SetExtractionConfiguration<T> config)
+    public BaseSet(string expression, SetExtractionConfiguration config)
     {
         // Ensure the configuration is not null, as it is needed to extract elements and subsets from the expression
         ArgumentNullException.ThrowIfNull(config, nameof(config));
@@ -151,8 +150,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
         // Assign the configurations
-        this.ExtractionConfiguration = config;
-        this.ExtractionConfiguration.IsICustomObject = IsCustomObjectConverter();
+        this.ExtractionConfiguration = ModifyConfigurations(config);
         // Extract the set tree from the provided expression and configuration
         _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
@@ -176,8 +174,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         this._treeWrapper = indexedSetTree;
 
         // Set the extraction configuration and original expression based on the injected tree
-        this.ExtractionConfiguration = indexedSetTree.ExtractionSettings;
-        this.ExtractionConfiguration.IsICustomObject = IsCustomObjectConverter();
+        this.ExtractionConfiguration = ModifyConfigurations(indexedSetTree.ExtractionSettings);
         this.OriginalExpression = indexedSetTree.ToString(); // Set the original expression from the tree's ToString method
     } // Constructor 2 (accepts injected IIndexedSetTree)
 
@@ -210,8 +207,11 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// Checks if the current instance is a custom object set.
     /// </summary>
     /// <returns>True if it is a custom object set.</returns>
-    protected virtual bool IsCustomObjectConverter()
-        => false;
+    protected virtual SetExtractionConfiguration ModifyConfigurations(SetExtractionConfiguration config)
+    {
+        //If there are no ovverides, return the configurations
+        return config;
+    }//ModifyConfigurations
     #endregion Constructors
 
     #region Implemented Methods
