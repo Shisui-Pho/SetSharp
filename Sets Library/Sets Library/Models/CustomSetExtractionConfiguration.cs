@@ -1,39 +1,30 @@
 ﻿/*
  * File: CustomSetExtractionConfiguration.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 25 November 2024
+ * Date: 29 March 2025
  * 
  * Description:
- * Defines the SetExtractionConfiguration class, which specifies the configuration
- * for extracting sets, including terminators for fields and rows, and an optional 
- * custom converter for converting string literals into objects. It also ensures that
- * reserved characters cannot be used as terminators.
+ * Defines the CustomSetExtractionConfiguration class which inherit from SetsConfigurationException,
  * 
  * Key Features:
- * - Supports configuration with field and row terminators.
- * - Allows integration of a custom object converter implementing ICustomObjectConverter<T>.
- * - Includes validation to ensure terminators are not null, distinct, and do not contain reserved characters.
- * - Provides a method to convert string records into objects using the provided converter.
+ * Introduces a new feature for converting any object
  */
 
 namespace SetsLibrary;
 
 /// <inheritdoc/>
-internal class CustomSetExtractionConfiguration<TObject> : SetsConfigurationException
+internal class CustomSetExtractionConfiguration<TObject> : SetExtractionConfiguration
     where TObject : IComparable<TObject>
 {
     //Add an additional feature for custom conversion
     public Func<string, SetsConfigurationException>? Funct_ToObject { get; private set; } = null;
+
     /// <inheritdoc/>
-    public CustomSetExtractionConfiguration(string? details) : base(details)
+    public CustomSetExtractionConfiguration(string rowTerminator) : base(rowTerminator)
     {
     }
     /// <inheritdoc/>
-    public CustomSetExtractionConfiguration(string? message, string? details) : base(message, details)
-    {
-    }
-    /// <inheritdoc/>
-    public CustomSetExtractionConfiguration(string? message, string? details, Exception? innerException) : base(message, details, innerException)
+    public CustomSetExtractionConfiguration(string fieldTerminator, string rowTerminator) : base(fieldTerminator, rowTerminator)
     {
     }
 }
