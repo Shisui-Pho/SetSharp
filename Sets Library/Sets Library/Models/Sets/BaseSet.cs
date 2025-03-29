@@ -108,7 +108,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Gets the current settings of the set extractor.
     /// </summary>
-    public SetExtractionConfiguration<T> ExtractionConfiguration { get; private set; }
+    public SetExtractionConfiguration ExtractionConfiguration { get; private set; }
 
     #endregion Properties
 
@@ -121,7 +121,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="extractionConfiguration"/> is null.</exception>
-    public BaseSet(SetExtractionConfiguration<T> extractionConfiguration)
+    public BaseSet(SetExtractionConfiguration extractionConfiguration)
     {
         // Ensure the extraction configuration is not null, as it is required for proper set extraction
         ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
@@ -142,7 +142,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="config"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown if <paramref name="expression"/> is null or whitespace.</exception>
-    public BaseSet(string expression, SetExtractionConfiguration<T> config)
+    public BaseSet(string expression, SetExtractionConfiguration config)
     {
         // Ensure the configuration is not null, as it is needed to extract elements and subsets from the expression
         ArgumentNullException.ThrowIfNull(config, nameof(config));

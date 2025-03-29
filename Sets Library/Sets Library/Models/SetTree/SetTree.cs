@@ -42,7 +42,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// <summary>
     /// Gets the configuration used for extracting elements from the set tree.
     /// </summary>
-    public SetExtractionConfiguration<T> ExtractionSettings { get; private set; }
+    public SetExtractionConfiguration ExtractionSettings { get; private set; }
 
     /// <summary>
     /// Gets the number of root elements in the tree.
@@ -67,7 +67,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// Initializes a new instance of the <see cref="SetTree{T}"/> class with the specified extraction settings.
     /// </summary>
     /// <param name="extractionSettings">The settings used for extracting elements from the set tree.</param>
-    public SetTree(SetExtractionConfiguration<T> extractionSettings)
+    public SetTree(SetExtractionConfiguration extractionSettings)
         : this()
     {
         //Check if settings are null
@@ -80,7 +80,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// </summary>
     /// <param name="extractionSettings">The settings used for extracting elements from the set tree.</param>
     /// <param name="elements">A collection of elements to add to the set tree.</param>
-    public SetTree(SetExtractionConfiguration<T> extractionSettings, IEnumerable<T> elements)
+    public SetTree(SetExtractionConfiguration extractionSettings, IEnumerable<T> elements)
         : this(extractionSettings)
     {
         //Add elements as ranges
@@ -92,7 +92,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// </summary>
     /// <param name="extractionSettings">The settings used for extracting elements from the set tree.</param>
     /// <param name="subsets">A collection of subsets to add to the set tree.</param>
-    public SetTree(SetExtractionConfiguration<T> extractionSettings, IEnumerable<ISetTree<T>> subsets)
+    public SetTree(SetExtractionConfiguration extractionSettings, IEnumerable<ISetTree<T>> subsets)
         : this(extractionSettings)
     {
         //Add elements as ranges
@@ -105,7 +105,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// <param name="extractionSettings">The settings used for extracting elements from the set tree.</param>
     /// <param name="elements">A collection of elements to add to the set tree.</param>
     /// <param name="subsets">A collection of subsets to add to the set tree.</param>
-    public SetTree(SetExtractionConfiguration<T> extractionSettings, IEnumerable<T> elements, IEnumerable<ISetTree<T>> subsets)
+    public SetTree(SetExtractionConfiguration extractionSettings, IEnumerable<T> elements, IEnumerable<ISetTree<T>> subsets)
         : this(extractionSettings)
     {
         //Add ranges

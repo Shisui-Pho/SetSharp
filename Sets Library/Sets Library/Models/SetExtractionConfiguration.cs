@@ -22,9 +22,7 @@ namespace SetsLibrary;
 /// Represents the configuration for extracting sets, including terminators, optional custom converter, 
 /// and validation for reserved characters used in terminators.
 /// </summary>
-/// <typeparam name="T">The type of object that the extracted records will be converted into. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SetExtractionConfiguration<T>
-    where T : IComparable<T>
+public class SetExtractionConfiguration
 {
     // Reserved characters that cannot be used in field or row terminators
     private const string RESERVED_CHARACTERS = "{}";
@@ -44,11 +42,11 @@ public class SetExtractionConfiguration<T>
     /// </summary>
     public bool IsICustomObject { get; internal set; }
 
-    internal static Func<string, SetExtractionConfiguration<T>, T?>? ToObject { get; set; } = null;
+    //internal static Func<string, SetExtractionConfiguration, T?>? ToObject { get; set; } = null;
 
     // Constructors
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetExtractionConfiguration{T}"/> class with a row terminators. The
+    /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with a row terminators. The
     /// default field is tab character(\t). 
     /// </summary>
     /// <param name="rowTerminator">The string used to separate rows in the data.</param>
@@ -62,7 +60,7 @@ public class SetExtractionConfiguration<T>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetExtractionConfiguration{T}"/> class with field and row terminators.
+    /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with field and row terminators.
     /// </summary>
     /// <param name="fieldTerminator">The string used to separate fields in a record.</param>
     /// <param name="rowTerminator">The string used to separate rows in the data.</param>

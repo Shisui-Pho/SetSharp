@@ -32,7 +32,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class with the specified extraction configuration.
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
-    public CustomObjectSet(SetExtractionConfiguration<T> extractionConfiguration)
+    public CustomObjectSet(SetExtractionConfiguration extractionConfiguration)
         : base(extractionConfiguration)
     {
     }
@@ -42,7 +42,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// </summary>
     /// <param name="expression">The string representation of the set expression.</param>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
-    public CustomObjectSet(string expression, SetExtractionConfiguration<T> config)
+    public CustomObjectSet(string expression, SetExtractionConfiguration config)
         : base(expression, config)
     {
     }
@@ -66,8 +66,8 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <returns>True if it is a custom object set.</returns>
     protected sealed override bool IsCustomObjectConverter()
     {
-        if (SetExtractionConfiguration<T>.ToObject is null)
-            SetExtractionConfiguration<T>.ToObject = ToObject;
+        //if (SetExtractionConfiguration.ToObject is null)
+        //    SetExtractionConfiguration.ToObject = ToObject;
 
         return true;
     }
@@ -109,7 +109,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <param name="config">The configurations of extracting the object from a string representation.</param>
     /// <returns>An object of type <typeparamref name="T"/> representing the record.</returns>
     /// <exception cref="SetsConfigurationException">Thrown if conversion failed.</exception>
-    public static T ToObject(string record, SetExtractionConfiguration<T> config)
+    public static T ToObject(string record, SetExtractionConfiguration config)
     {
         try
         {

@@ -30,6 +30,6 @@ public interface ICustomObjectConverter<T>
     /// <param name="field">The string representation of the object to convert.</param>
     /// <param name="settings">The extraction settings used for the conversion process.</param>
     /// <returns>An instance of type T created from the provided string representation.</returns>
-    static abstract T ToObject(string field, SetExtractionConfiguration<T> settings);
+    static abstract T ToObject(string field, SetExtractionConfiguration settings);
 } // interface
 // namespace

@@ -6,13 +6,13 @@ namespace SetsLibrary.Tests.Models
         [Fact]
         public void Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration<int>(null, ""));
+            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration(null, ""));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
         [Fact]
         public void Constructor_Should_Throw_ArgumentNullException_When_RowTerminator_Is_Null()
         {
-            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration<int>(",", null));
+            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration(",", null));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
 
@@ -21,7 +21,7 @@ namespace SetsLibrary.Tests.Models
         {
             string terminator = ";";
 
-            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<int>(terminator, terminator));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration(terminator, terminator));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
 
@@ -34,7 +34,7 @@ namespace SetsLibrary.Tests.Models
         [InlineData("5434sfsdf}", "sdfsdfsf")]
         public void Constructor_Should_Throw_SetsConfigurationException_When_Terminators_Use_Reserved_Characters(string fieldTerm, string rownTerm)
         {
-            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<int>(fieldTerm, rownTerm));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration(fieldTerm, rownTerm));
         }//Constructor_Should_Throw_ArgumentNullException_When_FieldTerminator_Is_Null
 
         [Theory]
@@ -47,11 +47,11 @@ namespace SetsLibrary.Tests.Models
         public void Valid_Terminators(string fieldTerminator, string rowTerminator)
         {
             //Create a null instance
-            SetExtractionConfiguration<int>? config = null;
+            SetExtractionConfiguration? config = null;
 
             try
             {
-                config = new SetExtractionConfiguration<int>(fieldTerminator, rowTerminator);
+                config = new SetExtractionConfiguration(fieldTerminator, rowTerminator);
             }
             catch { }//Swallow the exeption
 
@@ -68,13 +68,13 @@ namespace SetsLibrary.Tests.Models
         [InlineData("fieldTerminator", null)]
         public void Constructor_NullTerminators_ThrowsArgumentNullException(string fieldTerminator, string rowTerminator)
         {
-            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration<string>(fieldTerminator, rowTerminator));
+            Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration(fieldTerminator, rowTerminator));
         }
 
         [Fact]
         public void Constructor_SameFieldAndRowTerminators_SetsConfigurationException()
         {
-            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<string>("terminator", "terminator"));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration("terminator", "terminator"));
         }
 
         [Theory]
@@ -82,13 +82,13 @@ namespace SetsLibrary.Tests.Models
         [InlineData("fieldTerminator", "}")]
         public void Constructor_ReservedCharactersInTerminators_SetsConfigurationException(string fieldTerminator, string rowTerminator)
         {
-            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration<string>(fieldTerminator, rowTerminator));
+            Assert.Throws<SetsConfigurationException>(() => new SetExtractionConfiguration(fieldTerminator, rowTerminator));
         }
 
         [Fact]
         public void Constructor_ValidTerminators_AssignsTerminators()
         {
-            var config = new SetExtractionConfiguration<string>("fieldTerminator", "rowTerminator");
+            var config = new SetExtractionConfiguration("fieldTerminator", "rowTerminator");
             Assert.Equal("fieldTerminator", config.FieldTerminator);
             Assert.Equal("rowTerminator", config.RowTerminator);
             Assert.False(config.IsICustomObject);
@@ -97,14 +97,14 @@ namespace SetsLibrary.Tests.Models
         //[Fact]
         //public void Constructor_NullConverter_ThrowsArgumentNullException()
         //{
-        //    Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration<string>("fieldTerminator", "rowTerminator", null));
+        //    Assert.Throws<ArgumentNullException>(() => new SetExtractionConfiguration("fieldTerminator", "rowTerminator", null));
         //}
 
         //[Fact]
         //public void Constructor_ValidConverter_AssignsConverter()
         //{
         //    var converter = new MockConverter();
-        //    var config = new SetExtractionConfiguration<string>("fieldTerminator", "rowTerminator", converter);
+        //    var config = new SetExtractionConfiguration("fieldTerminator", "rowTerminator", converter);
         //    Assert.Equal("fieldTerminator", config.FieldTerminator);
         //    Assert.Equal("rowTerminator", config.RowTerminator);
         //    Assert.True(config.IsICustomObject);
@@ -114,7 +114,7 @@ namespace SetsLibrary.Tests.Models
         //[Fact]
         //public void ToObject_NullConverter_ThrowsArgumentNullException()
         //{
-        //    var config = new SetExtractionConfiguration<string>("fieldTerminator", "rowTerminator");
+        //    var config = new SetExtractionConfiguration("fieldTerminator", "rowTerminator");
         //    Assert.Throws<SetsConfigurationException>(() => config.ToObject("record"));
         //}
 
@@ -122,14 +122,14 @@ namespace SetsLibrary.Tests.Models
         public void ToObject_ValidConverter_CallsConverter()
         {
             var converter = new MockConverter();
-            var config = new SetExtractionConfiguration<string>("fieldTerminator", "rowTerminator");
+            var config = new SetExtractionConfiguration("fieldTerminator", "rowTerminator");
             var result = MockConverter.ToObject("record", config);
             Assert.Equal("convertedRecord", result);
         }
 
         private class MockConverter : ICustomObjectConverter<string>
         {
-            public static string ToObject(string field, SetExtractionConfiguration<string> settings)
+            public static string ToObject(string field, SetExtractionConfiguration settings)
             {
                 return "convertedRecord";
             }

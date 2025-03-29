@@ -10,7 +10,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void Constructor_Should_Initialize_Empty_SetTree()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.NotNull(setTree);
             Assert.Empty(setTree.GetRootElementsEnumerator());
@@ -21,7 +21,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void Constructor_With_ExtractionSettings_Should_Initialize_SetTree()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.NotNull(setTree);
             Assert.Equal(extractionSettings, setTree.ExtractionSettings);
@@ -30,7 +30,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void Constructor_With_Elements_Should_Add_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var elements = new List<int> { 1, 2, 3 };
             var setTree = new SetTree<int>(extractionSettings, elements);
             Assert.Equal(3, setTree.CountRootElements);
@@ -46,7 +46,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddElement_Should_Add_Element_When_Not_Exist()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
             Assert.Contains(10, setTree.GetRootElementsEnumerator());
@@ -55,7 +55,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddElement_Should_Not_Add_Existing_Element()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
             setTree.AddElement(10); // Adding again
@@ -65,7 +65,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddElement_Should_Throw_ArgumentNullException_When_Element_Is_Null()
         {
-            var extractionSettings = new SetExtractionConfiguration<string>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<string>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.AddElement(null));
         }
@@ -77,7 +77,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddRange_Should_Add_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddRange(new List<int> { 1, 2, 3 });
             Assert.Equal(3, setTree.CountRootElements);
@@ -89,7 +89,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddRange_Should_Throw_ArgumentNullException_When_Elements_Are_Null()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.AddRange(default(IEnumerable<int>)));
         }
@@ -101,7 +101,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddSubSetTree_Should_Add_Subset_Tree()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
@@ -114,7 +114,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddSubSetTree_Should_Throw_ArgumentNullException_When_Tree_Is_Null()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.AddSubSetTree(null));
         }
@@ -126,7 +126,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Remove_Element_When_Exists()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
             bool result = setTree.RemoveElement(10);
@@ -137,7 +137,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Return_False_When_Element_Does_Not_Exist()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             bool result = setTree.RemoveElement(10);
             Assert.False(result);
@@ -146,7 +146,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Throw_ArgumentNullException_When_Element_Is_Null()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.RemoveElement(null));
         }
@@ -158,7 +158,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Remove_Subset_Tree_When_Exists()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
@@ -172,7 +172,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Return_False_When_Subset_Does_Not_Exist()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var subsetTree = new SetTree<int>(extractionSettings);
             bool result = setTree.RemoveElement(subsetTree);
@@ -182,7 +182,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Throw_ArgumentNullException_When_Subset_Tree_Is_Null()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.RemoveElement((ISetTree<int>)null));
         }
@@ -194,7 +194,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_0_When_Trees_Are_Equal()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddElement(10);
             var setTree2 = new SetTree<int>(extractionSettings);
@@ -206,7 +206,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_1_When_Tree_Is_Larger()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddElement(10);
             var setTree2 = new SetTree<int>(extractionSettings);
@@ -219,7 +219,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_1_When_Tree_Is_Smaller()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddElement(10);
             var setTree2 = new SetTree<int>(extractionSettings);
@@ -232,7 +232,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Throw_ArgumentNullException_When_Compared_With_Null()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.CompareTo(null));
         }
@@ -244,7 +244,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void ToString_Should_Return_Correct_String_Representation()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
             setTree.AddElement(20);
@@ -260,7 +260,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void GetRootElementsEnumerator_Should_Return_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(1);
             setTree.AddElement(2);
@@ -272,7 +272,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void GetSubsetsEnumerator_Should_Return_Subsets()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
@@ -287,7 +287,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddElement_Should_Not_Add_Duplicate_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(5);
             setTree.AddElement(5); //Adding duplicate element
@@ -298,7 +298,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddRange_Should_Add_Elements_And_Subsets_Correctly()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddElement(10);
             setTree1.AddElement(20);
@@ -318,7 +318,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddRange_Should_Perform_Well_With_Large_Collection()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var elements = new List<int>();
             for (int i = 0; i < 100000; i++)
@@ -334,7 +334,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Return_False_When_Trying_To_Remove_Empty_Subset()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var emptySubset = new SetTree<int>(extractionSettings);
 
@@ -345,7 +345,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_0_When_Trees_Are_Equal_But_Elements_Are_In_Different_Order()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddRange(new List<int> { 1, 3, 2 });
 
@@ -358,7 +358,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Throw_ArgumentNullException_When_Compared_With_Null2()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             Assert.Throws<ArgumentNullException>(() => setTree.CompareTo(null)); // Should throw ArgumentNullException
         }
@@ -366,7 +366,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddSubSetTree_Should_Handle_Nested_Subsets_Correctly()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddElement(10);
             setTree1.AddElement(20);
@@ -391,7 +391,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Work_After_Subsets_Are_Added()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(10);
             setTree.AddElement(20);
@@ -409,7 +409,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_1_When_Comparing_Empty_Tree_With_NonEmpty_Tree()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var emptyTree = new SetTree<int>(extractionSettings);
             var nonEmptyTree = new SetTree<int>(extractionSettings);
             nonEmptyTree.AddElement(10);
@@ -422,7 +422,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddElement_Should_Throw_ArgumentNullException_When_Element_Is_Null_In_Threaded_Environment()
         {
-            var extractionSettings = new SetExtractionConfiguration<string>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<string>(extractionSettings);
 
             // Create a flag to track exceptions
@@ -465,7 +465,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddElement_Should_Properly_Handle_Massive_Amounts_Of_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
 
             // Test adding 1 million elements
@@ -479,7 +479,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_Correct_Result_When_Trees_Have_Same_Elements_But_Different_Subsets()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddRange(new List<int> { 1, 2, 3 });
 
@@ -502,7 +502,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddSubSetTree_Should_Throw_ArgumentNullException_When_Tree_Is_Null2()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
 
             // Adding a null subset tree
@@ -512,7 +512,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void RemoveElement_Should_Allow_Removal_Of_Only_One_Element_And_No_Duplicate_Elements()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             setTree.AddElement(1);
             setTree.AddElement(2);
@@ -531,7 +531,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Work_Properly_When_Comparing_Trees_With_Nested_Subsets()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var rootSet = new SetTree<int>(extractionSettings);
             rootSet.AddRange(new List<int> { 1, 2, 3 });
 
@@ -556,7 +556,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void AddSubSetTree_Should_Handle_Very_Large_Subsets_Properly()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var mainSet = new SetTree<int>(extractionSettings);
             var largeSubset = new SetTree<int>(extractionSettings);
 
@@ -572,7 +572,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void CompareTo_Should_Return_1_When_Tree_Contains_More_Elements_Than_Another()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree1 = new SetTree<int>(extractionSettings);
             setTree1.AddRange(new List<int> { 1, 2, 3 });
 
@@ -586,7 +586,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         [Fact]
         public void ToString_Should_Provide_Correct_String_Representation_After_Massive_Addition()
         {
-            var extractionSettings = new SetExtractionConfiguration<int>(";", ",");
+            var extractionSettings = new SetExtractionConfiguration(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
             var elements = Enumerable.Range(1, 100000).ToList();
             setTree.AddRange(elements);

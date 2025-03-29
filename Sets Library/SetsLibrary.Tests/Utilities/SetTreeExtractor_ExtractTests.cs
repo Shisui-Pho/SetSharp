@@ -12,12 +12,12 @@ namespace SetsLibrary.Tests.Utilities.Extract
             public int Count { get; set; }
             public int CountRootElements => RootElements.Split(',').Length;
             public int CountSubsets { get; set; }
-            public SetExtractionConfiguration<T> ExtractionSettings { get; set; }
+            public SetExtractionConfiguration ExtractionSettings { get; set; }
 
             private List<ISetTree<T>> _subsets = new List<ISetTree<T>>();
             private List<T> _elements = new List<T>();
 
-            public MockSetTree(string rootElements, SetExtractionConfiguration<T> extractionSettings)
+            public MockSetTree(string rootElements, SetExtractionConfiguration extractionSettings)
             {
                 RootElements = rootElements;
                 ExtractionSettings = extractionSettings;
@@ -66,7 +66,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         {
             // Arrange
             string expression = "{1,2,3}";
-            var config = new SetExtractionConfiguration<int>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
             // Act
@@ -85,7 +85,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         {
             // Arrange
             string expression = "{}";
-            var config = new SetExtractionConfiguration<int>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
             // Act
@@ -104,7 +104,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         {
             // Arrange
             string expression = "{1,2,{3,4}}";
-            var config = new SetExtractionConfiguration<int>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
             // Act
@@ -129,7 +129,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         {
             // Arrange
             string expression = "{1,2,{3,4},{5,6}}";
-            var config = new SetExtractionConfiguration<int>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
             // Act
@@ -159,7 +159,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{1,2,3}";
             var customConverter = new CustomStringToIntConverter();
-            var config = new SetExtractionConfiguration<int>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
 
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
@@ -177,7 +177,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         {
             // Arrange
             string expression = "{ 1 , 2 , 3 }";
-            var config = new SetExtractionConfiguration<int>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
             SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
 
             // Act
@@ -197,7 +197,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
         public void Extract_TheoryTests(string input, string expectedRootElements, int expectedCardinality, int expectedRootCount, int expectedSubsetCount)
         {
             // Arrange
-            var config = new SetExtractionConfiguration<string>(";", ",");
+            var config = new SetExtractionConfiguration(";", ",");
             SetTreeExtractor<string> extractor = new SetTreeExtractor<string>();
 
             // Act
@@ -214,7 +214,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
     // Custom converter for testing
     public class CustomStringToIntConverter : ICustomObjectConverter<int>
     {
-        public static int ToObject(string field, SetExtractionConfiguration<int> settings)
+        public static int ToObject(string field, SetExtractionConfiguration settings)
         {
             // For simplicity, parse the string into an integer
             return int.Parse(field);
