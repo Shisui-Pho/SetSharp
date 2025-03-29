@@ -108,7 +108,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Gets the current settings of the set extractor.
     /// </summary>
-    public SetExtractionConfiguration ExtractionConfiguration { get; private set; }
+    public SetExtractionConfiguration ExtractionConfiguration { get; protected set; }
 
     #endregion Properties
 
