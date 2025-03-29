@@ -42,8 +42,6 @@ public class SetExtractionConfiguration
     /// </summary>
     public bool IsICustomObject { get; internal set; }
 
-    //internal static Func<string, SetExtractionConfiguration, T?>? ToObject { get; set; } = null;
-
     // Constructors
     /// <summary>
     /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with a row terminators. The
@@ -120,4 +118,4 @@ public class SetExtractionConfiguration
         FieldTerminator = _fieldTerminator;
         RowTerminator = _rowTerminator;
     }
-}//namespace
+}//class
