@@ -17,7 +17,7 @@ internal class CustomSetExtractionConfiguration<TObject> : SetExtractionConfigur
     where TObject : IComparable<TObject>
 {
     //Add an additional feature for custom conversion
-    public Func<string, SetExtractionConfiguration, TObject>? Funct_ToObject { get; set; } = null;
+    public Func<string?[], SetExtractionConfiguration, TObject>? Funct_ToObject { get; set; } = null;
 
     /// <inheritdoc/>
     public CustomSetExtractionConfiguration(string rowTerminator) : base(rowTerminator)

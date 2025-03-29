@@ -181,17 +181,17 @@ public class SortAndRemoveDuplicatesTests
 // Custom converter for testing
 public class CustomStringToIntConverter : ICustomObjectConverter<int>
 {
-    public static int ToObject(string field, SetExtractionConfiguration settings)
+    public static int ToObject(string?[] field, SetExtractionConfiguration settings)
     {
         // Convert custom string representation of numbers (e.g., "10" => 10)
-        return int.Parse(field);
+        return int.Parse(field[0] ?? "0");
     }
 }
 
 // Invalid custom converter to simulate an error
 public class InvalidCustomConverter : ICustomObjectConverter<int>
 {
-    public static int ToObject(string field, SetExtractionConfiguration settings)
+    public static int ToObject(string?[] field, SetExtractionConfiguration settings)
     {
         // Invalid conversion, simulate FormatException
         return int.Parse("invalid"); // Will throw FormatException
