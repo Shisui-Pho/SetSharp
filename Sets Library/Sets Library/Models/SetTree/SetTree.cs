@@ -179,11 +179,13 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         ArgumentNullException.ThrowIfNull(tree, nameof(tree));
 
         //First check if it is a null set or not
-        if(tree.TreeInfo.IsEmptyTree)
+        if (tree.TreeInfo.IsEmptyTree)
         {
             //Add it as a null set
             WillHaveNullElements(true, 1);
         }
+        //Update the current's tree info
+        TreeInfo.IsEmptyTree = false;
 
         //Add if unique
         _subSets.AddIfUnique(tree);
