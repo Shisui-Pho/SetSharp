@@ -1,7 +1,7 @@
 ﻿/*
  * File: SetTreeUtility.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 25 November 2024
+ * Date: 30 March 2025
  * 
  * Description:
  * Defines the SetTreeUtility<T> class, which provides utility methods for working with tree-based sets. 

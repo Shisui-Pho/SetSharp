@@ -28,13 +28,12 @@ namespace SetsLibrary.Tests.Models.Sets
         }
 
         // ICustomObjectConverter implementation
-        public static Person ToObject(string field, SetExtractionConfiguration settings)
+        public static Person ToObject(string?[] field)
         {
-            var parts = field.Split(',');
-            if (parts.Length != 3)
+            if (field.Length != 3)
                 throw new ArgumentException("Invalid format.");
 
-            return new Person(parts[0].Trim(), parts[1].Trim(), int.Parse(parts[2].Trim()));
+            return new Person(field[0] ?? "0".Trim(), field[1] ?? "0".Trim(), int.Parse(field[2] ?? "0".Trim()));
         }
     }
 

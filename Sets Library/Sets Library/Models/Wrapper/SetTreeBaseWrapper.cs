@@ -72,6 +72,8 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
     /// Gets the extraction settings for the set.
     /// </summary>
     public SetExtractionConfiguration ExtractionSettings => setTree.ExtractionSettings;
+    ///<inheritdoc/>
+    public SetTreeInfo TreeInfo => setTree.TreeInfo;
 
     /// <summary>
     /// Adds a single element to the set.

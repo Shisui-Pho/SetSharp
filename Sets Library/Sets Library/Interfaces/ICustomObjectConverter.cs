@@ -27,9 +27,8 @@ public interface ICustomObjectConverter<T>
     /// <summary>
     /// Converts a string representation of an object to an instance of type T.
     /// </summary>
-    /// <param name="record">The string representation of the object to convert.</param>
-    /// <param name="settings">The extraction settings used for the conversion process.</param>
+    /// <param name="fields">The string representation of the object to convert.</param>
     /// <returns>An instance of type T created from the provided string representation.</returns>
-    static abstract T ToObject(string record, SetExtractionConfiguration settings);
+    static abstract T ToObject(string?[] fields);
 } // interface
 // namespace

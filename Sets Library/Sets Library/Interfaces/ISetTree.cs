@@ -41,7 +41,7 @@ public interface ISetTree<T> : IComparable<ISetTree<T>>
     /// The number of elements in the current set.
     /// </value>
     int Count { get; }
-
+    
     /// <summary>
     /// Gets the count of root elements in the current set.
     /// </summary>
@@ -66,6 +66,11 @@ public interface ISetTree<T> : IComparable<ISetTree<T>>
     /// </value>
     SetExtractionConfiguration ExtractionSettings { get; }
 
+    /// <summary>
+    /// Gets the information of the null elements in the root of the set. All null elements
+    ///  within a nested subsets will be ignored for the current set.
+    /// </summary>
+    SetTreeInfo TreeInfo { get; }
     /// <summary>
     /// Returns an enumerator that iterates through the subsets of the current set.
     /// </summary>

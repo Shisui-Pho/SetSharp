@@ -14,6 +14,8 @@ namespace SetsLibrary.Tests.Utilities.Extract
             public int CountSubsets { get; set; }
             public SetExtractionConfiguration ExtractionSettings { get; set; }
 
+            public SetTreeInfo TreeInfo => throw new NotImplementedException();
+
             private List<ISetTree<T>> _subsets = new List<ISetTree<T>>();
             private List<T> _elements = new List<T>();
 
@@ -214,10 +216,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
     // Custom converter for testing
     public class CustomStringToIntConverter : ICustomObjectConverter<int>
     {
-        public static int ToObject(string field, SetExtractionConfiguration settings)
+        public static int ToObject(string?[] field)
         {
             // For simplicity, parse the string into an integer
-            return int.Parse(field);
+            return int.Parse(field[0] ?? "0");
         }
     }
 }//namespae

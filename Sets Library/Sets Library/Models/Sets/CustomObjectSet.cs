@@ -1,7 +1,7 @@
 ﻿/*
  * File: CustomObjectSet.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 24 November 2024
+ * Date: 29 March 2025
  * 
  * Description:
  * This file contains the implementation of the CustomObjectSet<T> class, 
@@ -107,15 +107,14 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// <summary>
     /// Converts a record string to an object of type <typeparamref name="T"/> using the specified converter.
     /// </summary>
-    /// <param name="record">The record string to convert to an object.</param>
-    /// <param name="config">The configurations of extracting the object from a string representation.</param>
+    /// <param name="fields">The record string to convert to an object.</param>
     /// <returns>An object of type <typeparamref name="T"/> representing the record.</returns>
     /// <exception cref="SetsConfigurationException">Thrown if conversion failed.</exception>
-    public static T ToObject(string record, SetExtractionConfiguration config)
+    public static T ToObject(string?[] fields)
     {
         try
         {
-            return T.ToObject(record, config);
+            return T.ToObject(fields);
         }
         catch
         (Exception e)

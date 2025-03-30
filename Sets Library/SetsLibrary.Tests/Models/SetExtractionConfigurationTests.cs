@@ -123,13 +123,13 @@ namespace SetsLibrary.Tests.Models
         {
             var converter = new MockConverter();
             var config = new SetExtractionConfiguration("fieldTerminator", "rowTerminator");
-            var result = MockConverter.ToObject("record", config);
+            var result = MockConverter.ToObject(["record"]);
             Assert.Equal("convertedRecord", result);
         }
 
         private class MockConverter : ICustomObjectConverter<string>
         {
-            public static string ToObject(string field, SetExtractionConfiguration settings)
+            public static string ToObject(string?[] field)
             {
                 return "convertedRecord";
             }
