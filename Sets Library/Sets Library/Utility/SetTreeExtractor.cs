@@ -18,7 +18,9 @@
  */
 
 using SetsLibrary.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Xml.Linq;
 
 namespace SetsLibrary.Utility;
 
@@ -47,8 +49,10 @@ public class SetTreeExtractor<T>
         // Base case: no subsets, return the root set elements as a tree
         if (!expression.Contains("}") && !expression.Contains("{"))
         {
-            IEnumerable<T> rootElements = SortAndRemoveDuplicates(expression, extractionConfig);
-            return new SetTree<T>(extractionConfig, rootElements);
+            IEnumerable<T> rootElements = SortAndRemoveDuplicates(expression, extractionConfig, out bool hasNulls, out int countNulls);
+            var treeStructure = new SetTree<T>(extractionConfig, rootElements);
+            treeStructure.WillHaveNullElements(hasNulls, countNulls);
+            return treeStructure;
         }
 
         //Get the subsets
@@ -152,10 +156,12 @@ public class SetTreeExtractor<T>
     /// <param name="rootElements">A string representing the root elements to be processed.</param>
     /// <param name="extractionConfig">The configuration that specifies terminators and custom object converters.</param>
     /// <returns>An <see cref="IEnumerable{T}"/> containing the sorted and unique root elements.</returns>
-    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration extractionConfig)
+    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
     {
+        hasAnEmptySet = false;
+        countEmptySets = 0;
         //Split elements based on the row terminator
-        string[] elements = rootElements.Split(extractionConfig.RowTerminator, StringSplitOptions.RemoveEmptyEntries);
+        string[] elements = rootElements.Split(extractionConfig.RowTerminator);
 
         //Use a sorted collection to handle sorting and duplicates
         ISortedElements<T> uniqueElements = new SortedElements<T>();
@@ -163,44 +169,30 @@ public class SetTreeExtractor<T>
         //Loop through all elements and add them to the HashSet after converting them to the appropriate type
         foreach (string element in elements)
         {
+            var fields = GetFields(element, extractionConfig, out bool isEmptySet);
+
+            if (isEmptySet)
+            {
+                //Ignore the set/element
+                hasAnEmptySet = !extractionConfig.IgnoreEmptySets;
+                countEmptySets += 1;
+                continue;
+            }
+            T? item = default(T);
+
             try
             {
-                T? item = default(T);
                 //If a custom converter is used, convert using that; otherwise, attempt to convert to T
                 if (extractionConfig.IsICustomObject)
                 {
-                    //Call api to convert to custom object
-                    var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
-
-                    if(converter is null)
-                    {
-                        string details = $"The object \'{typeof(T)}\' was marked as an element of a custom object set, but no parameter of converter wass passed.";
-                        throw new SetsConfigurationException("Failed to convert object to set.", details);
-                    }
-
-                    //Do the conversion
-                    item = converter(element, extractionConfig);
+                    item = ToCustomObject(fields, extractionConfig);
                 }
                 else
                 {
-                    if ((element == "" || element == " ") && typeof(T) != typeof(string))
-                        continue;//Ignore element
-
-                    string _elem = element;
-
-                    //Trim sting to remove white spaces
-                    if (typeof(T) != typeof(string))
-                        _elem = _elem.Trim();
-
-                    //Convert to the specified type T
-                    item = (T)Convert.ChangeType(_elem, typeof(T));
-                    //uniqueElements.Add(item);
+                    item = ToPrimitiveType(fields[0]);
                 }
 
-                //This contains method uses a binary search algorithm 
-                //-The add method adds the elements in a sorted order
-                //if (!uniqueElements.Contains(item))
-                //    uniqueElements.Add(item);
+                //Check for nullls
                 if (item is not null)
                 {
                     uniqueElements.AddIfUnique(item);
@@ -221,5 +213,55 @@ public class SetTreeExtractor<T>
 
         return uniqueElements;
     }//SortAndRemoveDuplicates
+    private static T? ToPrimitiveType([NotNullIfNotNull("field")]string? field)
+    {
+        //Check if the field is empty first
+        if (field is null)
+            return default(T);
+
+        //Trim sting to remove white spaces
+        if (typeof(T) != typeof(string))
+            field = field.Trim();
+
+        //Convert to the specified type T
+        var item = (T)Convert.ChangeType(field, typeof(T));
+
+        return item;
+    }//ToPrimitiveType
+    private static T? ToCustomObject(string?[] fields,SetExtractionConfiguration extractionConfig)
+    {
+        //Call api to convert to custom object
+        var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
+
+        if (converter is null)
+        {
+            string details = $"The object \'{typeof(T)}\' was marked as an element of a custom object set, but no parameter of converter wass passed.";
+            throw new SetsConfigurationException("Failed to convert object to set.", details);
+        }
+
+        //Do the conversion
+        var item = converter(fields);
+        return item;
+    }
+    private static string?[] GetFields(string element, SetExtractionConfiguration config, out bool isempty)
+    {
+        //Split the string according to it's field terminator
+        string?[] fields = element.Split(config.FieldTerminator);
+
+        //Check if all the fields are empty
+        int countEmptyFields = 0;
+        for (int i = 0; i< fields.Length; i++)
+        {
+            fields[i] = fields[i]?.Trim();
+            if (string.IsNullOrWhiteSpace(fields[i]))
+            {
+                //Replace with a null
+                fields[i] = null;
+                countEmptyFields++;
+            }
+        }
+        isempty = countEmptyFields == fields.Length;
+
+        return fields;
+    }//IsEmptySet
 }//class
- //namespace
