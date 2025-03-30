@@ -44,7 +44,7 @@ public class SetExtractionConfiguration
     /// <summary>
     /// Get a values indicating whether empty cells should be ignored or not.
     /// </summary>
-    public bool IgnoreEmptyFields { get;private set; }
+    public bool IgnoreEmptySets { get;private set; }
     // Constructors
     /// <summary>
     /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with a row terminators. The
@@ -58,7 +58,7 @@ public class SetExtractionConfiguration
         string fieldTerminator = "\t";
         VerifyProperties(fieldTerminator, elementSeperator);
         IsICustomObject = false;
-        IgnoreEmptyFields = true;
+        IgnoreEmptySets = true;
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class SetExtractionConfiguration
     {
         VerifyProperties(fieldTerminator, rowTerminator);
         IsICustomObject = false;
-        IgnoreEmptyFields = true;
+        IgnoreEmptySets = true;
     }
 
     /// <summary>
