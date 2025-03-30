@@ -37,7 +37,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// <summary>
     /// Gets the total number of elements and subsets in the tree.
     /// </summary>
-    public int Count => _elements.Count + _subSets.Count;
+    public int Count => CountRootElements + CountSubsets;
 
     /// <summary>
     /// Gets the configuration used for extracting elements from the set tree.
@@ -50,9 +50,12 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     public int CountRootElements => _elements.Count;
 
     /// <summary>
-    /// Gets the number of subsets in the tree.
+    /// Gets the number of subsets in the tree, including empty set 'Ø'.
     /// </summary>
     public int CountSubsets => _subSets.Count;
+
+    /// <inheritdoc/>
+    public SetTreeInfo TreeInfo { get; private set; }
     #endregion Properties
 
     #region Constructors
@@ -62,6 +65,10 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Create new instances of collection
         this._elements = new SortedElements<T>();
         this._subSets = new SortedSubSets<T>();
+
+        //Create a new instance of NullElements information
+        TreeInfo = new(false,0);
+        TreeInfo.IsEmptyTree = true;
     }//ctor default
     /// <summary>
     /// Initializes a new instance of the <see cref="SetTree{T}"/> class with the specified extraction settings.
@@ -114,6 +121,19 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     }
     #endregion Constructors
 
+    #region Internal Methods
+    internal void WillHaveNullElements(bool hasNulls, int count = 0)
+    {
+        this.TreeInfo.HasNullElements = hasNulls;
+        if (hasNulls)
+            this.TreeInfo.NumberOfNullElements += count;
+        else
+            this.TreeInfo.NumberOfNullElements = 0;
+    }//WillHaveNullElements
+
+    #endregion Internal methods
+
+
     #region Public methods
 
     /// <summary>
@@ -124,6 +144,12 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     {
         //Check for nulls
         ArgumentNullException.ThrowIfNull(element, nameof(element));
+
+        //First check if the set was empty
+        if(this.TreeInfo.IsEmptyTree)
+        {
+            this.TreeInfo.IsEmptyTree = false;
+        }
 
         //Add element if it is unique
         _elements.AddIfUnique(element);
@@ -151,6 +177,13 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     {
         //Check for nulls
         ArgumentNullException.ThrowIfNull(tree, nameof(tree));
+
+        //First check if it is a null set or not
+        if(tree.TreeInfo.IsEmptyTree)
+        {
+            //Add it as a null set
+            WillHaveNullElements(true, 1);
+        }
 
         //Add if unique
         _subSets.AddIfUnique(tree);
@@ -223,6 +256,12 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 
         //Remove element 
         this._elements.RemoveAt(index);
+
+        //Check if the set is empty
+        if(Count == 0)
+        {
+            this.TreeInfo.IsEmptyTree = true;
+        }
         return true;
     }
 
@@ -244,6 +283,12 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 
         //Remove element
         this._subSets.RemoveAt(index);
+
+        //Check if the set is empty
+        if (Count == 0)
+        {
+            this.TreeInfo.IsEmptyTree = true;
+        }
         return true;
     }
 
