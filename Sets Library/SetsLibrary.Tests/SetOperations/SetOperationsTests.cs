@@ -39,7 +39,7 @@ namespace SetsLibrary.Tests
         // Test helper method to create a set with elements
         private IStructuredSet<int> CreateSet(IEnumerable<int> elements)
         {
-            var config = new SetExtractionConfiguration("-", ",");
+            var config = new SetExtractionConfiguration("-", ",", false);
             var set = new StructuredSet<int>(config);
             foreach (var elem in elements)
             {

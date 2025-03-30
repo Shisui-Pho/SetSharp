@@ -14,6 +14,8 @@ namespace SetsLibrary.Tests.Utilities.Extract
             public int CountSubsets { get; set; }
             public SetExtractionConfiguration ExtractionSettings { get; set; }
 
+            public SetTreeInfo TreeInfo => throw new NotImplementedException();
+
             private List<ISetTree<T>> _subsets = new List<ISetTree<T>>();
             private List<T> _elements = new List<T>();
 
