@@ -111,7 +111,7 @@ namespace SetsLibrary.Tests.Models.Sets
             var result = set.BuildStringRepresentation();
 
             // Assert
-            var expected = "{∅}";
+            var expected = "{}";
             Assert.Equal(expected, result);
         }
 
@@ -297,7 +297,7 @@ namespace SetsLibrary.Tests.Models.Sets
             var result = set.BuildStringRepresentation();
 
             // Assert
-            Assert.Equal("{John, Doe,20\n{∅}}", result); // Empty nested set should be ignored
+            Assert.Equal("{John, Doe,20\n{}}", result); // Empty nested set should be ignored
         }
 
         // Test: Multiple Custom Object Converters (Different Field Terminators)

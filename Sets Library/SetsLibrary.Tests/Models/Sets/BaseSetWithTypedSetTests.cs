@@ -114,7 +114,7 @@ namespace SetsLibrary.Tests.Models.Sets
             var baseSet = new TypedSet<int>(expression, _extractionConfig);
 
             baseSet.Clear();
-            Assert.Equal("{\u2205}", baseSet.BuildStringRepresentation()); // Should be empty set
+            Assert.Equal("{}", baseSet.BuildStringRepresentation()); // Should be empty set
             Assert.Equal(0, baseSet.Cardinality); // Cardinality should be 0 after clearing
         }
 
