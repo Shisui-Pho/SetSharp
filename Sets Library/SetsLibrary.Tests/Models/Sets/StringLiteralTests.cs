@@ -40,7 +40,7 @@ namespace SetsLibrary.Tests.Models.Sets
             var stringSet = new StringLiteralSet(_extractionConfig);
 
             Assert.IsType<StringLiteralSet>(stringSet);
-            Assert.Equal("{\u2205}", stringSet.BuildStringRepresentation());  // Assumes the default set string is empty
+            Assert.Equal("{}", stringSet.BuildStringRepresentation());  // Assumes the default set string is empty
         }
 
         // Test for the GetString method
@@ -111,7 +111,7 @@ namespace SetsLibrary.Tests.Models.Sets
 
             var result = stringSet.BuildStringRepresentation();
             stringSet.AddElement("2");
-            Assert.Equal("{\u2205}", result);  // Assuming empty set results in an empty string representation
+            Assert.Equal("{}", result);  // Assuming empty set results in an empty string representation
             Assert.Equal("{2}", stringSet.BuildStringRepresentation());
         }
     }
