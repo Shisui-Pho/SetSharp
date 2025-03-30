@@ -48,20 +48,13 @@ public static class SetTreeUtility<T>
     /// <returns>A string representing the set tree, where subsets are enclosed in curly braces and empty sets are represented as ∅.</returns>
     private static string BuildTree(ISetTree<T> currentTree)
     {
-        string representation = "{";
-        //Get the root elements
-        var root = currentTree.RootElements;
+        if(currentTree.TreeInfo.IsEmptyTree)
+        {
+            return "{}";//Return nothing (Ø)
+        }
 
-        if(currentTree.CountSubsets == 0 && string.IsNullOrEmpty(root))
-        {
-            //This is an empty set
-            representation += "\u2205";
-        }
-        else
-        {
-            //Attach the root elements
-            representation += root;
-        }
+        //Here the tree is none empty(it has something in it)
+        string representation = "{" + currentTree.RootElements; 
 
         //Loop through the subsets
         foreach (var subset in currentTree.GetSubsetsEnumerator())
