@@ -66,13 +66,14 @@ public class SetExtractionConfiguration
     /// </summary>
     /// <param name="fieldTerminator">The string used to separate fields in a record.</param>
     /// <param name="rowTerminator">The string used to separate rows in the data.</param>
+    /// <param name="ignoreEmptyFields">If true, empty sets or null elements will be ignored.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="fieldTerminator"/> or <paramref name="rowTerminator"/> is null.</exception>
     /// <exception cref="SetsConfigurationException">Thrown if <paramref name="fieldTerminator"/> is the same as <paramref name="rowTerminator"/> or if they contain reserved characters.</exception>
     public SetExtractionConfiguration(string fieldTerminator, string rowTerminator, bool ignoreEmptyFields = true)
     {
         VerifyProperties(fieldTerminator, rowTerminator);
         IsICustomObject = false;
-        IgnoreEmptySets = true;
+        IgnoreEmptySets = ignoreEmptyFields;
     }
 
     /// <summary>
