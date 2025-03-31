@@ -25,7 +25,7 @@ internal class CustomSetExtractionConfiguration<TObject> : SetExtractionConfigur
         IsICustomObject = true;
     }
     /// <inheritdoc/>
-    public CustomSetExtractionConfiguration(string fieldTerminator, string rowTerminator) : base(fieldTerminator, rowTerminator)
+    public CustomSetExtractionConfiguration(string fieldTerminator, string rowTerminator, bool ignoreEmptySets) : base(fieldTerminator, rowTerminator,ignoreEmptySets)
     {
         IsICustomObject = true;
     }

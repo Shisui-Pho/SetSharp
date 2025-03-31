@@ -54,7 +54,13 @@ public static class SetTreeUtility<T>
         }
 
         //Here the tree is none empty(it has something in it)
-        string representation = "{" + currentTree.RootElements; 
+        string representation = "{";
+
+        //Check for empty sets
+        if (currentTree.TreeInfo.HasNullElements && !currentTree.ExtractionSettings.IgnoreEmptySets)
+            representation += "{}" + currentTree.ExtractionSettings.RowTerminator;
+        
+         representation += currentTree.RootElements; 
 
         //Loop through the subsets
         foreach (var subset in currentTree.GetSubsetsEnumerator())
