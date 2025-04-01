@@ -37,7 +37,7 @@ public class SetTreeBuilder<T>
     /// <param name="expression">The string representation of the set expression to extract into a set tree.</param>
     /// <param name="extractionConfig">The configuration used for extracting the set, including terminators and optional custom object conversion.</param>
     /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
-    public static ISetTree<T> Extract(string expression, SetExtractionConfiguration extractionConfig)
+    public static ISetTree<T> BuildSetTree(string expression, SetExtractionConfiguration extractionConfig)
     {
         // Remove the first and last brace if they exist
         if (expression.StartsWith("{") && expression.EndsWith("}"))
@@ -59,17 +59,17 @@ public class SetTreeBuilder<T>
         var subsets = ExtractSubsets(expression,extractionConfig.RowTerminator.Length,out string root);
 
         // Create the root tree with the remaining elements after removing subsets
-        ISetTree<T> tree = Extract(root, extractionConfig);
+        ISetTree<T> tree = BuildSetTree(root, extractionConfig);
 
         // Add all subsets as subtrees
         while (subsets.Count > 0)
         {
             string ex = subsets.Pop();
-            tree.AddSubSetTree(Extract(ex, extractionConfig));
+            tree.AddSubSetTree(BuildSetTree(ex, extractionConfig));
         }
 
         return tree;
-    }//Extract
+    }//BuildSetTree
     private static Stack<string> ExtractSubsets(string expression,int lenRowTerminator ,out string rootElements)
     {
         //Here the first braces have been removed 

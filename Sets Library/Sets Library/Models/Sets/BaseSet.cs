@@ -151,7 +151,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Assign the configurations
         this.ExtractionConfiguration = ModifyConfigurations(config);
-        // Extract the set tree from the provided expression and configuration
+        // BuildSetTree the set tree from the provided expression and configuration
         _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
 
         // Assign the original expression after extraction
@@ -192,10 +192,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check if the string is null, empty, or contains only whitespace
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
-        //Extract and return the set tree from the expression using the extraction configuration
+        //BuildSetTree and return the set tree from the expression using the extraction configuration
         try
         {
-            return SetTreeBuilder<T>.Extract(expression, ExtractionConfiguration);
+            return SetTreeBuilder<T>.BuildSetTree(expression, ExtractionConfiguration);
         }
         catch (SetsException ex)
         {
@@ -271,7 +271,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check if null
         ArgumentNullException.ThrowIfNull(subset, nameof(subset));
 
-        //Extract the tree
+        //BuildSetTree the tree
         var tree = Extractions(subset);
 
         var indexedTree = BuildNewSet(new SetTreeWrapper<T>(tree));

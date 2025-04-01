@@ -62,7 +62,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
                 => 5;
         }
 
-        // Test to validate the basic Extract functionality with simple set expressions
+        // Test to validate the basic BuildSetTree functionality with simple set expressions
         [Fact]
         public void Extract_ValidSimpleSetExpression()
         {
@@ -72,7 +72,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.BuildSetTree(expression, config);
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
@@ -91,7 +91,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.BuildSetTree(expression, config);
 
             // Assert
             Assert.Equal("", tree.RootElements);
@@ -110,7 +110,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.BuildSetTree(expression, config);
 
             // Assert for the root elements
             Assert.Equal("1,2", tree.RootElements);
@@ -135,7 +135,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.BuildSetTree(expression, config);
 
             // Assert for the root elements
             Assert.Equal("1,2", tree.RootElements);
@@ -166,7 +166,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.BuildSetTree(expression, config);
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
@@ -183,14 +183,14 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.BuildSetTree(expression, config);
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
             Assert.Equal(3, tree.Count);
         }
 
-        // Theory Test: Extract various sets with different configurations
+        // Theory Test: BuildSetTree various sets with different configurations
         [Theory]
         [InlineData("{1,2,3}", "1,2,3", 3, 3, 0)]
         [InlineData("{1,2,{3,4}}", "1,2", 3, 2, 1)]
@@ -203,7 +203,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             SetTreeBuilder<string> extractor = new SetTreeBuilder<string>();
 
             // Act
-            ISetTree<string> tree = SetTreeBuilder<string>.Extract(input, config);
+            ISetTree<string> tree = SetTreeBuilder<string>.BuildSetTree(input, config);
 
             // Assert
             Assert.Equal(expectedRootElements, tree.RootElements);
