@@ -56,7 +56,7 @@ public class SetTreeExtractor<T>
         }
 
         //Get the subsets
-        var subsets = ExtractSubsets(expression, out string root);
+        var subsets = ExtractSubsets(expression,extractionConfig.RowTerminator.Length,out string root);
 
         // Create the root tree with the remaining elements after removing subsets
         ISetTree<T> tree = Extract(root, extractionConfig);
@@ -70,7 +70,7 @@ public class SetTreeExtractor<T>
 
         return tree;
     }//Extract
-    private static Stack<string> ExtractSubsets(string expression, out string rootElements)
+    private static Stack<string> ExtractSubsets(string expression,int lenRowTerminator ,out string rootElements)
     {
         //Here the first braces have been removed 
         Stack<string> subsets = [];
@@ -123,6 +123,12 @@ public class SetTreeExtractor<T>
 
                     //Reset the subset 
                     _subSet.Clear();
+
+                    //Skip the next row terminator
+                    i += lenRowTerminator;
+
+                    //Remove the previouse terminator from the root if it exists
+                    _roots = RemoveLastTerminator(_roots, lenRowTerminator, i < expression.Length);
                 }
 
                 //Move to the next character
@@ -150,6 +156,18 @@ public class SetTreeExtractor<T>
         rootElements = _roots.ToString();
         return subsets;
     }//ExtractSubSets
+
+    private static StringBuilder RemoveLastTerminator(StringBuilder roots, int lenRowTerminator, bool isEndOfExpression)
+    {
+        if (lenRowTerminator > roots.Length || isEndOfExpression)
+            return roots;
+
+        //Remove the last trailing row terminator
+        roots = roots.Remove(roots.Length - lenRowTerminator, lenRowTerminator);
+
+        return roots;
+    }//RemoveLastTerminator
+
     /// <summary>
     /// Sorts the root elements and removes duplicates, ensuring that the set only contains unique elements.
     /// </summary>
@@ -174,7 +192,7 @@ public class SetTreeExtractor<T>
             if (isEmptySet)
             {
                 //Ignore the set/element
-                hasAnEmptySet = extractionConfig.IgnoreEmptySets ? true : false;
+                hasAnEmptySet = true;
                 countEmptySets += 1;
                 continue;
             }
