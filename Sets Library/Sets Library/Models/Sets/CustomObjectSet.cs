@@ -67,7 +67,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     protected sealed override SetsConfigurations ModifyConfigurations(SetsConfigurations config)
     {
         //Here we create a new instance of the Extraction settings using the properties we had
-        var configNew = new CustomSetExtractionConfiguration<T>(config.FieldTerminator, config.RowTerminator,config.IgnoreEmptySets);
+        var configNew = new CustomSetsConfigurations<T>(config.FieldTerminator, config.RowTerminator,config.IgnoreEmptySets);
         //Set the method for converting
         configNew.Funct_ToObject = ToObject;
         //Ovverride the base configuration with the new one

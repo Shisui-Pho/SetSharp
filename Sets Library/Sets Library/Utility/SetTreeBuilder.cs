@@ -249,7 +249,7 @@ public class SetTreeBuilder<T>
     private static T? ToCustomObject(string?[] fields,SetsConfigurations extractionConfig)
     {
         //Call api to convert to custom object
-        var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
+        var converter = ((CustomSetsConfigurations<T>)extractionConfig).Funct_ToObject;
 
         if (converter is null)
         {
