@@ -192,7 +192,7 @@ public class SetTreeExtractor<T>
             if (isEmptySet)
             {
                 //Ignore the set/element
-                hasAnEmptySet = extractionConfig.IgnoreEmptySets ? true : false;
+                hasAnEmptySet = true;
                 countEmptySets += 1;
                 continue;
             }
