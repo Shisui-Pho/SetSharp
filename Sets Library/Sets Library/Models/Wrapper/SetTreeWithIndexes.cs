@@ -1,10 +1,10 @@
 ﻿/*
- * File: SetTreeWrapper.cs
+ * File: SetTreeWithIndexes.cs
  * Author: Phiwokwakhe Khathwane
  * Date: 24 November 2024
  * 
  * Description:
- * Defines the SetTreeWrapper class, a wrapper around the SetTree class that extends its functionality
+ * Defines the SetTreeWithIndexes class, a wrapper around the SetTree class that extends its functionality
  * to allow access to elements and subsets by index, and provides a method to clear the internal elements 
  * and subsets directly. It also includes checks for index bounds and handles cases where the internal 
  * SetTree structure is not available.
@@ -22,18 +22,18 @@ namespace SetsLibrary;
 /// and subsets by index and allows clearing internal elements and subsets directly.
 /// </summary>
 /// <typeparam name="T">The type of the elements in the set. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SetTreeWrapper<T> : BaseSetTreeWithIndexes<T>
+public class SetTreeWithIndexes<T> : BaseSetTreeWithIndexes<T>
     where T : IComparable<T>
 {
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetTreeWrapper{T}"/> class.
+    /// Initializes a new instance of the <see cref="SetTreeWithIndexes{T}"/> class.
     /// </summary>
     /// <param name="setTree">The SetTree instance to wrap.</param>
-    public SetTreeWrapper(ISetTree<T> setTree) : base(setTree)
+    public SetTreeWithIndexes(ISetTree<T> setTree) : base(setTree)
     {
     }
-    internal SetTreeWrapper(SetsConfigurations config) : base(config) { }
+    internal SetTreeWithIndexes(SetsConfigurations config) : base(config) { }
     /// <summary>
     /// Gets the root element at the specified index.
     /// </summary>

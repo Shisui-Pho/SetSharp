@@ -128,8 +128,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Set the extraction configuration
         this.ExtractionConfiguration = ModifyConfigurations(extractionConfiguration);
-        // Create a new instance of SetTreeWrapper using the provided configuration
-        _treeWrapper = new SetTreeWrapper<T>(extractionConfiguration);
+        // Create a new instance of SetTreeWithIndexes using the provided configuration
+        _treeWrapper = new SetTreeWithIndexes<T>(extractionConfiguration);
     } // Default constructor (uses SetsConfigurations)
 
     /// <summary>
@@ -152,7 +152,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Assign the configurations
         this.ExtractionConfiguration = ModifyConfigurations(config);
         // BuildSetTree the set tree from the provided expression and configuration
-        _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
+        _treeWrapper = new SetTreeWithIndexes<T>(Extractions(expression));
 
         // Assign the original expression after extraction
         OriginalExpression = expression;
@@ -274,7 +274,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //BuildSetTree the tree
         var tree = Extractions(subset);
 
-        var indexedTree = BuildNewSet(new SetTreeWrapper<T>(tree));
+        var indexedTree = BuildNewSet(new SetTreeWithIndexes<T>(tree));
         //Add the tree
         this.AddElement(indexedTree);
     }//AddSubsetAsString
@@ -502,7 +502,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     {
         foreach (var item in _treeWrapper.GetSubsetsEnumerator())
         {
-            yield return BuildNewSet(new SetTreeWrapper<T>(item));
+            yield return BuildNewSet(new SetTreeWithIndexes<T>(item));
         }
     }//EnumerateSubsets
 
@@ -574,7 +574,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             ArgumentNullException.ThrowIfNull(sub, nameof(sub));
 
             //Make sub element a set
-            var _subSet = BuildNewSet(new SetTreeWrapper<T>(sub));
+            var _subSet = BuildNewSet(new SetTreeWithIndexes<T>(sub));
             if (!setB.Contains(_subSet))
                 newSet.AddElement(_subSet);
         }//end for 
