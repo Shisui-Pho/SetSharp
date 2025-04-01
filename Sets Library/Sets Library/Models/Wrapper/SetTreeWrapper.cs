@@ -22,7 +22,7 @@ namespace SetsLibrary;
 /// and subsets by index and allows clearing internal elements and subsets directly.
 /// </summary>
 /// <typeparam name="T">The type of the elements in the set. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
+public class SetTreeWrapper<T> : BaseSetTreeWithIndexes<T>
     where T : IComparable<T>
 {
 
