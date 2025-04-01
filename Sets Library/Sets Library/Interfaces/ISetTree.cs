@@ -62,9 +62,9 @@ public interface ISetTree<T> : IComparable<ISetTree<T>>
     /// Gets the set extraction settings associated with the current set.
     /// </summary>
     /// <value>
-    /// The <see cref="SetExtractionConfiguration"/> settings for extracting the set.
+    /// The <see cref="SetsConfigurations"/> settings for extracting the set.
     /// </value>
-    SetExtractionConfiguration ExtractionSettings { get; }
+    SetsConfigurations ExtractionSettings { get; }
 
     /// <summary>
     /// Gets the information of the null elements in the root of the set. All null elements

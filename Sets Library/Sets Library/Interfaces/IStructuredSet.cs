@@ -41,7 +41,7 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// <summary>
     /// Gets the current settings for extracting elements from the set.
     /// </summary>
-    SetExtractionConfiguration ExtractionConfiguration { get; }
+    SetsConfigurations ExtractionConfiguration { get; }
 
     /// <summary>
     /// Adds an element to the set. If the element already exists, it will not be added.

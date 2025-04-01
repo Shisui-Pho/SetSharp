@@ -177,7 +177,7 @@ namespace SetsLibrary.Extensions
             try
             {
                 // Create an instance of indexed tree
-                var indexedTree = new SetTreeWrapper<T>(tree);
+                var indexedTree = new SetTreeWithIndexes<T>(tree);
 
                 // Generate the structured set
                 return generateSetFunct(indexedTree);
@@ -205,7 +205,7 @@ namespace SetsLibrary.Extensions
             try
             {
                 // Create the indexed tree
-                var indexedTree = new SetTreeWrapper<T>(tree);
+                var indexedTree = new SetTreeWithIndexes<T>(tree);
 
                 // Return a new typed set
                 return new TypedSet<T>(indexedTree);
@@ -233,7 +233,7 @@ namespace SetsLibrary.Extensions
             try
             {
                 // Clone the configurations
-                var config = new SetExtractionConfiguration(tree.ExtractionSettings.FieldTerminator, tree.ExtractionSettings.RowTerminator);
+                var config = new SetsConfigurations(tree.ExtractionSettings.FieldTerminator, tree.ExtractionSettings.RowTerminator);
 
                 // Get the string representation
                 var expression = tree.ToString();

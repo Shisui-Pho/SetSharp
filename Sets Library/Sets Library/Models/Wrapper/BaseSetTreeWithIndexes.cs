@@ -1,10 +1,10 @@
 ﻿/*
- * File: SetTreeBaseWrapper.cs
+ * File: BaseSetTreeWithIndexes.cs
  * Author: [Your Name]
  * Date: [Current Date]
  * 
  * Description:
- * Defines the SetTreeBaseWrapper class, which serves as a base wrapper for SetTree instances, providing 
+ * Defines the BaseSetTreeWithIndexes class, which serves as a base wrapper for SetTree instances, providing 
  * basic functionality such as adding elements, getting enumerators for root elements and subsets, 
  * and removing elements. This class ensures that all required methods for interacting with SetTree 
  * are properly delegated to the underlying SetTree instance.
@@ -22,7 +22,7 @@ namespace SetsLibrary;
 /// </summary>
 /// <typeparam name="T">The type of the elements in the set. This type must implement <see cref="IComparable{T}"/>.</typeparam>
 #pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
-public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
+public abstract class BaseSetTreeWithIndexes<T> : IIndexedSetTree<T>
 #pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
     where T : IComparable<T>
 {
@@ -32,17 +32,17 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
     protected readonly ISetTree<T> setTree;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetTreeBaseWrapper{T}"/> class.
+    /// Initializes a new instance of the <see cref="BaseSetTreeWithIndexes{T}"/> class.
     /// </summary>
     /// <param name="setTree">The SetTree instance to wrap.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="setTree"/> is <c>null</c>.</exception>
-    public SetTreeBaseWrapper(ISetTree<T> setTree)
+    public BaseSetTreeWithIndexes(ISetTree<T> setTree)
     {
         // Check for nulls
         ArgumentNullException.ThrowIfNull(setTree, nameof(setTree));
         this.setTree = setTree;
     }
-    internal SetTreeBaseWrapper(SetExtractionConfiguration config)
+    internal BaseSetTreeWithIndexes(SetsConfigurations config)
     {
         //Creates a new instance of the set tree
         setTree = new SetTree<T>(config);
@@ -71,7 +71,7 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
     /// <summary>
     /// Gets the extraction settings for the set.
     /// </summary>
-    public SetExtractionConfiguration ExtractionSettings => setTree.ExtractionSettings;
+    public SetsConfigurations ExtractionSettings => setTree.ExtractionSettings;
     ///<inheritdoc/>
     public SetTreeInfo TreeInfo => setTree.TreeInfo;
 

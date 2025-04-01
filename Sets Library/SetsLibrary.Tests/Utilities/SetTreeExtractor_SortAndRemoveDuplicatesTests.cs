@@ -3,10 +3,10 @@ using Xunit;
 namespace SetsLibrary.Tests.Utilities.SortAndRemove;
 public class SortAndRemoveDuplicatesTests
 {
-    // Helper method to create SetExtractionConfiguration for testing
-    private SetExtractionConfiguration CreateIntConfig()
+    // Helper method to create SetsConfigurations for testing
+    private SetsConfigurations CreateIntConfig()
     {
-        return new SetExtractionConfiguration(";", ",");
+        return new SetsConfigurations(";", ",");
     }
 
     [Fact]
@@ -17,7 +17,7 @@ public class SortAndRemoveDuplicatesTests
         var config = CreateIntConfig();
 
         // Act
-        var result = SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
+        var result = SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
 
         // Assert
         Assert.Equal(3, result.Count);
@@ -34,7 +34,7 @@ public class SortAndRemoveDuplicatesTests
         var config = CreateIntConfig();
 
         // Act
-        var result = SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out bool _, out int _).ToList();
+        var result = SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out bool _, out int _).ToList();
 
         // Assert
         Assert.Empty(result);
@@ -49,7 +49,7 @@ public class SortAndRemoveDuplicatesTests
 
         // Act & Assert
         Assert.Throws<SetsException>(() =>
-            SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList());
+            SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList());
     }
 
     [Fact]
@@ -57,12 +57,12 @@ public class SortAndRemoveDuplicatesTests
     {
         // Arrange
         var customConverter = new CustomStringToIntConverter();
-        var config = new SetExtractionConfiguration(",", ";");
+        var config = new SetsConfigurations(",", ";");
 
         string input = "10;5;3;5;10";
 
         // Act
-        var result = SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
+        var result = SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
 
         // Assert
         Assert.Equal(3, result.Count);
@@ -76,13 +76,13 @@ public class SortAndRemoveDuplicatesTests
     {
         // Arrange
         var invalidCustomConverter = new InvalidCustomConverter();
-        var config = new SetExtractionConfiguration(";", ",");
+        var config = new SetsConfigurations(";", ",");
 
         string input = "invalid,values";
 
         // Act & Assert
         Assert.Throws<SetsException>(() =>
-            SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList());
+            SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList());
     }
 
     [Fact]
@@ -90,8 +90,8 @@ public class SortAndRemoveDuplicatesTests
     {
         // Test with strings
         string stringInput = "apple,banana,apple,grape";
-        var stringConfig = new SetExtractionConfiguration(";", ",");
-        var stringResult = SetTreeExtractor<string>.SortAndRemoveDuplicates(stringInput, stringConfig, out _, out _ ).ToList();
+        var stringConfig = new SetsConfigurations(";", ",");
+        var stringResult = SetTreeBuilder<string>.SortAndRemoveDuplicates(stringInput, stringConfig, out _, out _ ).ToList();
         Assert.Equal(3, stringResult.Count);
         Assert.Equal("apple", stringResult[0]);
         Assert.Equal("banana", stringResult[1]);
@@ -100,7 +100,7 @@ public class SortAndRemoveDuplicatesTests
         // Test with integers
         string intInput = "10,5,5,10,20";
         var intConfig = CreateIntConfig();
-        var intResult = SetTreeExtractor<int>.SortAndRemoveDuplicates(intInput, intConfig, out _, out _).ToList();
+        var intResult = SetTreeBuilder<int>.SortAndRemoveDuplicates(intInput, intConfig, out _, out _).ToList();
         Assert.Equal(3, intResult.Count);
         Assert.Equal(5, intResult[0]);
         Assert.Equal(10, intResult[1]);
@@ -117,7 +117,7 @@ public class SortAndRemoveDuplicatesTests
         var config = CreateIntConfig();
 
         // Act
-        var result = SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
+        var result = SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
 
         // Assert
         Assert.Single(result);
@@ -132,7 +132,7 @@ public class SortAndRemoveDuplicatesTests
         var config = CreateIntConfig();
 
         // Act
-        var result = SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
+        var result = SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -153,7 +153,7 @@ public class SortAndRemoveDuplicatesTests
         var config = CreateIntConfig();
 
         // Act
-        var result = SetTreeExtractor<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
+        var result = SetTreeBuilder<int>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
 
         // Assert
         Assert.Equal(expectedCount, result.Count);
@@ -167,10 +167,10 @@ public class SortAndRemoveDuplicatesTests
     public void SortAndRemoveDuplicates_StringTheoryTests(string input, int expectedCount, string[] expectedResult)
     {
         // Arrange
-        var config = new SetExtractionConfiguration(";", ",");
+        var config = new SetsConfigurations(";", ",");
 
         // Act
-        var result = SetTreeExtractor<string>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
+        var result = SetTreeBuilder<string>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();
 
         // Assert
         Assert.Equal(expectedCount, result.Count);

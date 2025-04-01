@@ -1,10 +1,10 @@
 ﻿/*
- * File: SetTreeExtractor.cs
+ * File: SetTreeBuilder.cs
  * Author: Phiwokwakhe Khathwane
  * Date: 29 March 2025
  * 
  * Description:
- * This file contains the definition of the SetTreeExtractor class, which provides utility methods 
+ * This file contains the definition of the SetTreeBuilder class, which provides utility methods 
  * for extracting a set tree from a string expression based on a specified configuration. The class 
  * handles parsing set expressions, removing duplicates, and sorting elements, while also supporting 
  * the extraction of nested subsets to construct a complete set tree structure.
@@ -28,7 +28,7 @@ namespace SetsLibrary.Utility;
 /// Provides utility methods to extract a set tree from a string expression and configuration.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set tree. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SetTreeExtractor<T>
+public class SetTreeBuilder<T>
     where T : IComparable<T>
 {
     /// <summary>
@@ -37,7 +37,7 @@ public class SetTreeExtractor<T>
     /// <param name="expression">The string representation of the set expression to extract into a set tree.</param>
     /// <param name="extractionConfig">The configuration used for extracting the set, including terminators and optional custom object conversion.</param>
     /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
-    public static ISetTree<T> Extract(string expression, SetExtractionConfiguration extractionConfig)
+    public static ISetTree<T> BuildSetTree(string expression, SetsConfigurations extractionConfig)
     {
         // Remove the first and last brace if they exist
         if (expression.StartsWith("{") && expression.EndsWith("}"))
@@ -59,17 +59,17 @@ public class SetTreeExtractor<T>
         var subsets = ExtractSubsets(expression,extractionConfig.RowTerminator.Length,out string root);
 
         // Create the root tree with the remaining elements after removing subsets
-        ISetTree<T> tree = Extract(root, extractionConfig);
+        ISetTree<T> tree = BuildSetTree(root, extractionConfig);
 
         // Add all subsets as subtrees
         while (subsets.Count > 0)
         {
             string ex = subsets.Pop();
-            tree.AddSubSetTree(Extract(ex, extractionConfig));
+            tree.AddSubSetTree(BuildSetTree(ex, extractionConfig));
         }
 
         return tree;
-    }//Extract
+    }//BuildSetTree
     private static Stack<string> ExtractSubsets(string expression,int lenRowTerminator ,out string rootElements)
     {
         //Here the first braces have been removed 
@@ -174,7 +174,7 @@ public class SetTreeExtractor<T>
     /// <param name="rootElements">A string representing the root elements to be processed.</param>
     /// <param name="extractionConfig">The configuration that specifies terminators and custom object converters.</param>
     /// <returns>An <see cref="IEnumerable{T}"/> containing the sorted and unique root elements.</returns>
-    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
+    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetsConfigurations extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
     {
         hasAnEmptySet = false;
         countEmptySets = 0;
@@ -246,10 +246,10 @@ public class SetTreeExtractor<T>
 
         return item;
     }//ToPrimitiveType
-    private static T? ToCustomObject(string?[] fields,SetExtractionConfiguration extractionConfig)
+    private static T? ToCustomObject(string?[] fields,SetsConfigurations extractionConfig)
     {
         //Call api to convert to custom object
-        var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
+        var converter = ((CustomSetsConfigurations<T>)extractionConfig).Funct_ToObject;
 
         if (converter is null)
         {
@@ -261,7 +261,7 @@ public class SetTreeExtractor<T>
         var item = converter(fields);
         return item;
     }
-    private static string?[] GetFields(string element, SetExtractionConfiguration config, out bool isempty)
+    private static string?[] GetFields(string element, SetsConfigurations config, out bool isempty)
     {
         //Split the string according to it's field terminator
         string?[] fields = element.Split(config.FieldTerminator);

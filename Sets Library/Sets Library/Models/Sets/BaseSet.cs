@@ -108,7 +108,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <summary>
     /// Gets the current settings of the set extractor.
     /// </summary>
-    public SetExtractionConfiguration ExtractionConfiguration { get; private set; }
+    public SetsConfigurations ExtractionConfiguration { get; private set; }
 
     #endregion Properties
 
@@ -121,16 +121,16 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="extractionConfiguration"/> is null.</exception>
-    public BaseSet(SetExtractionConfiguration extractionConfiguration)
+    public BaseSet(SetsConfigurations extractionConfiguration)
     {
         // Ensure the extraction configuration is not null, as it is required for proper set extraction
         ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
 
         // Set the extraction configuration
         this.ExtractionConfiguration = ModifyConfigurations(extractionConfiguration);
-        // Create a new instance of SetTreeWrapper using the provided configuration
-        _treeWrapper = new SetTreeWrapper<T>(extractionConfiguration);
-    } // Default constructor (uses SetExtractionConfiguration)
+        // Create a new instance of SetTreeWithIndexes using the provided configuration
+        _treeWrapper = new SetTreeWithIndexes<T>(extractionConfiguration);
+    } // Default constructor (uses SetsConfigurations)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class with the specified string expression 
@@ -141,7 +141,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="config"/> is null.</exception>
     /// <exception cref="ArgumentException">Thrown if <paramref name="expression"/> is null or whitespace.</exception>
-    public BaseSet(string expression, SetExtractionConfiguration config)
+    public BaseSet(string expression, SetsConfigurations config)
     {
         // Ensure the configuration is not null, as it is needed to extract elements and subsets from the expression
         ArgumentNullException.ThrowIfNull(config, nameof(config));
@@ -151,12 +151,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
 
         // Assign the configurations
         this.ExtractionConfiguration = ModifyConfigurations(config);
-        // Extract the set tree from the provided expression and configuration
-        _treeWrapper = new SetTreeWrapper<T>(Extractions(expression));
+        // BuildSetTree the set tree from the provided expression and configuration
+        _treeWrapper = new SetTreeWithIndexes<T>(Extractions(expression));
 
         // Assign the original expression after extraction
         OriginalExpression = expression;
-    } // Constructor 1 (accepts expression and SetExtractionConfiguration)
+    } // Constructor 1 (accepts expression and SetsConfigurations)
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseSet{T}"/> class by injecting an existing instance of IIndexedSetTree.
@@ -192,10 +192,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check if the string is null, empty, or contains only whitespace
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
-        //Extract and return the set tree from the expression using the extraction configuration
+        //BuildSetTree and return the set tree from the expression using the extraction configuration
         try
         {
-            return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
+            return SetTreeBuilder<T>.BuildSetTree(expression, ExtractionConfiguration);
         }
         catch (SetsException ex)
         {
@@ -207,7 +207,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// Checks if the current instance is a custom object set.
     /// </summary>
     /// <returns>True if it is a custom object set.</returns>
-    protected virtual SetExtractionConfiguration ModifyConfigurations(SetExtractionConfiguration config)
+    protected virtual SetsConfigurations ModifyConfigurations(SetsConfigurations config)
     {
         //If there are no ovverides, return the configurations
         return config;
@@ -271,10 +271,10 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check if null
         ArgumentNullException.ThrowIfNull(subset, nameof(subset));
 
-        //Extract the tree
+        //BuildSetTree the tree
         var tree = Extractions(subset);
 
-        var indexedTree = BuildNewSet(new SetTreeWrapper<T>(tree));
+        var indexedTree = BuildNewSet(new SetTreeWithIndexes<T>(tree));
         //Add the tree
         this.AddElement(indexedTree);
     }//AddSubsetAsString
@@ -502,7 +502,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     {
         foreach (var item in _treeWrapper.GetSubsetsEnumerator())
         {
-            yield return BuildNewSet(new SetTreeWrapper<T>(item));
+            yield return BuildNewSet(new SetTreeWithIndexes<T>(item));
         }
     }//EnumerateSubsets
 
@@ -574,7 +574,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             ArgumentNullException.ThrowIfNull(sub, nameof(sub));
 
             //Make sub element a set
-            var _subSet = BuildNewSet(new SetTreeWrapper<T>(sub));
+            var _subSet = BuildNewSet(new SetTreeWithIndexes<T>(sub));
             if (!setB.Contains(_subSet))
                 newSet.AddElement(_subSet);
         }//end for 

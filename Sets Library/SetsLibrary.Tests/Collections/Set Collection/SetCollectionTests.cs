@@ -5,7 +5,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
 {
     public class SetCollectionTests
     {
-        private static readonly SetExtractionConfiguration settings = new SetExtractionConfiguration(";", ",");
+        private static readonly SetsConfigurations settings = new SetsConfigurations(";", ",");
 
         [Fact]
         public void Count_ReturnsZero_WhenCollectionIsEmpty()
