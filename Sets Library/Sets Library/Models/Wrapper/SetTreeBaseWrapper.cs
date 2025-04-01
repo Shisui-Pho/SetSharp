@@ -42,7 +42,7 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
         ArgumentNullException.ThrowIfNull(setTree, nameof(setTree));
         this.setTree = setTree;
     }
-    internal SetTreeBaseWrapper(SetExtractionConfiguration config)
+    internal SetTreeBaseWrapper(SetsConfigurations config)
     {
         //Creates a new instance of the set tree
         setTree = new SetTree<T>(config);
@@ -71,7 +71,7 @@ public abstract class SetTreeBaseWrapper<T> : IIndexedSetTree<T>
     /// <summary>
     /// Gets the extraction settings for the set.
     /// </summary>
-    public SetExtractionConfiguration ExtractionSettings => setTree.ExtractionSettings;
+    public SetsConfigurations ExtractionSettings => setTree.ExtractionSettings;
     ///<inheritdoc/>
     public SetTreeInfo TreeInfo => setTree.TreeInfo;
 

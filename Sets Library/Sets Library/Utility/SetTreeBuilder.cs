@@ -37,7 +37,7 @@ public class SetTreeBuilder<T>
     /// <param name="expression">The string representation of the set expression to extract into a set tree.</param>
     /// <param name="extractionConfig">The configuration used for extracting the set, including terminators and optional custom object conversion.</param>
     /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
-    public static ISetTree<T> BuildSetTree(string expression, SetExtractionConfiguration extractionConfig)
+    public static ISetTree<T> BuildSetTree(string expression, SetsConfigurations extractionConfig)
     {
         // Remove the first and last brace if they exist
         if (expression.StartsWith("{") && expression.EndsWith("}"))
@@ -174,7 +174,7 @@ public class SetTreeBuilder<T>
     /// <param name="rootElements">A string representing the root elements to be processed.</param>
     /// <param name="extractionConfig">The configuration that specifies terminators and custom object converters.</param>
     /// <returns>An <see cref="IEnumerable{T}"/> containing the sorted and unique root elements.</returns>
-    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetExtractionConfiguration extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
+    public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetsConfigurations extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
     {
         hasAnEmptySet = false;
         countEmptySets = 0;
@@ -246,7 +246,7 @@ public class SetTreeBuilder<T>
 
         return item;
     }//ToPrimitiveType
-    private static T? ToCustomObject(string?[] fields,SetExtractionConfiguration extractionConfig)
+    private static T? ToCustomObject(string?[] fields,SetsConfigurations extractionConfig)
     {
         //Call api to convert to custom object
         var converter = ((CustomSetExtractionConfiguration<T>)extractionConfig).Funct_ToObject;
@@ -261,7 +261,7 @@ public class SetTreeBuilder<T>
         var item = converter(fields);
         return item;
     }
-    private static string?[] GetFields(string element, SetExtractionConfiguration config, out bool isempty)
+    private static string?[] GetFields(string element, SetsConfigurations config, out bool isempty)
     {
         //Split the string according to it's field terminator
         string?[] fields = element.Split(config.FieldTerminator);

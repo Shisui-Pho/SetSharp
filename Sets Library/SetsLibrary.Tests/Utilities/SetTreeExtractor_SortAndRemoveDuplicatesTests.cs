@@ -3,10 +3,10 @@ using Xunit;
 namespace SetsLibrary.Tests.Utilities.SortAndRemove;
 public class SortAndRemoveDuplicatesTests
 {
-    // Helper method to create SetExtractionConfiguration for testing
-    private SetExtractionConfiguration CreateIntConfig()
+    // Helper method to create SetsConfigurations for testing
+    private SetsConfigurations CreateIntConfig()
     {
-        return new SetExtractionConfiguration(";", ",");
+        return new SetsConfigurations(";", ",");
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class SortAndRemoveDuplicatesTests
     {
         // Arrange
         var customConverter = new CustomStringToIntConverter();
-        var config = new SetExtractionConfiguration(",", ";");
+        var config = new SetsConfigurations(",", ";");
 
         string input = "10;5;3;5;10";
 
@@ -76,7 +76,7 @@ public class SortAndRemoveDuplicatesTests
     {
         // Arrange
         var invalidCustomConverter = new InvalidCustomConverter();
-        var config = new SetExtractionConfiguration(";", ",");
+        var config = new SetsConfigurations(";", ",");
 
         string input = "invalid,values";
 
@@ -90,7 +90,7 @@ public class SortAndRemoveDuplicatesTests
     {
         // Test with strings
         string stringInput = "apple,banana,apple,grape";
-        var stringConfig = new SetExtractionConfiguration(";", ",");
+        var stringConfig = new SetsConfigurations(";", ",");
         var stringResult = SetTreeBuilder<string>.SortAndRemoveDuplicates(stringInput, stringConfig, out _, out _ ).ToList();
         Assert.Equal(3, stringResult.Count);
         Assert.Equal("apple", stringResult[0]);
@@ -167,7 +167,7 @@ public class SortAndRemoveDuplicatesTests
     public void SortAndRemoveDuplicates_StringTheoryTests(string input, int expectedCount, string[] expectedResult)
     {
         // Arrange
-        var config = new SetExtractionConfiguration(";", ",");
+        var config = new SetsConfigurations(";", ",");
 
         // Act
         var result = SetTreeBuilder<string>.SortAndRemoveDuplicates(input, config, out _, out _).ToList();

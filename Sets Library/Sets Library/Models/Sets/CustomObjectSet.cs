@@ -32,7 +32,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// Initializes a new instance of the <see cref="CustomObjectSet{T}"/> class with the specified extraction configuration.
     /// </summary>
     /// <param name="extractionConfiguration">The configuration to be used for extracting set elements and subsets.</param>
-    public CustomObjectSet(SetExtractionConfiguration extractionConfiguration)
+    public CustomObjectSet(SetsConfigurations extractionConfiguration)
         : base(extractionConfiguration)
     {
     }
@@ -42,7 +42,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// </summary>
     /// <param name="expression">The string representation of the set expression.</param>
     /// <param name="config">The configuration to be used for extracting set elements and subsets.</param>
-    public CustomObjectSet(string expression, SetExtractionConfiguration config)
+    public CustomObjectSet(string expression, SetsConfigurations config)
         : base(expression, config)
     {
     }
@@ -64,7 +64,7 @@ public class CustomObjectSet<T> : BaseSet<T>
     /// Checks if the current instance is a custom object set.
     /// </summary>
     /// <returns>True if it is a custom object set.</returns>
-    protected sealed override SetExtractionConfiguration ModifyConfigurations(SetExtractionConfiguration config)
+    protected sealed override SetsConfigurations ModifyConfigurations(SetsConfigurations config)
     {
         //Here we create a new instance of the Extraction settings using the properties we had
         var configNew = new CustomSetExtractionConfiguration<T>(config.FieldTerminator, config.RowTerminator,config.IgnoreEmptySets);

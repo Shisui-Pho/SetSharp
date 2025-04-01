@@ -1,10 +1,10 @@
 ﻿/*
- * File: SetExtractionConfiguration.cs
+ * File: SetsConfigurations.cs
  * Author: Phiwokwakhe Khathwane
  * Date: 25 November 2024
  * 
  * Description:
- * Defines the SetExtractionConfiguration class, which specifies the configuration
+ * Defines the SetsConfigurations class, which specifies the configuration
  * for extracting sets, including terminators for fields and rows, and an optional 
  * custom converter for converting string literals into objects. It also ensures that
  * reserved characters cannot be used as terminators.
@@ -22,7 +22,7 @@ namespace SetsLibrary;
 /// Represents the configuration for extracting sets, including terminators, optional custom converter, 
 /// and validation for reserved characters used in terminators.
 /// </summary>
-public class SetExtractionConfiguration
+public class SetsConfigurations
 {
     // Reserved characters that cannot be used in field or row terminators
     private const string RESERVED_CHARACTERS = "{}";
@@ -47,13 +47,13 @@ public class SetExtractionConfiguration
     public bool IgnoreEmptySets { get;private set; }
     // Constructors
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with a row terminators. The
+    /// Initializes a new instance of the <see cref="SetsConfigurations"/> class with a row terminators. The
     /// default field is tab character(\t). 
     /// </summary>
     /// <param name="elementSeperator">The string used to separate rows in the data.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementSeperator"/> is null.</exception>
     /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="elementSeperator"/> or if they contain reserved characters.</exception>
-    public SetExtractionConfiguration(string elementSeperator)
+    public SetsConfigurations(string elementSeperator)
     {
         string fieldTerminator = "\t";
         VerifyProperties(fieldTerminator, elementSeperator);
@@ -62,14 +62,14 @@ public class SetExtractionConfiguration
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetExtractionConfiguration"/> class with field and row terminators.
+    /// Initializes a new instance of the <see cref="SetsConfigurations"/> class with field and row terminators.
     /// </summary>
     /// <param name="fieldTerminator">The string used to separate fields in a record.</param>
     /// <param name="rowTerminator">The string used to separate rows in the data.</param>
     /// <param name="ignoreEmptyFields">If true, empty sets or null elements will be ignored.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="fieldTerminator"/> or <paramref name="rowTerminator"/> is null.</exception>
     /// <exception cref="SetsConfigurationException">Thrown if <paramref name="fieldTerminator"/> is the same as <paramref name="rowTerminator"/> or if they contain reserved characters.</exception>
-    public SetExtractionConfiguration(string fieldTerminator, string rowTerminator, bool ignoreEmptyFields = true)
+    public SetsConfigurations(string fieldTerminator, string rowTerminator, bool ignoreEmptyFields = true)
     {
         VerifyProperties(fieldTerminator, rowTerminator);
         IsICustomObject = false;

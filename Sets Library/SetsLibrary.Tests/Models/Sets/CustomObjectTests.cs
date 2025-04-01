@@ -43,7 +43,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestBasicParsingAndSorting()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Phiwo, Smith, 15\nHello, Kitty, 10\nBen, Clips, 20}";
 
             // Act
@@ -59,7 +59,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestDuplicateHandling()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Phiwo, Smith,15\nHello, Kitty,10\nPhiwo, Smith,15}";
 
             // Act
@@ -75,7 +75,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestComplexNestedAndSortedSet()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Phiwo,Smith,15\nHello,Kitty,10\n{Ben,Clips,20\nBen,Clips,20}\n{Ben,Clips,20}\n{Brum, Ficher, 35}}";
 
             // Act
@@ -91,7 +91,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestInvalidFormat()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Invalid Format\nHello, Kitty,10}";
 
             // Act & Assert
@@ -103,7 +103,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestEmptySet()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{}";
 
             // Act
@@ -119,7 +119,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestSingleElementSet()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{John, Doe, 30}";
 
             // Act
@@ -135,7 +135,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestInvalidFormatInStringExpression()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Phiwo, Smith, 15\nHello, Kitty, 10\nInvalidFieldFormat}";
 
             // Act & Assert
@@ -147,7 +147,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestEmptyStringExpression()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{}";
 
             // Act
@@ -164,7 +164,7 @@ namespace SetsLibrary.Tests.Models.Sets
         {
             // Arrange & Act
             var exception = Assert.Throws<SetsConfigurationException>(() =>
-                new SetExtractionConfiguration(",", ","));
+                new SetsConfigurations(",", ","));
 
             // Assert
             Assert.Contains("Terminators cannot be the same.", exception.Message);
@@ -176,7 +176,7 @@ namespace SetsLibrary.Tests.Models.Sets
         {
             // Arrange & Act
             var exception = Assert.Throws<SetsConfigurationException>(() =>
-                new SetExtractionConfiguration("{", "\n"));
+                new SetsConfigurations("{", "\n"));
 
             // Assert
             Assert.Contains("Cannot use reserved characters.", exception.Message);
@@ -188,7 +188,7 @@ namespace SetsLibrary.Tests.Models.Sets
         {
             // Arrange & Act
             var exception = Assert.Throws<SetsConfigurationException>(() =>
-                new SetExtractionConfiguration(",", "{"));
+                new SetsConfigurations(",", "{"));
 
             // Assert
             Assert.Contains("Cannot use reserved characters.", exception.Message);
@@ -200,7 +200,7 @@ namespace SetsLibrary.Tests.Models.Sets
         {
             // Arrange & Act
             var exception = Assert.Throws<ArgumentNullException>(() =>
-                new SetExtractionConfiguration(",", null));
+                new SetsConfigurations(",", null));
 
             // Assert
             Assert.Equal("Value cannot be null. (Parameter '_rowTerminator')", exception.Message);
@@ -211,7 +211,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestSetWithSingleElement()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Hello, Kitty,10}";
 
             // Act
@@ -227,7 +227,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestNullRecordHandling()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Hello, Kitty, 10\nnull}";
 
             // Act & Assert
@@ -240,7 +240,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestSpecialCharactersInFields()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{John, Doe,20\nJane, O'Connor,30}";
 
             // Act
@@ -256,7 +256,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestCaseSensitivityInFields()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{Alice, Wonderland,25\nalice, wonderland,25}";
 
             // Act
@@ -272,7 +272,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestLargeInputSetWithComplexNestedSets()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{John, Doe,20\n{Alice, Wonderland,25\nBob, Marley,30\n{Charlie, Brown,35}}\nJane, Austen,40}";
 
             // Act
@@ -289,7 +289,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestEmptyNestedSetHandling()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{John, Doe,20\n{}}";
 
             // Act
@@ -305,7 +305,7 @@ namespace SetsLibrary.Tests.Models.Sets
         public void TestMultipleCustomObjectConverters()
         {
             // Arrange
-            var config = new SetExtractionConfiguration(",", "\n");
+            var config = new SetsConfigurations(",", "\n");
             string expression = "{John, Doe,20|Jane, Austen,30}"; // Custom delimiter `|`
 
             // Act & Assert

@@ -13,7 +13,7 @@
 namespace SetsLibrary;
 
 /// <inheritdoc/>
-internal class CustomSetExtractionConfiguration<TObject> : SetExtractionConfiguration
+internal class CustomSetExtractionConfiguration<TObject> : SetsConfigurations
     where TObject : IComparable<TObject>
 {
     //Add an additional feature for custom conversion

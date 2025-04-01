@@ -15,7 +15,7 @@ internal class MockSetStructure : IStructuredSet<int>
     #region No-implementation needed
     public string OriginalExpression => throw new NotImplementedException();
 
-    public SetExtractionConfiguration ExtractionConfiguration => throw new NotImplementedException();
+    public SetsConfigurations ExtractionConfiguration => throw new NotImplementedException();
 
 
     public void AddElement(int Element)

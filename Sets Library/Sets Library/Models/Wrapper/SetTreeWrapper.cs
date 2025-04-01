@@ -33,7 +33,7 @@ public class SetTreeWrapper<T> : SetTreeBaseWrapper<T>
     public SetTreeWrapper(ISetTree<T> setTree) : base(setTree)
     {
     }
-    internal SetTreeWrapper(SetExtractionConfiguration config) : base(config) { }
+    internal SetTreeWrapper(SetsConfigurations config) : base(config) { }
     /// <summary>
     /// Gets the root element at the specified index.
     /// </summary>

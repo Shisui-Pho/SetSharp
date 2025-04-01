@@ -3,15 +3,15 @@ namespace SetsLibrary.Tests.Models.Sets
 {
     public class StringLiteralSetTests
     {
-        private SetExtractionConfiguration _extractionConfig;
+        private SetsConfigurations _extractionConfig;
 
         public StringLiteralSetTests()
         {
             // Setup an example extraction configuration to use in the tests
-            _extractionConfig = new SetExtractionConfiguration("none", ",");
+            _extractionConfig = new SetsConfigurations("none", ",");
         }
 
-        // Test constructor that uses the SetExtractionConfiguration
+        // Test constructor that uses the SetsConfigurations
         [Fact]
         public void Constructor_WithSetExtractionConfiguration_ShouldInitializeCorrectly()
         {
@@ -21,7 +21,7 @@ namespace SetsLibrary.Tests.Models.Sets
             Assert.Equal(_extractionConfig, stringSet.ExtractionConfiguration);
         }
 
-        // Test constructor with string expression and SetExtractionConfiguration
+        // Test constructor with string expression and SetsConfigurations
         [Fact]
         public void Constructor_WithExpressionAndSetExtractionConfiguration_ShouldInitializeCorrectly()
         {

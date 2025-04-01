@@ -31,7 +31,7 @@ public class TypedSet<T> : BaseSet<T>
     /// Initializes a new instance of the <see cref="TypedSet{T}"/> class with the specified extraction configuration.
     /// </summary>
     /// <param name="extractionConfiguration">The configuration used for extracting set elements and subsets.</param>
-    public TypedSet(SetExtractionConfiguration extractionConfiguration) : base(extractionConfiguration)
+    public TypedSet(SetsConfigurations extractionConfiguration) : base(extractionConfiguration)
     {
     }
 
@@ -40,7 +40,7 @@ public class TypedSet<T> : BaseSet<T>
     /// </summary>
     /// <param name="expression">The string representation of the set expression.</param>
     /// <param name="config">The configuration used for extracting set elements and subsets.</param>
-    public TypedSet(string expression, SetExtractionConfiguration config) : base(expression, config)
+    public TypedSet(string expression, SetsConfigurations config) : base(expression, config)
     {
     }
     /// <summary>
