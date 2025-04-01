@@ -69,10 +69,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{1,2,3}";
             var config = new SetExtractionConfiguration(";", ",");
-            SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
+            SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeExtractor<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
@@ -88,10 +88,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{}";
             var config = new SetExtractionConfiguration(";", ",");
-            SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
+            SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeExtractor<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
 
             // Assert
             Assert.Equal("", tree.RootElements);
@@ -107,10 +107,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{1,2,{3,4}}";
             var config = new SetExtractionConfiguration(";", ",");
-            SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
+            SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeExtractor<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
 
             // Assert for the root elements
             Assert.Equal("1,2", tree.RootElements);
@@ -132,10 +132,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{1,2,{3,4},{5,6}}";
             var config = new SetExtractionConfiguration(";", ",");
-            SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
+            SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeExtractor<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
 
             // Assert for the root elements
             Assert.Equal("1,2", tree.RootElements);
@@ -163,10 +163,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
             var customConverter = new CustomStringToIntConverter();
             var config = new SetExtractionConfiguration(";", ",");
 
-            SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
+            SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeExtractor<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
@@ -180,10 +180,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
             // Arrange
             string expression = "{ 1 , 2 , 3 }";
             var config = new SetExtractionConfiguration(";", ",");
-            SetTreeExtractor<int> extractor = new SetTreeExtractor<int>();
+            SetTreeBuilder<int> extractor = new SetTreeBuilder<int>();
 
             // Act
-            ISetTree<int> tree = SetTreeExtractor<int>.Extract(expression, config);
+            ISetTree<int> tree = SetTreeBuilder<int>.Extract(expression, config);
 
             // Assert
             Assert.Equal("1,2,3", tree.RootElements);
@@ -200,10 +200,10 @@ namespace SetsLibrary.Tests.Utilities.Extract
         {
             // Arrange
             var config = new SetExtractionConfiguration(";", ",");
-            SetTreeExtractor<string> extractor = new SetTreeExtractor<string>();
+            SetTreeBuilder<string> extractor = new SetTreeBuilder<string>();
 
             // Act
-            ISetTree<string> tree = SetTreeExtractor<string>.Extract(input, config);
+            ISetTree<string> tree = SetTreeBuilder<string>.Extract(input, config);
 
             // Assert
             Assert.Equal(expectedRootElements, tree.RootElements);

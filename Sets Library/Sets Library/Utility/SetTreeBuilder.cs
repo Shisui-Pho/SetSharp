@@ -1,10 +1,10 @@
 ﻿/*
- * File: SetTreeExtractor.cs
+ * File: SetTreeBuilder.cs
  * Author: Phiwokwakhe Khathwane
  * Date: 29 March 2025
  * 
  * Description:
- * This file contains the definition of the SetTreeExtractor class, which provides utility methods 
+ * This file contains the definition of the SetTreeBuilder class, which provides utility methods 
  * for extracting a set tree from a string expression based on a specified configuration. The class 
  * handles parsing set expressions, removing duplicates, and sorting elements, while also supporting 
  * the extraction of nested subsets to construct a complete set tree structure.
@@ -28,7 +28,7 @@ namespace SetsLibrary.Utility;
 /// Provides utility methods to extract a set tree from a string expression and configuration.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set tree. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-public class SetTreeExtractor<T>
+public class SetTreeBuilder<T>
     where T : IComparable<T>
 {
     /// <summary>

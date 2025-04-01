@@ -195,7 +195,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Extract and return the set tree from the expression using the extraction configuration
         try
         {
-            return SetTreeExtractor<T>.Extract(expression, ExtractionConfiguration);
+            return SetTreeBuilder<T>.Extract(expression, ExtractionConfiguration);
         }
         catch (SetsException ex)
         {
