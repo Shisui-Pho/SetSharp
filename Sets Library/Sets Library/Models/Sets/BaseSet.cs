@@ -241,19 +241,19 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         var _set = TryGetUnderlyingBaseSet(subset);
 
         if (_set is not null)
-            _treeWrapper.AddSubSetTree(_set._treeWrapper);
+            _treeWrapper.AddElement(_set._treeWrapper);
         else
         {
             if(subset.Cardinality == 0)
             {
                 //add an empty set
-                _treeWrapper.AddSubSetTree(Extractions("{}"));
+                _treeWrapper.AddElement(Extractions("{}"));
             }
             else
             {
                 #warning Temporary implementation, need to change this
                 var tree = Extractions(subset.BuildStringRepresentation());
-                _treeWrapper.AddSubSetTree(tree);
+                _treeWrapper.AddElement(tree);
             }
         }
 

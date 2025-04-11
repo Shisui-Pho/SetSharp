@@ -24,7 +24,7 @@ namespace SetsLibrary;
 /// allowing hierarchical structures within the set collection.
 /// </summary>
 /// <typeparam name="T">The type of the set tree, which must implement <see cref="ISetTree{T}"/> and <see cref="IComparable{T}"/>.</typeparam>
-public interface ISubTree<T>
+public interface ISubTree<T> : ISetTreeElement<ISetTree<T>>
     where T : IComparable<T>
 {
     /// <summary>
@@ -41,36 +41,6 @@ public interface ISubTree<T>
     /// <returns>
     /// An <see cref="IEnumerable{T}"/> that can be used to iterate through the subsets.
     /// </returns>
-    IEnumerable<T> GetSubsetsEnumerator();
-
-    /// <summary>
-    /// Adds a subset (tree) inside the current set.
-    /// </summary>
-    /// <param name="tree">The tree representation of the subset to be added to the set.</param>
-    void AddSubSetTree(T tree);
-
-    /// <summary>
-    /// Adds a range of subsets to the current set.
-    /// </summary>
-    /// <param name="subsets">A collection of subsets to be added to the set.</param>
-    void AddRange(IEnumerable<T> subsets);
-
-    /// <summary>
-    /// Removes a subset from the current set.
-    /// </summary>
-    /// <param name="element">The subset to be removed from the set.</param>
-    /// <returns>
-    /// A boolean value indicating whether the subset was successfully removed.
-    /// </returns>
-    bool RemoveElement(T element);
-
-    /// <summary>
-    /// Gets the index of the specified subset in the nested sets of the current set.
-    /// </summary>
-    /// <param name="subset">The subset to search for within the current set.</param>
-    /// <returns>
-    /// The zero-based index of the subset if found; otherwise, -1.
-    /// </returns>
-    int IndexOf(T subset);
+    IEnumerable<ISetTree<T>> GetSubsetsEnumerator();
 } // interface
 // namespace

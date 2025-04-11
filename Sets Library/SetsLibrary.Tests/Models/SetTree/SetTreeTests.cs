@@ -67,7 +67,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         {
             var extractionSettings = new SetsConfigurations(";", ",");
             var setTree = new SetTree<string>(extractionSettings);
-            Assert.Throws<ArgumentNullException>(() => setTree.AddElement(null));
+            Assert.Throws<ArgumentNullException>(() => setTree.AddElement((string?)null));
         }
 
         #endregion Add Element Tests
@@ -106,7 +106,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
 
-            setTree.AddSubSetTree(subsetTree);
+            setTree.AddElement(subsetTree);
 
             Assert.Single(setTree.GetSubsetsEnumerator());
         }
@@ -116,7 +116,7 @@ namespace SetsLibrary.Tests.Models.SetTree
         {
             var extractionSettings = new SetsConfigurations(";", ",");
             var setTree = new SetTree<int>(extractionSettings);
-            Assert.Throws<ArgumentNullException>(() => setTree.AddSubSetTree(null));
+            Assert.Throws<ArgumentNullException>(() => setTree.AddElement(null));
         }
 
         #endregion Add Subset Tree Tests
@@ -162,7 +162,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree = new SetTree<int>(extractionSettings);
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
-            setTree.AddSubSetTree(subsetTree);
+            setTree.AddElement(subsetTree);
 
             bool result = setTree.RemoveElement(subsetTree);
             Assert.True(result);
@@ -276,7 +276,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree = new SetTree<int>(extractionSettings);
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(5);
-            setTree.AddSubSetTree(subsetTree);
+            setTree.AddElement(subsetTree);
             var subsets = setTree.GetSubsetsEnumerator();
             Assert.Contains(subsetTree, subsets);
         }
@@ -308,8 +308,8 @@ namespace SetsLibrary.Tests.Models.SetTree
 
             var mainTree = new SetTree<int>(extractionSettings);
             mainTree.AddRange(new List<int> { 1, 2 });
-            mainTree.AddSubSetTree(setTree1);
-            mainTree.AddSubSetTree(setTree2);
+            mainTree.AddElement(setTree1);
+            mainTree.AddElement(setTree2);
 
             Assert.Equal(2, mainTree.CountRootElements); // 1, 2
             Assert.Equal(2, mainTree.CountSubsets); // setTree1, setTree2
@@ -378,11 +378,11 @@ namespace SetsLibrary.Tests.Models.SetTree
             setTree3.AddElement(40);
 
             // Nested subset
-            setTree2.AddSubSetTree(setTree3);
+            setTree2.AddElement(setTree3);
 
             var mainTree = new SetTree<int>(extractionSettings);
-            mainTree.AddSubSetTree(setTree1);
-            mainTree.AddSubSetTree(setTree2);
+            mainTree.AddElement(setTree1);
+            mainTree.AddElement(setTree2);
 
             Assert.Equal(2, mainTree.CountSubsets); // setTree1, setTree2
             Assert.Equal(1, setTree2.CountSubsets); // setTree3 inside setTree2
@@ -399,7 +399,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var subsetTree = new SetTree<int>(extractionSettings);
             subsetTree.AddElement(30);
 
-            setTree.AddSubSetTree(subsetTree);
+            setTree.AddElement(subsetTree);
 
             bool result = setTree.RemoveElement(10); // Removing an element from the root set
             Assert.True(result); // Should remove 10 successfully
@@ -435,7 +435,7 @@ namespace SetsLibrary.Tests.Models.SetTree
                 {
                     lock (obj)
                     {
-                        setTree.AddElement(null);
+                        setTree.AddElement((string?)null);
                     }
                 }
                 catch (ArgumentNullException ex)
@@ -492,8 +492,8 @@ namespace SetsLibrary.Tests.Models.SetTree
             var subset2 = new SetTree<int>(extractionSettings);
             subset2.AddElement(20);
 
-            setTree1.AddSubSetTree(subset1);
-            setTree2.AddSubSetTree(subset2);
+            setTree1.AddElement(subset1);
+            setTree2.AddElement(subset2);
 
             int result = setTree1.CompareTo(setTree2);
             Assert.Equal(-1, result); // Should return -1 because the subsets are different
@@ -506,7 +506,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var setTree = new SetTree<int>(extractionSettings);
 
             // Adding a null subset tree
-            Assert.Throws<ArgumentNullException>(() => setTree.AddSubSetTree(null));
+            Assert.Throws<ArgumentNullException>(() => setTree.AddElement(null));
         }
 
         [Fact]
@@ -541,13 +541,13 @@ namespace SetsLibrary.Tests.Models.SetTree
             var subset2 = new SetTree<int>(extractionSettings);
             subset2.AddElement(5);
 
-            rootSet.AddSubSetTree(subset1);
-            rootSet.AddSubSetTree(subset2);
+            rootSet.AddElement(subset1);
+            rootSet.AddElement(subset2);
 
             var rootSetClone = new SetTree<int>(extractionSettings);
             rootSetClone.AddRange(new List<int> { 1, 2, 3 });
-            rootSetClone.AddSubSetTree(subset1);
-            rootSetClone.AddSubSetTree(subset2);
+            rootSetClone.AddElement(subset1);
+            rootSetClone.AddElement(subset2);
 
             int result = rootSet.CompareTo(rootSetClone);
             Assert.Equal(0, result); // Should return 0 as both sets and their subsets are identical
@@ -563,7 +563,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             // Add 1 million elements to a subset
             largeSubset.AddRange(Enumerable.Range(0, 1000000));
 
-            mainSet.AddSubSetTree(largeSubset);
+            mainSet.AddElement(largeSubset);
 
             Assert.Equal(1, mainSet.CountSubsets); // Should have 1 subset
             Assert.Equal(1000000, largeSubset.CountRootElements); // Subset should contain 1 million elements

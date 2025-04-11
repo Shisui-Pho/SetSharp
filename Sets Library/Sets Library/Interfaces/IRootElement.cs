@@ -24,7 +24,8 @@ namespace SetsLibrary;
 /// of root-level elements within a set collection.
 /// </summary>
 /// <typeparam name="TElement">The type of the elements contained in the set.</typeparam>
-public interface IRootElement<TElement>
+public interface IRootElement<TElement> : ISetTreeElement<TElement>
+    where TElement : IComparable<TElement>
 {
     /// <summary>
     /// Gets the count of root elements in the current set.
@@ -41,35 +42,4 @@ public interface IRootElement<TElement>
     /// An <see cref="IEnumerable{T}"/> that can be used to iterate through the root elements.
     /// </returns>
     IEnumerable<TElement> GetRootElementsEnumerator();
-
-    /// <summary>
-    /// Adds a single element to the root elements of the current set.
-    /// </summary>
-    /// <param name="element">The element to be added to the root elements collection.</param>
-    void AddElement(TElement element);
-
-    /// <summary>
-    /// Adds a range of elements to the root elements of the current set.
-    /// </summary>
-    /// <param name="elements">A collection of elements to add to the root.</param>
-    void AddRange(IEnumerable<TElement> elements);
-
-    /// <summary>
-    /// Removes an element from the root elements of the current set.
-    /// </summary>
-    /// <param name="element">The element to remove from the root.</param>
-    /// <returns>
-    /// <c>true</c> if the element was successfully removed; otherwise, <c>false</c>.
-    /// </returns>
-    bool RemoveElement(TElement element);
-
-    /// <summary>
-    /// Gets the index of the specified element within the root elements.
-    /// </summary>
-    /// <param name="element">The element to locate in the root elements collection.</param>
-    /// <returns>
-    /// The zero-based index of the element if found; otherwise, -1.
-    /// </returns>
-    int IndexOf(TElement element);
 } // interface
-// namespace

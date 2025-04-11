@@ -25,7 +25,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
                 ExtractionSettings = extractionSettings;
             }
 
-            public void AddSubSetTree(ISetTree<T> tree)
+            public void AddElement(ISetTree<T> tree)
             {
                 _subsets.Add(tree);
                 CountSubsets++;
@@ -55,7 +55,7 @@ namespace SetsLibrary.Tests.Utilities.Extract
             public void AddRange(IEnumerable<ISetTree<T>> subsets)
             {
                 foreach (var item in subsets)
-                    AddSubSetTree(item);
+                    AddElement(item);
             }
 
             public int CompareTo(ISetTree<T>? other)
