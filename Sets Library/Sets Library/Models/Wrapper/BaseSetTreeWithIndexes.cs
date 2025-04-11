@@ -21,10 +21,7 @@ namespace SetsLibrary;
 /// Represents a base wrapper for a SetTree, delegating functionality to the underlying ISetTree instance.
 /// </summary>
 /// <typeparam name="T">The type of the elements in the set. This type must implement <see cref="IComparable{T}"/>.</typeparam>
-#pragma warning disable CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
-public abstract class BaseSetTreeWithIndexes<T> : IIndexedSetTree<T>
-#pragma warning restore CS8766 // Nullability of reference types in return type doesn't match implicitly implemented member (possibly because of nullability attributes).
-    where T : IComparable<T>
+public abstract class BaseSetTreeWithIndexes<T> : IIndexedSetTree<T> where T : IComparable<T>
 {
     /// <summary>
     /// 
@@ -178,6 +175,7 @@ public abstract class BaseSetTreeWithIndexes<T> : IIndexedSetTree<T>
     {
         return setTree.RemoveElement(element);
     }
+    /// <inheritdoc/>
     public override string ToString()
     {
         return setTree.ToString();
