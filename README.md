@@ -138,7 +138,7 @@ var config = new SetsConfigurations(",", "\n");
 var set = new CustomObjectSet<Person>(expression,config);
 
 Console.WriteLine($"Element count: {set.Cardinality}");// 3
-Console.WriteLine($"Expression: {set.BuildStringRepresentation()}");//{// Abel 13\nAlice 1\nPhiwo 10}
+Console.WriteLine($"Expression: {set.BuildStringRepresentation()}");//{ Abel 13\nAlice 1\nPhiwo 10}
 ```
 
 ## **License**
