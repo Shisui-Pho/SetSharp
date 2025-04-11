@@ -17,9 +17,9 @@ namespace SetsLibrary.Tests.Models.Sets
             Age = age;
         }
 
-        public int CompareTo(Person other)
+        public int CompareTo(Person? other)
         {
-            return Age.CompareTo(other.Age); // Sorting by age
+            return Age.CompareTo(other?.Age ?? -1); // Sorting by age
         }
 
         public override string ToString()
