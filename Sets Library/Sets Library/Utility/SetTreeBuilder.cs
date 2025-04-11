@@ -173,6 +173,8 @@ public class SetTreeBuilder<T>
     /// </summary>
     /// <param name="rootElements">A string representing the root elements to be processed.</param>
     /// <param name="extractionConfig">The configuration that specifies terminators and custom object converters.</param>
+    /// <param name="hasAnEmptySet">True if the set is empty.</param>
+    /// <param name="countEmptySets">Number of empty sets per recors/row if using custom object sets, otherwise number of elements. </param>
     /// <returns>An <see cref="IEnumerable{T}"/> containing the sorted and unique root elements.</returns>
     public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetsConfigurations extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
     {
