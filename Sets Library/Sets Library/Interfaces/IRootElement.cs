@@ -1,10 +1,10 @@
 ﻿/*
- * File: IRootElements.cs
+ * File: IRootElement.cs
  * Author: Phiwokwakhe Khathwane
  * Date: 11 April 2025
  * 
  * Description:
- * This file contains the definition of the IRootElements interface, 
+ * This file contains the definition of the IRootElement interface, 
  * which establishes a contract for managing root-level elements within a set.
  * It provides methods for retrieving, adding, removing, and indexing 
  * elements that are considered "root elements" in the context of the set.
@@ -24,7 +24,7 @@ namespace SetsLibrary;
 /// of root-level elements within a set collection.
 /// </summary>
 /// <typeparam name="TElement">The type of the elements contained in the set.</typeparam>
-public interface IRootElements<TElement>
+public interface IRootElement<TElement>
 {
     /// <summary>
     /// Gets the count of root elements in the current set.
