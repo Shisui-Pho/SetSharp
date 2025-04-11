@@ -98,7 +98,7 @@ collection.Add(setB);
 var retrievedSet = collection["A"];
 Console.WriteLine($"Retrieved Set: {retrievedSet.BuildStringRepresentation()}");//{1,2,3}
 ``` 
-**Custom Data Type Integration**
+**Custom Data Type Integration**  
 The library allows defining and working with custom data types by implementing `ICustomObjectConverter<T>`.
 
 ```csharp
