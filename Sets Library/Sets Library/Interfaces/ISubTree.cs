@@ -24,7 +24,7 @@ namespace SetsLibrary;
 /// allowing hierarchical structures within the set collection.
 /// </summary>
 /// <typeparam name="T">The type of the set tree, which must implement <see cref="ISetTree{T}"/> and <see cref="IComparable{T}"/>.</typeparam>
-public interface ISubTree<T> : ISetTreeElement<ISetTree<T>>, IEnumerable<ISubTree<T>>
+public interface ISubTree<T> : ISetTreeElement<ISetTree<T>>
     where T : IComparable<T>
 {
     /// <summary>

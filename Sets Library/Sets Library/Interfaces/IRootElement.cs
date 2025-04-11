@@ -24,7 +24,7 @@ namespace SetsLibrary;
 /// of root-level elements within a set collection.
 /// </summary>
 /// <typeparam name="TElement">The type of the elements contained in the set.</typeparam>
-public interface IRootElement<TElement> : ISetTreeElement<TElement>, IEnumerable<TElement>
+public interface IRootElement<TElement> : ISetTreeElement<TElement>
     where TElement : IComparable<TElement>
 {
     /// <summary>
