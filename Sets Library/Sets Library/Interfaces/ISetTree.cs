@@ -23,7 +23,7 @@ namespace SetsLibrary;
 /// This interface provides methods to manipulate, retrieve, and manage elements and subsets in a sorted set tree.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public interface ISetTree<T> : IRootElement<T>, ISubTree<ISetTree<T>> ,IComparable<ISetTree<T>>
+public interface ISetTree<T> : IRootElement<T>, ISubTree<T> ,IComparable<ISetTree<T>>
     where T : IComparable<T>
 {
     /// <summary>
