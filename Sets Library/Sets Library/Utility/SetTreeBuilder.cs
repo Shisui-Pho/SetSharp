@@ -65,7 +65,7 @@ public class SetTreeBuilder<T>
         while (subsets.Count > 0)
         {
             string ex = subsets.Pop();
-            tree.AddSubSetTree(BuildSetTree(ex, extractionConfig));
+            tree.AddElement(BuildSetTree(ex, extractionConfig));
         }
 
         return tree;

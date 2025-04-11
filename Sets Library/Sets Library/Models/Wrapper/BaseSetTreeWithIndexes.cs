@@ -106,9 +106,9 @@ public abstract class BaseSetTreeWithIndexes<T> : IIndexedSetTree<T>
     /// Adds a subset tree to the set.
     /// </summary>
     /// <param name="tree">The subset tree to add.</param>
-    public void AddSubSetTree(ISetTree<T> tree)
+    public void AddElement(ISetTree<T> tree)
     {
-        setTree.AddSubSetTree(tree);
+        setTree.AddElement(tree);
     }
 
     /// <summary>

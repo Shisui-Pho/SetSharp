@@ -47,7 +47,7 @@ public interface ISubTree<T>
     /// Adds a subset (tree) inside the current set.
     /// </summary>
     /// <param name="tree">The tree representation of the subset to be added to the set.</param>
-    void AddSubSetTree(T tree);
+    void AddElement(T tree);
 
     /// <summary>
     /// Adds a range of subsets to the current set.

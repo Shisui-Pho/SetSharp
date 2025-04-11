@@ -173,7 +173,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// Adds a subset tree to the set tree.
     /// </summary>
     /// <param name="tree">The subset tree to add.</param>
-    public void AddSubSetTree(ISetTree<T> tree)
+    public void AddElement(ISetTree<T> tree)
     {
         //Check for nulls
         ArgumentNullException.ThrowIfNull(tree, nameof(tree));
@@ -202,7 +202,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
 
         //Add subsets one by one
         foreach (ISetTree<T> subset in subsets)
-            this.AddSubSetTree(subset);
+            this.AddElement(subset);
     }
 
     /// <summary>
