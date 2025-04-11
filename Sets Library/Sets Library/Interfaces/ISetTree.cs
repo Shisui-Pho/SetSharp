@@ -23,7 +23,7 @@ namespace SetsLibrary;
 /// This interface provides methods to manipulate, retrieve, and manage elements and subsets in a sorted set tree.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set, which must implement <see cref="IComparable{T}"/>.</typeparam>
-public interface ISetTree<T> : IRootElement<T>, IComparable<ISetTree<T>>
+public interface ISetTree<T> : IRootElement<T>, ISubTree<ISetTree<T>> ,IComparable<ISetTree<T>>
     where T : IComparable<T>
 {
     /// <summary>
@@ -43,14 +43,6 @@ public interface ISetTree<T> : IRootElement<T>, IComparable<ISetTree<T>>
     int Count { get; }
 
     /// <summary>
-    /// Gets the count of subsets contained within the current set.
-    /// </summary>
-    /// <value>
-    /// The number of nested subsets within the set.
-    /// </value>
-    int CountSubsets { get; }
-
-    /// <summary>
     /// Gets the set extraction settings associated with the current set.
     /// </summary>
     /// <value>
@@ -63,43 +55,6 @@ public interface ISetTree<T> : IRootElement<T>, IComparable<ISetTree<T>>
     ///  within a nested subsets will be ignored for the current set.
     /// </summary>
     SetTreeInfo TreeInfo { get; }
-    /// <summary>
-    /// Returns an enumerator that iterates through the subsets of the current set.
-    /// </summary>
-    /// <returns>
-    /// An enumerator that can be used to iterate through the subsets of the current set.
-    /// </returns>
-    IEnumerable<ISetTree<T>> GetSubsetsEnumerator();
-
-    /// <summary>
-    /// Adds a subset inside the current set.
-    /// </summary>
-    /// <param name="tree">The tree representation of the subset to be added.</param>
-    void AddSubSetTree(ISetTree<T> tree);
-
-    /// <summary>
-    /// Adds a range of subsets to the current set.
-    /// </summary>
-    /// <param name="subsets">The subsets to be added.</param>
-    void AddRange(IEnumerable<ISetTree<T>> subsets);
-
-    /// <summary>
-    /// Removes a subset from the current set.
-    /// </summary>
-    /// <param name="element">The subset to be removed.</param>
-    /// <returns>
-    /// A boolean value indicating whether the subset was successfully removed.
-    /// </returns>
-    bool RemoveElement(ISetTree<T> element);
-
-    /// <summary>
-    /// Gets the index of the specified subset in the nested sets of the current set.
-    /// </summary>
-    /// <param name="subset">The subset to search for.</param>
-    /// <returns>
-    /// The zero-based index of the subset within the current set, or -1 if the subset is not found.
-    /// </returns>
-    int IndexOf(ISetTree<T> subset);
 
     /// <summary>
     /// Gets the string representation of the current set tree.

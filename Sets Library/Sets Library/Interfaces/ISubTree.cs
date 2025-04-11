@@ -53,7 +53,7 @@ public interface ISubTree<T>
     /// Adds a range of subsets to the current set.
     /// </summary>
     /// <param name="subsets">A collection of subsets to be added to the set.</param>
-    void AddRange(T subsets);
+    void AddRange(IEnumerable<T> subsets);
 
     /// <summary>
     /// Removes a subset from the current set.
