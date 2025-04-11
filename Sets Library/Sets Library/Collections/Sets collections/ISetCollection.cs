@@ -29,7 +29,6 @@ namespace SetsLibrary.Collections;
 /// <typeparam name="TSet">The type of the set. It must implement <see cref="IStructuredSet{T}"/>.</typeparam>
 /// <typeparam name="TType">The type of the elements within the sets, which must implement <see cref="IComparable{T}"/>.</typeparam>
 public interface ISetCollection<TSet, TType> : IEnumerable<KeyValuePair<string, TSet>>
-    where TType : IComparable<TType>
 {
     /// <summary>
     /// Gets the set associated with the specified name.
