@@ -209,7 +209,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     /// <returns>True if it is a custom object set.</returns>
     protected virtual SetsConfigurations ModifyConfigurations(SetsConfigurations config)
     {
-        //If there are no ovverides, return the configurations
+        //If there are no overrides, return the configurations
         return config;
     }//ModifyConfigurations
     #endregion Constructors
@@ -251,7 +251,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             }
             else
             {
-                #warning Temporary implementation, need to change this
+                //An in-efficient way
                 var tree = Extractions(subset.BuildStringRepresentation());
                 _treeWrapper.AddElement(tree);
             }
@@ -318,7 +318,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             return _treeWrapper.IndexOf(_set._treeWrapper) >= 0;
 
 
-#warning Temporary implementation, need to change this
+        //An in-efficient way
         var tree = Extractions(subSet.BuildStringRepresentation());
 
         return _treeWrapper.IndexOf(tree) >= 0;
@@ -453,8 +453,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         if (_set is not null)
             return _treeWrapper.RemoveElement(_set._treeWrapper);
 
-#warning Temporary implementation, need to change this
-
+        //An in-efficient way
         var tree = Extractions(subSet.BuildStringRepresentation());
 
         return _treeWrapper.RemoveElement(tree);
@@ -527,7 +526,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         string setA = _treeWrapper.ToString();
         string? setB = set.BuildStringRepresentation();
 
-        //Merg strings
+        //Merge strings
         string _set = setA.Remove(setA.Length - 1) + "," + setB?.Remove(0, 1);
         return BuildNewSet(_set);
     }//MergeWith
