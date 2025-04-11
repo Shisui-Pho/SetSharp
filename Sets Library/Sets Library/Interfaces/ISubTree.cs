@@ -25,7 +25,7 @@ namespace SetsLibrary;
 /// </summary>
 /// <typeparam name="T">The type of the set tree, which must implement <see cref="ISetTree{T}"/> and <see cref="IComparable{T}"/>.</typeparam>
 public interface ISubTree<T>
-    where T : ISetTree<T>, IComparable<T>
+    where T : IComparable<T>
 {
     /// <summary>
     /// Gets the count of subsets contained within the current set.
@@ -39,21 +39,21 @@ public interface ISubTree<T>
     /// Returns an enumerator that iterates through the subsets of the current set.
     /// </summary>
     /// <returns>
-    /// An <see cref="IEnumerable{ISetTree{T}}"/> that can be used to iterate through the subsets.
+    /// An <see cref="IEnumerable{T}"/> that can be used to iterate through the subsets.
     /// </returns>
-    IEnumerable<ISetTree<T>> GetSubsetsEnumerator();
+    IEnumerable<T> GetSubsetsEnumerator();
 
     /// <summary>
     /// Adds a subset (tree) inside the current set.
     /// </summary>
     /// <param name="tree">The tree representation of the subset to be added to the set.</param>
-    void AddSubSetTree(ISetTree<T> tree);
+    void AddSubSetTree(T tree);
 
     /// <summary>
     /// Adds a range of subsets to the current set.
     /// </summary>
     /// <param name="subsets">A collection of subsets to be added to the set.</param>
-    void AddRange(IEnumerable<ISetTree<T>> subsets);
+    void AddRange(T subsets);
 
     /// <summary>
     /// Removes a subset from the current set.
@@ -62,7 +62,7 @@ public interface ISubTree<T>
     /// <returns>
     /// A boolean value indicating whether the subset was successfully removed.
     /// </returns>
-    bool RemoveElement(ISetTree<T> element);
+    bool RemoveElement(T element);
 
     /// <summary>
     /// Gets the index of the specified subset in the nested sets of the current set.
@@ -71,6 +71,6 @@ public interface ISubTree<T>
     /// <returns>
     /// The zero-based index of the subset if found; otherwise, -1.
     /// </returns>
-    int IndexOf(ISetTree<T> subset);
+    int IndexOf(T subset);
 } // interface
 // namespace
