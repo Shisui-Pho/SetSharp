@@ -45,20 +45,26 @@ public class SetsConfigurations
     /// Get a values indicating whether empty cells should be ignored or not.
     /// </summary>
     public bool IgnoreEmptySets { get;private set; }
+    /// <summary>
+    /// Get a values to indicate if braces can be automatically added.
+    /// </summary>
+    internal bool AutomaticallyAddBrace { get; private set; }
     // Constructors
     /// <summary>
     /// Initializes a new instance of the <see cref="SetsConfigurations"/> class with a row terminators. The
     /// default field is tab character(\t). 
     /// </summary>
-    /// <param name="elementSeperator">The string used to separate rows in the data.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementSeperator"/> is null.</exception>
-    /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="elementSeperator"/> or if they contain reserved characters.</exception>
-    public SetsConfigurations(string elementSeperator)
+    /// <param name="elementSeparator">The string used to separate rows in the data.</param>
+    /// <param name="addBraces">If true then braces will be automatically added.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementSeparator"/> is null.</exception>
+    /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="elementSeparator"/> or if they contain reserved characters.</exception>
+    public SetsConfigurations(string elementSeparator, bool addBraces = false)
     {
         string fieldTerminator = "\t";
-        VerifyProperties(fieldTerminator, elementSeperator);
+        VerifyProperties(fieldTerminator, elementSeparator);
         IsICustomObject = false;
         IgnoreEmptySets = true;
+        AutomaticallyAddBrace = addBraces;
     }
 
     /// <summary>
@@ -67,13 +73,15 @@ public class SetsConfigurations
     /// <param name="fieldTerminator">The string used to separate fields in a record.</param>
     /// <param name="rowTerminator">The string used to separate rows in the data.</param>
     /// <param name="ignoreEmptyFields">If true, empty sets or null elements will be ignored.</param>
+    /// <param name="addBraces">If true then braces will be automatically added.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="fieldTerminator"/> or <paramref name="rowTerminator"/> is null.</exception>
     /// <exception cref="SetsConfigurationException">Thrown if <paramref name="fieldTerminator"/> is the same as <paramref name="rowTerminator"/> or if they contain reserved characters.</exception>
-    public SetsConfigurations(string fieldTerminator, string rowTerminator, bool ignoreEmptyFields = true)
+    public SetsConfigurations(string fieldTerminator, string rowTerminator, bool ignoreEmptyFields = true, bool addBraces = false)
     {
         VerifyProperties(fieldTerminator, rowTerminator);
         IsICustomObject = false;
         IgnoreEmptySets = ignoreEmptyFields;
+        AutomaticallyAddBrace = addBraces;
     }
 
     /// <summary>

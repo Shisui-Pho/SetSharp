@@ -146,12 +146,16 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Ensure the configuration is not null, as it is needed to extract elements and subsets from the expression
         ArgumentNullException.ThrowIfNull(config, nameof(config));
 
+        //Add braces if needed
+        expression = AddBracesIfNeeded(expression, config);
+
         // Ensure the expression is valid (non-null and non-whitespace)
         ArgumentException.ThrowIfNullOrWhiteSpace(expression, nameof(expression));
 
         // Assign the configurations
         this.ExtractionConfiguration = ModifyConfigurations(config);
         // BuildSetTree the set tree from the provided expression and configuration
+
         _treeWrapper = new SetTreeWithIndexes<T>(Extractions(expression));
 
         // Assign the original expression after extraction
@@ -202,7 +206,16 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             throw new SetsException("Failed to extract set string.", "", ex);
         }
     } // Extractions
-
+    private string AddBracesIfNeeded(string expression, SetsConfigurations config)
+    {
+        ArgumentNullException.ThrowIfNull(expression, nameof (expression));
+        //Check if we need to add braces or not
+        if(config.AutomaticallyAddBrace)
+            return "{" + expression + "}";
+        
+        //Just return the expression itself.
+        return expression;
+    }
     /// <summary>
     /// Checks if the current instance is a custom object set.
     /// </summary>

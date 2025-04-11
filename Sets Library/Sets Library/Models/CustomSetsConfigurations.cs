@@ -20,12 +20,13 @@ internal class CustomSetsConfigurations<TObject> : SetsConfigurations
     public Func<string?[], TObject>? Funct_ToObject { get; set; } = null;
 
     /// <inheritdoc/>
-    public CustomSetsConfigurations(string rowTerminator) : base(rowTerminator)
+    public CustomSetsConfigurations(string rowTerminator, bool addBraces) : base(rowTerminator, addBraces)
     {
         IsICustomObject = true;
     }
     /// <inheritdoc/>
-    public CustomSetsConfigurations(string fieldTerminator, string rowTerminator, bool ignoreEmptySets) : base(fieldTerminator, rowTerminator,ignoreEmptySets)
+    public CustomSetsConfigurations(string fieldTerminator, string rowTerminator, bool ignoreEmptySets, bool addBraces) 
+        : base(fieldTerminator, rowTerminator,ignoreEmptySets, addBraces)
     {
         IsICustomObject = true;
     }
