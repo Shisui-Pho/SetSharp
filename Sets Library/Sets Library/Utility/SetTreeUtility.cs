@@ -58,7 +58,7 @@ public static class SetTreeUtility<T>
 
         //Check for empty sets
         if (currentTree.TreeInfo.HasNullElements && !currentTree.ExtractionSettings.IgnoreEmptySets)
-            representation += "{}" + currentTree.ExtractionSettings.RowTerminator;
+            representation += "{}";
         
          representation += currentTree.RootElements; 
 
