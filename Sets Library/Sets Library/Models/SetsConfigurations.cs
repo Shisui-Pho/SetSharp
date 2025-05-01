@@ -56,15 +56,17 @@ public class SetsConfigurations
     /// </summary>
     /// <param name="elementSeparator">The string used to separate rows in the data.</param>
     /// <param name="addBraces">If true then braces will be automatically added.</param>
+    /// <param name="ignoreEmptyFields">If true then all empty sets will be ignored.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementSeparator"/> is null.</exception>
     /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="elementSeparator"/> or if they contain reserved characters.</exception>
-    public SetsConfigurations(string elementSeparator, bool addBraces = false)
+    public SetsConfigurations(string elementSeparator, bool addBraces = false, bool ignoreEmptyFields = false)
     {
         string fieldTerminator = "\t";
         VerifyProperties(fieldTerminator, elementSeparator);
         IsICustomObject = false;
         IgnoreEmptySets = true;
         AutomaticallyAddBrace = addBraces;
+        IgnoreEmptySets |= ignoreEmptyFields;
     }
 
     /// <summary>
