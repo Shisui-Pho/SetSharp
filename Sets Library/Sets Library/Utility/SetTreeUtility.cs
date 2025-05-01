@@ -54,17 +54,26 @@ public static class SetTreeUtility<T>
         }
 
         //Here the tree is none empty(it has something in it)
-        string representation = "{";
+        string representation = "{" + currentTree.RootElements;
+        bool emptyAdded = false;
 
         //Check for empty sets
         if (currentTree.TreeInfo.HasNullElements && !currentTree.ExtractionSettings.IgnoreEmptySets)
-            representation += "{}";
-        
-         representation += currentTree.RootElements; 
+        {
+            if (representation.Length == 1)//Here it means there's only the opening brace without clossing braces
+                representation += "{}";
+            else
+                representation += currentTree.ExtractionSettings.RowTerminator + "{}";
+            emptyAdded = true;
+        }
+
 
         //Loop through the subsets
         foreach (var subset in currentTree.GetSubsetsEnumerator())
         {
+            if (emptyAdded && subset.TreeInfo.IsEmptyTree)
+                continue;//Ignore tree since it has been handled
+
             //Attach each subset in the representation
             string subsetTree = BuildTree(subset);
             representation += subset.ExtractionSettings.RowTerminator + subsetTree;
