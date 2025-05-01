@@ -2,6 +2,7 @@
 using Xunit;
 using System;
 using SetsLibrary.Utility;
+using SetsLibrary.Extensions;
 namespace SetsLibrary.Tests.New_features;
 
 public class AddBracesPropertyFeature
@@ -42,7 +43,7 @@ public class AddBracesPropertyFeature
         var config = new SetsConfigurations(",", addBraces: false);
 
         //This should pass
-        Assert.Throws<ArgumentException>(() => new TypedSet<int>(expression, config));
+        Assert.Throws<MissingBraceException>(() => new TypedSet<int>(expression, config));
     }
     [Fact]
     public void BuildSetTree_SimpleSet_ParsesCorrectly()
@@ -69,4 +70,22 @@ public class AddBracesPropertyFeature
 
         Assert.Equal(3, result.CountRootElements);
     }
+    //[Fact]
+    //public void BuildSetTree_WithBraces_CreatesSubset()
+    //{
+    //    var config = new SetsConfigurations(",", addBraces: true);
+    //    string input = "{2,1,2,3,1}";
+    //    var set = new TypedSet<int>(input, config);
+
+    //    var result = set.
+
+
+    //    Assert.Equal(0, result.CountRootElements);
+    //    Assert.Equal(1, result.CountSubsets);
+    //    Assert.Equal(1, result.Count);
+    //    Assert.Empty(result.RootElements);
+    //    Assert.Empty(result.GetRootElementsEnumerator());
+    //    Assert.NotEmpty(result.GetSubsetsEnumerator());
+    //    Assert.Equal("{1,2,3}", result.GetSubsetsEnumerator().First().ToString());
+    //}
 }//class
