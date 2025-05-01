@@ -62,18 +62,17 @@ public class SetTreeBuilder<T>
         ISetTree<T> tree = BuildSetTree(root, extractionConfig);
 
         // Add all subsets as subtrees
-        while (subsets.Count > 0)
+        foreach (var subset in subsets)
         {
-            string ex = subsets.Pop();
-            tree.AddElement(BuildSetTree(ex, extractionConfig));
+            tree.AddElement(BuildSetTree(subset, extractionConfig));
         }
 
         return tree;
     }//BuildSetTree
-    private static Stack<string> ExtractSubsets(string expression,int lenRowTerminator ,out string rootElements)
+    private static SortedCollection<string> ExtractSubsets(string expression,int lenRowTerminator ,out string rootElements)
     {
         //Here the first braces have been removed 
-        Stack<string> subsets = [];
+        SortedCollection<string> subsets = [];
 
         //String builders to hold the current subset and current root
         StringBuilder _roots = new();
@@ -119,7 +118,7 @@ public class SetTreeBuilder<T>
                 {
                     //Here it means that the subset has been extracted
                     //-We need to add the subset
-                    subsets.Push(_subSet.ToString());
+                    subsets.AddIfUnique(_subSet.ToString());
 
                     //Reset the subset 
                     _subSet.Clear();
