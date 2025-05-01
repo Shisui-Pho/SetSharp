@@ -213,7 +213,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         if(config.AutomaticallyAddBrace)
             return "{" + expression + "}";
         
-        //Just return the expression itself.
+        //Check if the the braces match
+        if(!expression.StartsWith('{') || !expression.EndsWith('}'))
+        {
+            throw new MissingBraceException("Sets cannot be parsed, you're missing an oppenig or clossing or both braces.",
+                                            "If you need to automatically add them, you can pass the parameter \"addBraces = true\" in the configurations.");
+        }
         return expression;
     }
     /// <summary>
