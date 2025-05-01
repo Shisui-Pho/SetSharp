@@ -66,7 +66,7 @@ public class SetsConfigurations
         IsICustomObject = false;
         IgnoreEmptySets = true;
         AutomaticallyAddBrace = addBraces;
-        IgnoreEmptySets |= ignoreEmptyFields;
+        IgnoreEmptySets = ignoreEmptyFields;
     }
 
     /// <summary>
