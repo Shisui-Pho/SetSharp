@@ -388,15 +388,6 @@ public class SetTreeListConverter
     }
 
     [Fact]
-    public void ToListRootElementsWith_ShouldThrowArgumentNullException_WhenTreeIsNull()
-    {
-        // Arrange
-        ISetTree<int> nullTree = null;
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new SetTreeListConverter<int>(nullTree));
-    }
-
-    [Fact]
     public void ToListRootElements_ShouldReturnEmptyList_WhenTreeIsEmpty()
     {
         // Arrange

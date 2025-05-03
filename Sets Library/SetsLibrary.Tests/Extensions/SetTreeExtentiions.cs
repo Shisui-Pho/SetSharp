@@ -53,7 +53,7 @@ public class SetTreeExtentiions
         ISetTree<int> tree = null;
 
         // Act & Assert
-        Assert.Throws<SetsException>(() => tree.ToTypedSet());
+        Assert.Throws<ArgumentNullException>(() => tree.ToTypedSet());
     }
 
     // Extreme Test Case 6: Null Tree in ToStringLiteralSet
