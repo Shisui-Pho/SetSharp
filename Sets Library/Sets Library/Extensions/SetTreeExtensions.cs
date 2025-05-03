@@ -19,11 +19,8 @@
  * - TElement must implement IComparable<TElement> for proper element comparison within the set.
  * - Specific conversion methods also support additional constraints like IConvertible and ICustomObjectConverter<TElement>.
  */
-
-using SetsLibrary.Collections;
 using System.Diagnostics.CodeAnalysis;
-
-namespace SetsLibrary.Extensions
+namespace SetsLibrary.Collections
 {
     /// <summary>
     /// Provides extension methods for converting <see cref="ISetTree{TElement}"/> objects into different collection types.

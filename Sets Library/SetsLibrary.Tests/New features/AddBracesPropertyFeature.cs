@@ -2,7 +2,7 @@
 using Xunit;
 using System;
 using SetsLibrary.Utility;
-using SetsLibrary.Extensions;
+using SetsLibrary.Collections;
 namespace SetsLibrary.Tests.New_features;
 
 public class AddBracesPropertyFeature
