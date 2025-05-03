@@ -25,7 +25,7 @@ namespace SetsLibrary.Collections
     /// <summary>
     /// Provides extension methods for converting <see cref="ISetTree{TElement}"/> objects into different collection types.
     /// </summary>
-    public static partial class SetTreeExtensions
+    public static class SetTreeExtensions
     {
         #region Converting "ISetTree<TElement>" to type "IStructuredSet<TElement>"
 
