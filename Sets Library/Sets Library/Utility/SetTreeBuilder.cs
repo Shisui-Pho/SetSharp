@@ -18,6 +18,7 @@
  */
 
 using SetsLibrary.Collections;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Linq;
@@ -177,6 +178,14 @@ public class SetTreeBuilder<T>
     /// <returns>An <see cref="IEnumerable{T}"/> containing the sorted and unique root elements.</returns>
     public static IEnumerable<T> SortAndRemoveDuplicates(string rootElements, SetsConfigurations extractionConfig, out bool hasAnEmptySet, out int countEmptySets)
     {
+        //If there is nothing
+        if(string.IsNullOrEmpty(rootElements) || string.IsNullOrWhiteSpace(rootElements))
+        {
+            hasAnEmptySet = false;
+            countEmptySets = 0;
+            return Enumerable.Empty<T>();
+        }    
+
         hasAnEmptySet = false;
         countEmptySets = 0;
         //Split elements based on the row terminator
