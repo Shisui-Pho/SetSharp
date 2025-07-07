@@ -662,14 +662,15 @@ namespace SetsLibrary.Tests
         public void SymmetricDifference_LargeSets_ReturnsCorrectSymmetricDifference()
         {
             // Arrange
-            var setA = CreateSet(new int[1000]);
-            var setB = CreateSet(new int[1000]);
-            for (int i = 0; i < 1000; i++)
+            var setA = CreateSet(new int[10_000]);
+            var setB = CreateSet(new int[10_000]);
+            for (int i = 0; i < 10_000; i++)
             {
                 setA.AddElement(CreateSet(new[] { i }));
                 setB.AddElement(CreateSet(new[] { i + 500 }));
             }
-
+            var s1 = setA.BuildStringRepresentation();
+            var s2 = setB.BuildStringRepresentation();
             // Act
             var result = setA.SymmetricDifference(setB);
 
@@ -758,6 +759,7 @@ namespace SetsLibrary.Tests
 
             // Assert
             Assert.Equal(expectedSymmetricDifference.Length, result.Cardinality);
+            var lst = result.EnumerateRootElements().ToList();
             foreach (var elem in expectedSymmetricDifference)
             {
                 Assert.Contains(elem, result.EnumerateRootElements());

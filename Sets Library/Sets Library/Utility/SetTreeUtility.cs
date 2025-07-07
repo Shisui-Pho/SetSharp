@@ -37,7 +37,6 @@ public static class SetTreeUtility<T>
 
         // Recursively build the tree string representation
         string tree = BuildTree(setTree);
-
         return tree;
     }//ToElementString
 
@@ -48,9 +47,13 @@ public static class SetTreeUtility<T>
     /// <returns>A string representing the set tree, where subsets are enclosed in curly braces and empty sets are represented as ∅.</returns>
     private static string BuildTree(ISetTree<T> currentTree)
     {
-        if(currentTree.TreeInfo.IsEmptyTree)
+        if (currentTree.TreeInfo.IsEmptyTree)
         {
             return "{}";//Return nothing (Ø)
+        }
+        if(currentTree.TreeInfo.IsEmptyTree && currentTree.ExtractionSettings.IgnoreEmptySets)
+        {
+            return string.Empty; //Return nothing if empty sets are ignored
         }
 
         //Here the tree is none empty(it has something in it)
@@ -60,13 +63,12 @@ public static class SetTreeUtility<T>
         //Check for empty sets
         if (currentTree.TreeInfo.HasNullElements && !currentTree.ExtractionSettings.IgnoreEmptySets)
         {
-            if (representation.Length == 1)//Here it means there's only the opening brace without clossing braces
+            if (representation.Length == 1)//Here it means there's only the opening brace without closing braces
                 representation += "{}";
             else
-                representation += currentTree.ExtractionSettings.RowTerminator + "{}";
+                representation += currentTree.ExtractionSettings.RowTerminator + "{}"; //Add empty set with a row terminator
             emptyAdded = true;
         }
-
 
         //Loop through the subsets
         foreach (var subset in currentTree.GetSubsetsEnumerator())
@@ -76,10 +78,17 @@ public static class SetTreeUtility<T>
 
             //Attach each subset in the representation
             string subsetTree = BuildTree(subset);
-            representation += subset.ExtractionSettings.RowTerminator + subsetTree;
-        }
+            var empty = string.Empty;
 
+            if(string.IsNullOrEmpty(subsetTree))
+                continue; //Skip empty subset trees if they are ignored
+
+            if (representation.Length == 1) //If it's just a brace, then there are no root elements
+                representation += subsetTree;
+            else
+                representation += currentTree.ExtractionSettings.RowTerminator + subsetTree; // Add subset with a row terminator
+        }
         //Attach the closing brace
         return representation + "}";
-    }
-}//BuildTree
+    }//BuildTree
+}//class

@@ -541,7 +541,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
             return this;
 
         //Get the string representation of the sets
-        string setA = _treeWrapper.ToString();
+        string setA = BuildStringRepresentation();
         string? setB = set.BuildStringRepresentation();
 
         //Merge strings
