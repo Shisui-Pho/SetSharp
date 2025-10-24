@@ -62,7 +62,7 @@ public class SetTreeBuilder<T>
         // Create the root tree with the remaining elements after removing subsets
         ISetTree<T> tree = BuildSetTree(root, extractionConfig);
 
-        // Add all subsets as subtrees
+        // AddIfDuplicate all subsets as subtrees
         foreach (var subset in subsets)
         {
             tree.AddElement(BuildSetTree(subset, extractionConfig));
@@ -119,7 +119,7 @@ public class SetTreeBuilder<T>
                 {
                     //Here it means that the subset has been extracted
                     //-We need to add the subset
-                    subsets.AddIfUnique(_subSet.ToString());
+                    subsets.Add(_subSet.ToString());
 
                     //Reset the subset 
                     _subSet.Clear();
@@ -223,7 +223,7 @@ public class SetTreeBuilder<T>
                 //Check for nullls
                 if (item is not null)
                 {
-                    uniqueElements.AddIfUnique(item);
+                    uniqueElements.Add(item);
                 }
                 else
                 {

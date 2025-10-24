@@ -66,7 +66,7 @@ public static class SetTreeUtility<T>
             if (representation.Length == 1)//Here it means there's only the opening brace without closing braces
                 representation += "{}";
             else
-                representation += currentTree.ExtractionSettings.RowTerminator + "{}"; //Add empty set with a row terminator
+                representation += currentTree.ExtractionSettings.RowTerminator + "{}"; //AddIfDuplicate empty set with a row terminator
             emptyAdded = true;
         }
 
@@ -86,7 +86,7 @@ public static class SetTreeUtility<T>
             if (representation.Length == 1) //If it's just a brace, then there are no root elements
                 representation += subsetTree;
             else
-                representation += currentTree.ExtractionSettings.RowTerminator + subsetTree; // Add subset with a row terminator
+                representation += currentTree.ExtractionSettings.RowTerminator + subsetTree; // AddIfDuplicate subset with a row terminator
         }
         //Attach the closing brace
         return representation + "}";

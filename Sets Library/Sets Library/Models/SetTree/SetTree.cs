@@ -90,7 +90,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     public SetTree(SetsConfigurations extractionSettings, IEnumerable<T> elements)
         : this(extractionSettings)
     {
-        //Add elements as ranges
+        //AddIfDuplicate elements as ranges
         this.AddRange(elements);
     }
 
@@ -102,7 +102,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     public SetTree(SetsConfigurations extractionSettings, IEnumerable<ISetTree<T>> subsets)
         : this(extractionSettings)
     {
-        //Add elements as ranges
+        //AddIfDuplicate elements as ranges
         this.AddRange(subsets);
     }
 
@@ -115,7 +115,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     public SetTree(SetsConfigurations extractionSettings, IEnumerable<T> elements, IEnumerable<ISetTree<T>> subsets)
         : this(extractionSettings)
     {
-        //Add ranges
+        //AddIfDuplicate ranges
         this.AddRange(elements);
         this.AddRange(subsets);
     }
@@ -151,8 +151,8 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
             this.TreeInfo.IsEmptyTree = false;
         }
 
-        //Add element if it is unique
-        _elements.AddIfUnique(element);
+        //AddIfDuplicate element if it is unique
+        _elements.Add(element);
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(elements, nameof(elements));
 
-        //Add them one by one
+        //AddIfDuplicate them one by one
         foreach (T element in elements)
             this.AddElement(element);
     }
@@ -181,14 +181,14 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //First check if it is a null set or not
         if (tree.TreeInfo.IsEmptyTree)
         {
-            //Add it as a null set
+            //AddIfDuplicate it as a null set
             WillHaveNullElements(true, 1);
         }
         //Update the current's tree info
         TreeInfo.IsEmptyTree = false;
 
-        //Add if unique
-        _subSets.AddIfUnique(tree);
+        //AddIfDuplicate if unique
+        _subSets.Add(tree);
     }
 
     /// <summary>
@@ -200,7 +200,7 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(subsets, nameof(subsets));
 
-        //Add subsets one by one
+        //AddIfDuplicate subsets one by one
         foreach (ISetTree<T> subset in subsets)
             this.AddElement(subset);
     }

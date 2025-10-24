@@ -79,7 +79,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
         // Check for nulls
         ArgumentNullException.ThrowIfNull(collection, nameof(collection));
 
-        // Add the range
+        // AddIfDuplicate the range
         this.AddRange(collection);
     }
 
@@ -99,7 +99,7 @@ public class SetCollection<T> : ISetCollection<IStructuredSet<T>, T>
         //Generate the next key
         string key = GenerateNextKey();
 
-        // Add the element
+        // AddIfDuplicate the element
         _dicCollection.Add(key, item);
     }
     private string GenerateNextKey()

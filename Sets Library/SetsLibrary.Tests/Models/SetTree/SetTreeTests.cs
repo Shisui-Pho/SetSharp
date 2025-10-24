@@ -560,7 +560,7 @@ namespace SetsLibrary.Tests.Models.SetTree
             var mainSet = new SetTree<int>(extractionSettings);
             var largeSubset = new SetTree<int>(extractionSettings);
 
-            // Add 1 million elements to a subset
+            // AddIfDuplicate 1 million elements to a subset
             largeSubset.AddRange(Enumerable.Range(0, 1000000));
 
             mainSet.AddElement(largeSubset);

@@ -60,7 +60,7 @@ public static class BraceEvaluator
             // Check for opening brace
             if (character == '{')
             {
-                elements.Push(character); // Add the opening brace to the stack
+                elements.Push(character); // AddIfDuplicate the opening brace to the stack
                 continue;
             }
 

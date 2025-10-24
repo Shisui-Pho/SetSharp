@@ -146,7 +146,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         // Ensure the configuration is not null, as it is needed to extract elements and subsets from the expression
         ArgumentNullException.ThrowIfNull(config, nameof(config));
 
-        //Add braces if needed
+        //AddIfDuplicate braces if needed
         expression = AddBracesIfNeeded(expression, config);
 
         // Ensure the expression is valid (non-null and non-whitespace)
@@ -242,7 +242,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //Check if element is null or not
         ArgumentNullException.ThrowIfNull(element, nameof(element));
 
-        //Add element to the tree
+        //AddIfDuplicate element to the tree
         _treeWrapper.AddElement(element);
     }//AddElement
 
@@ -293,7 +293,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         var tree = Extractions(subset);
 
         var indexedTree = BuildNewSet(new SetTreeWithIndexes<T>(tree));
-        //Add the tree
+        //AddIfDuplicate the tree
         this.AddElement(indexedTree);
     }//AddSubsetAsString
 

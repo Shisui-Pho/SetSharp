@@ -9,7 +9,7 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Add_OneElement_ElementIsAdded()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(5);
+            sortedElements.AddIfDuplicate(5);
 
             Assert.Equal(1, sortedElements.Count);
             Assert.Equal(5, sortedElements[0]);
@@ -19,9 +19,9 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Add_MultipleElements_ElementsAreSorted()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(3);
-            sortedElements.Add(1);
-            sortedElements.Add(2);
+            sortedElements.AddIfDuplicate(3);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
 
             Assert.Equal(3, sortedElements.Count);
             Assert.Equal(1, sortedElements[0]);
@@ -33,16 +33,16 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Add_NullElement_ThrowsArgumentNullException()
         {
             var sortedElements = new SortedElements<string>();
-            Assert.Throws<ArgumentNullException>(() => sortedElements.Add(null));
+            Assert.Throws<ArgumentNullException>(() => sortedElements.AddIfDuplicate(null));
         }//Add_NullElement_ThrowsArgumentNullException
 
         [Fact]
         public void Remove_ExistingElement_ElementIsRemoved()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
-            sortedElements.Add(3);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
+            sortedElements.AddIfDuplicate(3);
 
             sortedElements.Remove(2);
             Assert.Equal(2, sortedElements.Count);
@@ -54,8 +54,8 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Remove_NonExistingElement_ReturnsFalse()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
 
             bool result = sortedElements.Remove(3);
             Assert.False(result);
@@ -66,8 +66,8 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Contains_ExistingElement_ReturnsTrue()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
 
             Assert.True(sortedElements.Contains(1));
         }//Contains_ExistingElement_ReturnsTrue
@@ -76,8 +76,8 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Contains_NonExistingElement_ReturnsFalse()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
 
             Assert.False(sortedElements.Contains(3));
         }//Contains_NonExistingElement_ReturnsFalse
@@ -86,9 +86,9 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void IndexOf_ExistingElement_ReturnsCorrectIndex()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
-            sortedElements.Add(3);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
+            sortedElements.AddIfDuplicate(3);
 
             int index = sortedElements.IndexOf(2);
             Assert.Equal(1, index);
@@ -98,8 +98,8 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void IndexOf_NonExistingElement_ReturnsMinusOne()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
 
             int index = sortedElements.IndexOf(3);
             Assert.Equal(-1, index);
@@ -109,8 +109,8 @@ namespace SetsLibrary.Tests.Collections.Element_Collections
         public void Clear_ElementsAreRemoved()
         {
             var sortedElements = new SortedElements<int>();
-            sortedElements.Add(1);
-            sortedElements.Add(2);
+            sortedElements.AddIfDuplicate(1);
+            sortedElements.AddIfDuplicate(2);
             sortedElements.Clear();
 
             Assert.Equal(0, sortedElements.Count);

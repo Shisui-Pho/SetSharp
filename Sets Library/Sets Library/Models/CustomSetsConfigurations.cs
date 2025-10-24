@@ -16,7 +16,7 @@ namespace SetsLibrary;
 internal class CustomSetsConfigurations<TObject> : SetsConfigurations
     where TObject : IComparable<TObject>
 {
-    //Add an additional feature for custom conversion
+    //AddIfDuplicate an additional feature for custom conversion
     public Func<string?[], TObject>? Funct_ToObject { get; set; } = null;
 
     /// <inheritdoc/>
