@@ -10,7 +10,7 @@ namespace SetsLibrary.Tests.Collections.Set_Collection
         {
             //Create an empty set
             collection = new SetCollection<int>();
-            //Add 16,384 empty sets. 
+            //AddIfDuplicate 16,384 empty sets. 
             var set = new MockSetStructure();
             for (int i = 0; i < 16384; i++)
                 collection.Add(set);

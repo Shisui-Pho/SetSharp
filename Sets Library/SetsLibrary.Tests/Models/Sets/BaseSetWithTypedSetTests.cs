@@ -171,7 +171,7 @@ namespace SetsLibrary.Tests.Models.Sets
             string expression = "{1,2,3}";
             var baseSet = new TypedSet<int>(expression, _extractionConfig);
 
-            // Add an element
+            // AddIfDuplicate an element
             baseSet.AddElement(4);
             Assert.Contains(4, baseSet.EnumerateRootElements());
             Assert.Equal(4, baseSet.Cardinality); // Should now have 4 elements
@@ -340,7 +340,7 @@ namespace SetsLibrary.Tests.Models.Sets
         {
             var baseSet = new TypedSet<int>(initialExpression, _extractionConfig);
 
-            // Add the element
+            // AddIfDuplicate the element
             baseSet.AddElement(elementToAdd);
 
             // Assert the resulting set matches the expected string representation

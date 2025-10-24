@@ -17,7 +17,7 @@
  * - Indexer for retrieving sets by their name.
  * - Name-based searching and removal of sets.
  * - Enumeration of sets both as structures and as individual elements.
- * - Methods for dynamic manipulation: Add, AddRange, Contains, Remove, Reset, and Clear.
+ * - Methods for dynamic manipulation: AddIfDuplicate, AddRange, Contains, Remove, Reset, and Clear.
  * - Each element in the set must implement <see cref="IComparable{T}"/> for ordering and comparison.
  */
 namespace SetsLibrary.Collections;

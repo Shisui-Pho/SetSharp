@@ -168,6 +168,6 @@ public class SetTreeExtentiions
 
         //// Assert
         //Assert.NotEmpty(result);
-        //// Add assertions to check the complexity of the structured sets returned
+        //// AddIfDuplicate assertions to check the complexity of the structured sets returned
     }
 }

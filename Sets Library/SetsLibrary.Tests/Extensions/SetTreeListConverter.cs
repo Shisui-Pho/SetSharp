@@ -265,7 +265,7 @@ public class SetTreeListConverter
         // Arrange
         var setTree = new SetTree<int>(config);
         var emptySubTree = new SetTree<int>(config);  // A subtree with no elements
-        setTree.AddElement(emptySubTree);  // Add it as a subset
+        setTree.AddElement(emptySubTree);  // AddIfDuplicate it as a subset
         var converter = new SetTreeListConverter<int>(setTree);
 
         // Act
@@ -285,9 +285,9 @@ public class SetTreeListConverter
         var internalCollection = new SortedCollection<int>();
         for (int i = 0; i < 100000; i++)  // Adding a large number of elements to internal collection
         {
-            internalCollection.Add(i);
+            internalCollection.AddIfDuplicate(i);
         }
-        setTree.AddRange(internalCollection);  // Add this large collection as an element
+        setTree.AddRange(internalCollection);  // AddIfDuplicate this large collection as an element
         var converter = new SetTreeListConverter<int>(setTree);
 
         // Act

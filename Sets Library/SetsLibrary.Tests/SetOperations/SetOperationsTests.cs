@@ -783,13 +783,13 @@ namespace SetsLibrary.Tests
 
             // Assert Element-Set pairs (CartesianPairType.Element1Set1)
             var subsetB = CreateSet(new[] { 3 }); // Subset of setB
-            setB.AddElement(subsetB);  // Add subset to setB
+            setB.AddElement(subsetB);  // AddIfDuplicate subset to setB
             Assert.DoesNotContain(result, pair => pair.PairType == CartesianPairType.Element1Set1 && pair.Element1 == 1 && pair.Set1 == subsetB);
             Assert.DoesNotContain(result, pair => pair.PairType == CartesianPairType.Element1Set1 && pair.Element1 == 2 && pair.Set1 == subsetB);
 
             // Assert Set-Element pairs (CartesianPairType.Set1Element1)
             var subsetA = CreateSet(new[] { 1 }); // Subset of setA
-            setA.AddElement(subsetA);  // Add subset to setA
+            setA.AddElement(subsetA);  // AddIfDuplicate subset to setA
 
             result = setA.CartesianProduct(setB).ToList();
 
@@ -798,7 +798,7 @@ namespace SetsLibrary.Tests
 
             // Assert Set-Set pairs (CartesianPairType.Set1Set2)
             var subsetB2 = CreateSet(new[] { 4 }); // Another subset of setB
-            setB.AddElement(subsetB2);  // Add another subset to setB
+            setB.AddElement(subsetB2);  // AddIfDuplicate another subset to setB
             result = setA.CartesianProduct(setB).ToList();
             Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA) && pair.Set2.SetStructuresEqual( subsetB));
             Assert.Contains(result, pair => pair.PairType == CartesianPairType.Set1Set2 && pair.Set1.SetStructuresEqual(subsetA) && pair.Set2.SetStructuresEqual(subsetB2));
@@ -1001,11 +1001,11 @@ namespace SetsLibrary.Tests
             var setA = CreateSet(new[] { 1, 2, 3 }); // A set with elements
             var setB = CreateSet(new int[] { }); // Empty set B
 
-            // Add subsets to set A
+            // AddIfDuplicate subsets to set A
             var subsetA = CreateSet(new[] { 1, 2 });
             setA.AddElement(subsetA);
 
-            // Add a subset to set B (empty set has no root elements or subsets)
+            // AddIfDuplicate a subset to set B (empty set has no root elements or subsets)
             var subsetB = CreateSet(new[] { 4, 5 });
             setB.AddElement(subsetB);
 
@@ -1046,7 +1046,7 @@ namespace SetsLibrary.Tests
             var setB = CreateSet(setBElements); // Create set B from input
             var subset = CreateSet(subsetElements); // Create a subset
 
-            // Add the subset to set B (we assume subsets can be added to sets)
+            // AddIfDuplicate the subset to set B (we assume subsets can be added to sets)
             setB.AddElement(subset);
 
             // Act

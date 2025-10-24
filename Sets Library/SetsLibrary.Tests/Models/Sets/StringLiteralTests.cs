@@ -55,7 +55,7 @@ namespace SetsLibrary.Tests.Models.Sets
             Assert.Equal("{0,1,2,3,4}", result);
         }
 
-        // Test for adding a new element to the set (assuming Add method exists)
+        // Test for adding a new element to the set (assuming AddIfDuplicate method exists)
         [Fact]
         public void Add_ShouldAddElementToSet()
         {

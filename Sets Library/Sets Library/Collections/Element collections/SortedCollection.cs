@@ -88,7 +88,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     ///</summary>
     ///<param name="value">The element to add.</param>
     ///<exception cref="ArgumentNullException">Thrown if the element is null.</exception>
-    public void Add(TElement value)
+    public void AddIfDuplicate(TElement value)
     {
         //Don't add if null
         ArgumentNullException.ThrowIfNull(value, nameof(value));
@@ -103,13 +103,13 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
         //Find the index for insertion
         int pointOfInsertion = FindIndexOfInsertion(value);
         _elements.Insert(pointOfInsertion, value);
-    }//Add
+    }//AddIfDuplicate
     ///<summary>
     ///Adds an element to the collection, ensuring the collection remains sorted. Duplicates will not be added.
     ///</summary>
     ///<param name="val">The element to add.</param>
     ///<exception cref="ArgumentNullException">Thrown if the element is null.</exception>
-    public void AddIfUnique(TElement val)
+    public void Add(TElement val)
     {
         //Don't add if null
         ArgumentNullException.ThrowIfNull(val, nameof(val));
@@ -123,13 +123,13 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
 
         int indexOfInsertion = FindIndexOfInsertion(val);
 
-        //Check if element can be added
-        if (indexOfInsertion < Count && _elements[indexOfInsertion].CompareTo(val) == 0) //Here it means it is defined
+        //Only add unique elements
+        if (indexOfInsertion < Count && _elements[indexOfInsertion].CompareTo(val) == 0) 
             return;
 
-        //Else add
+        
         _elements.Insert(indexOfInsertion, val);
-    }//AddIfUnique
+    }//Add
     ///<summary>
     ///Finds the index at which the specified value should be inserted to maintain sorted order.
     ///</summary>
@@ -169,7 +169,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
 
         foreach (var item in coll)
         {
-            Add(item);
+            AddIfDuplicate(item);
         }
     }//AddRange
 
