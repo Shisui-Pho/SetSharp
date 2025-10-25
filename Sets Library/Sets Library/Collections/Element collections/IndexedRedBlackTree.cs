@@ -1,5 +1,28 @@
-﻿using System.Collections;
+﻿/*
+ * File: IndexedRedBlackTree.cs
+ * Author: Phiwokwakhe Khathwane
+ * Date: 25 January 2025
+ * 
+ * Description:
+ * This file defines the IndexedRedBlackTree<TElement> class, which implements the IIndexedRedBlackTree<TElement> interface. 
+ * The class represents a red-black tree data structure that allows indexed access to elements, as well as typical operations such as 
+ * adding, removing, and querying elements. This tree is designed to maintain balanced ordering while providing efficient access 
+ * to elements by index, utilizing a red-black tree algorithm for balancing and performance.
+ * 
+ * Key Features:
+ * - Implements a red-black tree with indexed access, adhering to the IIndexedRedBlackTree interface.
+ * - Provides efficient insertion, removal, and querying of elements in the tree.
+ * - Allows accessing elements by index, maintaining the tree’s balance automatically.
+ * - Supports enumeration of elements and common operations like finding the minimum and maximum elements.
+ * - Optimized for performance with logarithmic time complexity for most operations.
+ */
+
+using System.Collections;
 namespace SetsLibrary.Collections;
+/// <summary>
+/// Represents a red-black tree data structure that supports indexed access to elements, implementing the IIndexedRedBlackTree interface.
+/// </summary>
+/// <typeparam name="TElement">The type of elements in the tree. The elements must implement <see cref="IComparable{TElement}"/> for sorting and comparison.</typeparam>
 public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEnumerable<TElement> where TElement : IComparable<TElement>
 {
     #region Internal Structures
@@ -43,9 +66,11 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
 
     #region Properties, indexers and constructors
     private Node? root = null!;
+    /// <inheritdoc/>
     public int Count { get; private set; }
+    /// <inheritdoc/>
     public bool IsEmpty => root == null;
-    //Indexer
+    /// <inheritdoc/>
     public TElement this[int index]
     {
         get
@@ -72,6 +97,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
     }
     #endregion Properties, indexers and constructors
     #region Public methods
+    /// <inheritdoc/>
     public void Add(TElement item)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
@@ -81,11 +107,13 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Count++;
         FixViolation(newNode);
     }
+    /// <inheritdoc/>
     public bool Contains(TElement item)
     {
         ArgumentNullException.ThrowIfNull(item, nameof(item));
         return FindNode(item) != null;
     }
+    /// <inheritdoc/>
     public int IndexOf(TElement item)
     {
         if (root == null || item == null) return -1;
@@ -109,27 +137,32 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         //Element not found
         return -1;
     }
+    /// <inheritdoc/>
     public IEnumerator<TElement> GetEnumerator()
     {
         return InOrderTraversal().GetEnumerator();
     }
+    /// <inheritdoc/>
     public TElement Min()
     {
         if (root == null)
             throw new InvalidOperationException("Tree is empty");
         return FindMinNode(root).Data;
     }
+    /// <inheritdoc/>
     public TElement Max()
     {
         if (root == null)
             throw new InvalidOperationException("Tree is empty");
         return FindMaxNode(root).Data;
     }
+    /// <inheritdoc/>
     public void Clear()
     {
         root = null;
         Count = 0;
     }
+    /// <inheritdoc/>
     public bool TryRemove(TElement item, out TElement? removedData)
     {
         var node = FindNode(item);
@@ -144,6 +177,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Count--;
         return true;
     }
+    /// <inheritdoc/>
     public bool Remove(TElement item)
     {
         var node = FindNode(item);
@@ -154,6 +188,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Count--;
         return true;
     }
+    /// <inheritdoc/>
     public TElement RemoveAt(int index)
     {
         if (index < 0 || index >= Count)
