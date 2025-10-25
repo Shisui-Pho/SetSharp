@@ -43,10 +43,15 @@ public interface IIndexedRedBlackTree<TElement> where TElement : IComparable<TEl
     bool IsEmpty { get; }
 
     /// <summary>
-    /// Adds an element to the tree. Duplicates may or may not be allowed depending on the tree's implementation.
+    /// Adds an element to the tree.
     /// </summary>
     /// <param name="item">The element to be added to the tree.</param>
     void Add(TElement item);
+    /// <summary>
+    /// Adds a collection of elements to the tree.
+    /// </summary>
+    /// <param name="items">The collection of elements to be added to the tree.</param>
+    void AddRange(IEnumerable<TElement> items);
 
     /// <summary>
     /// Clears all elements from the tree.

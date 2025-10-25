@@ -86,14 +86,30 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             return node.Data;
         }
     }//end indexer
+
+    /// <summary>
+    /// Initializes a new, empty instance of the <see cref="IndexedRedBlackTree{TElement}"/> class.
+    /// </summary>
+    /// <remarks>
+    /// This constructor creates an empty red-black tree with an initial count of zero and a null root.
+    /// </remarks>
     public IndexedRedBlackTree()
     {
-        root = null;
-        Count = 0;
+        Clear();
     }
-    public IndexedRedBlackTree(IEnumerable<TElement> elements) : this()
-    {
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IndexedRedBlackTree{TElement}"/> class and populates it with the specified collection of elements.
+    /// </summary>
+    /// <param name="elements">A collection of elements to add to the tree.</param>
+    /// <remarks>
+    /// This constructor creates a new red-black tree and uses the specified collection to populate the tree.
+    /// The elements are added in the order they appear in the collection, and the tree remains balanced throughout.
+    /// </remarks>
+    public IndexedRedBlackTree(IEnumerable<TElement> elements)
+    {
+        Clear();
+        AddRange(elements);
     }
     #endregion Properties, indexers and constructors
     #region Public methods
@@ -106,6 +122,14 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         var newNode = InsertBST(item);
         Count++;
         FixViolation(newNode);
+    }
+    ///<inheritdoc/>
+    public void AddRange(IEnumerable<TElement> items)
+    {
+        ArgumentNullException.ThrowIfNull(items, nameof(items));
+
+        foreach (var item in items)
+            Add(item);
     }
     /// <inheritdoc/>
     public bool Contains(TElement item)
