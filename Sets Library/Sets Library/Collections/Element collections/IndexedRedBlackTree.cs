@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 namespace SetsLibrary.Collections;
-public class IndexedRedBlackTree<TElement> : IEnumerable<TElement> where TElement : IComparable<TElement>
+public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEnumerable<TElement> where TElement : IComparable<TElement>
 {
     #region Internal Structures
     private enum NodeColor
