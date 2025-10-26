@@ -65,6 +65,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
     #endregion Internal Structures
 
     #region Properties, indexers and constructors
+    private const float MIN_CHANGE_STRUCTURE_RATIO = 0.2f;
     private Node? root = null!;
     /// <inheritdoc/>
     public int Count { get; private set; }
@@ -111,6 +112,11 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Clear();
         AddRange(elements);
     }
+    private IndexedRedBlackTree(Node root)
+    {
+        Clear();
+        this.root = root;
+    }
     #endregion Properties, indexers and constructors
     #region Public methods
     /// <inheritdoc/>
@@ -127,10 +133,29 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
     public void AddRange(IEnumerable<TElement> items)
     {
         ArgumentNullException.ThrowIfNull(items, nameof(items));
+        var sorted = items as IndexedRedBlackTree<TElement>;
+        if (sorted == null)
+        {
+            foreach (var item in items)
+                Add(item);
+            return;
+        }
 
-        foreach (var item in items)
-            Add(item);
-    }
+        //If the incomming tree is way bigger than the current tree, 
+        //- it will be efficient to swap the tree, and add the current one to the 
+        //- incoming one.
+        float ratio = (float)Count / sorted.Count;
+        if(ratio <= MIN_CHANGE_STRUCTURE_RATIO)
+        {
+            this.SwapTreesAddRange(sorted);
+        }
+        else
+        {
+            foreach (var item in items)
+                Add(item);
+        }
+    }//AddRange
+
     /// <inheritdoc/>
     public bool Contains(TElement item)
     {
@@ -227,6 +252,91 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
     }
     #endregion Public methods
     #region Helper methods
+    private void SwapTreesAddRange(IndexedRedBlackTree<TElement> sorted)
+    {
+        if (sorted.IsEmpty || sorted.Count == 0)
+            return;
+
+        if (this.Count == 0)
+        {
+            InsertDefaultSortedBFT(sorted);
+            Count = sorted.Count;
+        }
+        else
+        {
+            InsertExchageSortedBFT(sorted);
+            Count += sorted.Count;
+        }
+    }//SwapTreesAddRange
+    private void InsertExchageSortedBFT(IndexedRedBlackTree<TElement> sorted)
+    {
+        if (sorted.Count < Count)
+            throw new Exception("Invalid operation, consider using the Add method");
+
+        if (sorted.root == null)
+            throw new NullReferenceException("Root node is null");
+
+        var newRoot = new Node(sorted.root.Data);
+        newRoot.Color = sorted.root.Color;
+
+        CopyTreeBFT(sorted,ref newRoot);
+
+        //Re-add the current element from current root.
+        IndexedRedBlackTree<TElement> tree = new(newRoot);
+        tree.AddRange(this);
+
+        //Change roots
+        this.root = tree.root;
+    }//InsertExchageSortedBFT
+    private void InsertDefaultSortedBFT(IndexedRedBlackTree<TElement> sorted)
+    {
+        if (this.Count > 0)
+            throw new Exception("Tree is not empty, method can only be used when the tree is already empty.");
+        
+        if (sorted.root == null)
+            throw new NullReferenceException("Root node is null");
+
+        root = new Node(sorted.root.Data);
+        root.Color = sorted.root.Color;
+
+        CopyTreeBFT(sorted, ref root);
+    }//InsertDefaultSortedBFT
+    #nullable disable
+    private void CopyTreeBFT(IndexedRedBlackTree<TElement> sorted, ref Node defaultRoot)
+    {
+        //A BFT method of recreating the tree structure of the incomming balanced tree
+        Queue<Node> sortedNodes = new Queue<Node>();
+        Queue<Node> newNodes = new Queue<Node>();
+
+        sortedNodes.Enqueue(sorted.root);
+        newNodes.Enqueue(defaultRoot);
+
+        while (sortedNodes.Count > 0)
+        {
+            var s_node = sortedNodes.Dequeue();
+            var n_node = newNodes.Dequeue();
+
+            if (s_node.Left != null)
+            {
+                n_node.Left = new Node(s_node.Left.Data);
+                n_node.Left.Color = s_node.Left.Color;
+                n_node.Left.Parent = n_node;
+
+                newNodes.Enqueue(n_node.Left);
+                sortedNodes.Enqueue(s_node.Left);
+            }
+            if (s_node.Right != null)
+            {
+                n_node.Right = new Node(s_node.Right.Data);
+                n_node.Right.Color = s_node.Right.Color;
+                n_node.Right.Parent = n_node;
+
+                newNodes.Enqueue(n_node.Right);
+                sortedNodes.Enqueue(s_node.Right);
+            }
+        }
+    }//CopyTreeBFT
+    #nullable enable
     private Node InsertBST(TElement item)
     {
         var newNode = new Node(item);
@@ -433,7 +543,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             current = current.Right;
         }//end while
     }//InOrderTraversal
-#nullable disable
+    #nullable disable
     private void RemoveNode(Node node)
     {
         // Case 1: Node has two children - find inorder successor and replace
@@ -481,7 +591,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             }
         }
     }
-#nullable enable
+    #nullable enable
     private void FixDoubleBlack(Node node, Node parent)
     {
         // Continue fixing until we reach root or the node becomes red

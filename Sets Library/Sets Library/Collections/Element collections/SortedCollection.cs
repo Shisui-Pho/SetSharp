@@ -153,12 +153,20 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(coll, nameof(coll));
 
-        foreach (var item in coll)
+        var sorted = coll as SortedCollection<TElement>;
+
+        if(sorted == null)
         {
-            AddIfDuplicate(item);
+            foreach (var item in coll)
+            {
+                AddIfDuplicate(item);
+            }
+        }
+        else
+        {
+            this._elements.AddRange(sorted._elements);
         }
     }//AddRange
-
     ///<summary>
     ///Checks whether the collection contains the specified element.
     ///</summary>
