@@ -202,14 +202,15 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     {
         ArgumentNullException.ThrowIfNull(val, nameof(val));
 
-        int index = FindIndexOfInsertion(val);
+        //int index = FindIndexOfInsertion(val);
 
-        if (index < Count && val.CompareTo(_elements[index]) == 0)
-        {
-            return index;
-        }
+        //if (index < Count && val.CompareTo(_elements[index]) == 0)
+        //{
+        //    return index;
+        //}
 
-        return -1; //Element not found
+        //return -1; //Element not found
+        return _elements.IndexOf(val);
     }//IndexOf
 
     ///<summary>
