@@ -22,7 +22,7 @@
 
 using System.Collections;
 
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// A generic collection class that holds a set of unique sets, identified by string keys.

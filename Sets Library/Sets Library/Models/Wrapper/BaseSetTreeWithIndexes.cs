@@ -15,7 +15,7 @@
  * - Exposes root element and subset enumerators, along with counting properties.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a base wrapper for a SetTree, delegating functionality to the underlying ISetTree instance.

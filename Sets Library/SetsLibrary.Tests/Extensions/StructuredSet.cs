@@ -1,6 +1,6 @@
-﻿using SetsLibrary;
+﻿using SetSharp;
 
-namespace SetsLibrary.Tests.Extensions;
+namespace SetSharp.Tests.Extensions;
 public class StructuredSet<T> : IStructuredSet<T> where T : IComparable<T>
 {
     private List<T> elements;

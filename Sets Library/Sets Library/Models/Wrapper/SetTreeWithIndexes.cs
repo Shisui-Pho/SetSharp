@@ -15,7 +15,7 @@
  * - Implements validation for index range and null checks.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a wrapper for the SetTree class that extends functionality for accessing elements 

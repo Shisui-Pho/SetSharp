@@ -16,7 +16,7 @@
  * - Supports removal of elements by value or by index.
  */
 
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 /// <summary>
 /// Represents a collection of sorted elements that allows for addition, removal, and searching within the collection.
 /// </summary>

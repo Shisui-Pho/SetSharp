@@ -16,12 +16,12 @@
  * - Implements the ISortedElements<T> interface for collection-specific behavior.
  * 
  * Dependencies:
- * - SetsLibrary.Collections.BaseSortedCollection<T> for base functionality.
- * - SetsLibrary.Interfaces.ISortedElements<T> for interface adherence.
+ * - SetSharp.Collections.BaseSortedCollection<T> for base functionality.
+ * - SetSharp.Interfaces.ISortedElements<T> for interface adherence.
  * - System.Collections for IEnumerable support.
  */
 
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// Represents a collection of sorted elements that allows for addition, removal, and searching within the collection.

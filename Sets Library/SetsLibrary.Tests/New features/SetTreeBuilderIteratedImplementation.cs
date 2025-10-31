@@ -1,7 +1,7 @@
-﻿using SetsLibrary.Utility;
+﻿using SetSharp.Utility;
 using Xunit;
 
-namespace SetsLibrary.Tests.New_features
+namespace SetSharp.Tests.New_features
 {
     public class SetTreeBuilderIteratedImplementation
     {

@@ -1,7 +1,7 @@
-﻿using SetsLibrary.SetOperations;
+﻿using SetSharp.SetOperations;
 using Xunit;
-using static SetsLibrary.SetOperations.SetsOperations;
-namespace SetsLibrary.Tests
+using static SetSharp.SetOperations.SetsOperations;
+namespace SetSharp.Tests
 {
     public class SetsOperationsTests
     {

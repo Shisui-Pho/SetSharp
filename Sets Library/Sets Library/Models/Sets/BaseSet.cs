@@ -24,11 +24,11 @@
  * functionality specific to the type of set being created.
  */
 
-using SetsLibrary.SetOperations;
-using SetsLibrary.Utility;
+using SetSharp.SetOperations;
+using SetSharp.Utility;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// An abstract base class for structured sets, providing a foundation for specific set implementations.

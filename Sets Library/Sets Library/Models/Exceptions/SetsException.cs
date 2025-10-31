@@ -4,7 +4,7 @@
  * Date: 16 December 2024
  * 
  * Description:
- * Defines the SetsException class, a custom exception used within the SetsLibrary. 
+ * Defines the SetsException class, a custom exception used within the SetSharp. 
  * It provides additional detail information that can be included when throwing 
  * an exception related to sets, allowing for better context and debugging.
  * 
@@ -15,7 +15,7 @@
  * - Provides properties for retrieving exception details.
  */
 
-namespace SetsLibrary
+namespace SetSharp
 {
     /// <summary>
     /// Represents a custom exception for the SetsLibrary with additional detail information.

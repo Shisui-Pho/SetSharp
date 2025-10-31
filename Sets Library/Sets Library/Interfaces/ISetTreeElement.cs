@@ -19,7 +19,7 @@
  * - TElement: The type of the elements within the set, which must implement <see cref="IComparable{TElement}"/>.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Defines common methods for managing elements and subsets in a set tree, including 

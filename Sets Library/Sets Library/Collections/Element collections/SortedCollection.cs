@@ -22,7 +22,7 @@
  * - System.Collections.Generic for List<T> and IEnumerable<T>.
  */
 using System.Collections;
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 ///<summary>
 ///Represents a base class for a sorted collection of elements.

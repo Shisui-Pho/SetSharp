@@ -17,13 +17,13 @@
  * - Handles edge cases such as missing braces or malformed expressions gracefully.
  */
 
-using SetsLibrary.Collections;
+using SetSharp.Collections;
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml.Linq;
 
-namespace SetsLibrary.Utility;
+namespace SetSharp.Utility;
 
 /// <summary>
 /// Provides utility methods to extract a set tree from a string expression and configuration.

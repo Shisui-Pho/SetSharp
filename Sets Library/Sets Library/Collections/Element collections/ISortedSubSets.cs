@@ -16,7 +16,7 @@
  * - Provides methods to check for the existence of a set tree and retrieve its index.
  * - Enables removal of set trees by value or by index.
  */
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// Represents a collection of sorted subsets, allowing for addition, removal, and searching of set trees within the collection.

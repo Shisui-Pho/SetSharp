@@ -16,11 +16,11 @@
  * - Implements the ISortedSubSets<T> interface to adhere to collection-specific contracts.
  * 
  * Dependencies:
- * - SetsLibrary.Interfaces for ISetTree<T> and ISortedSubSets<T>.
+ * - SetSharp.Interfaces for ISetTree<T> and ISortedSubSets<T>.
  * - System.Collections for IEnumerable support.
  */
 
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// Represents a collection of sorted subsets, each being a <see cref="ISetTree{T}"/>.

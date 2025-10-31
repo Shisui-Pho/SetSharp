@@ -1,7 +1,7 @@
-﻿using SetsLibrary.Collections;
+﻿using SetSharp.Collections;
 using Xunit;
 
-namespace SetsLibrary.Tests.Collections.Element_Collections
+namespace SetSharp.Tests.Collections.Element_Collections
 {
     public class SortedElementsTests
     {

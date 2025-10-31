@@ -16,7 +16,7 @@
  * - Merge functionality with other sets (MergeWith) for future implementation.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a typed set that can contain elements of a specified type T.

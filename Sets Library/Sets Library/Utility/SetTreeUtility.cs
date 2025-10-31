@@ -15,7 +15,7 @@
  * - Ensures null checks and throws appropriate exceptions.
  */
 
-namespace SetsLibrary.Utility;
+namespace SetSharp.Utility;
 
 /// <summary>
 /// Provides utility methods for working with set trees, including converting a set tree to its string representation.

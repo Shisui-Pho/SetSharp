@@ -1,4 +1,4 @@
-﻿namespace SetsLibrary.Utility;
+﻿namespace SetSharp.Utility;
 
 /// <summary>
 /// Enum representing the possible types of missing braces in a code structure.

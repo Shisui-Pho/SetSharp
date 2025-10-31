@@ -1,4 +1,4 @@
-﻿namespace SetsLibrary;
+﻿namespace SetSharp;
 /// <summary>
 /// Represents a wrapper for the SetTree class that extends functionality for accessing elements 
 /// and subsets by index and allows clearing internal elements and subsets directly.

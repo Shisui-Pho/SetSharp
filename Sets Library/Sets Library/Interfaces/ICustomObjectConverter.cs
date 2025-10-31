@@ -14,7 +14,7 @@
  * - Supports generic types that implement the IComparable interface.
  * - Utilizes SetExtractionSettings<T> for customizing the conversion process.
  */
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Defines a contract for converting a string to an object of type T, 

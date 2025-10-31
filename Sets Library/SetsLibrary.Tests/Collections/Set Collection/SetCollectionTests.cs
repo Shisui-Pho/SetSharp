@@ -1,7 +1,7 @@
-﻿using SetsLibrary.Collections;
+﻿using SetSharp.Collections;
 using Xunit;
 
-namespace SetsLibrary.Tests.Collections.Set_Collection
+namespace SetSharp.Tests.Collections.Set_Collection
 {
     public class SetCollectionTests
     {

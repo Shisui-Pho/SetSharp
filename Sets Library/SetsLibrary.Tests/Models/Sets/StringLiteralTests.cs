@@ -1,5 +1,5 @@
 ﻿using Xunit;
-namespace SetsLibrary.Tests.Models.Sets
+namespace SetSharp.Tests.Models.Sets
 {
     public class StringLiteralSetTests
     {

@@ -20,7 +20,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace SetsLibrary.SetOperations;
+namespace SetSharp.SetOperations;
 
 /// <summary>
 /// Provides various set operations such as intersection, union, and complement

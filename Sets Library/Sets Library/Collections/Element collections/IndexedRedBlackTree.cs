@@ -18,7 +18,7 @@
  */
 
 using System.Collections;
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 /// <summary>
 /// Represents a red-black tree data structure that supports indexed access to elements, implementing the IIndexedRedBlackTree interface.
 /// </summary>

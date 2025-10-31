@@ -1,5 +1,5 @@
 ﻿using Xunit;
-namespace SetsLibrary.Tests.Models
+namespace SetSharp.Tests.Models
 {
     public class SetExtractionConfigurationTests
     {

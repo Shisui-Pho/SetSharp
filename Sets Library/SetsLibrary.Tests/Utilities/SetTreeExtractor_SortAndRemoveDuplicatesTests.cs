@@ -1,6 +1,6 @@
-﻿using SetsLibrary.Utility;
+﻿using SetSharp.Utility;
 using Xunit;
-namespace SetsLibrary.Tests.Utilities.SortAndRemove;
+namespace SetSharp.Tests.Utilities.SortAndRemove;
 public class SortAndRemoveDuplicatesTests
 {
     // Helper method to create SetsConfigurations for testing

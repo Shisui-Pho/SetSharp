@@ -18,7 +18,7 @@
  * within the set can be compared to one another.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Defines an interface for managing structured sets with operations on both elements and nested subsets. 
@@ -158,4 +158,4 @@ public interface IStructuredSet<T> where T : IComparable<T>
     /// <returns>A new instance of a structured set based on the provided string.</returns>
     IStructuredSet<T> BuildNewSet(string setString);
 } // interface : IStructuredSet
-// namespace SetsLibrary
+// namespace SetSharp

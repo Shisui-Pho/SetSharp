@@ -16,7 +16,7 @@
  * - Provides a placeholder method for checking element presence (Contains).
  * - Includes a method for merging sets (MergeWith) with future implementation.
  */
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a custom set that can contain elements of type T, 

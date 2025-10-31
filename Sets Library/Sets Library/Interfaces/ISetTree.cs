@@ -16,7 +16,7 @@
  * - Supports custom string representation and element index lookup.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a tree-based set structure, where elements can be stored in both root and subset collections. 

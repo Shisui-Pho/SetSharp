@@ -16,7 +16,7 @@
  * - Supports set merging and subset checking.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 /// <summary>
 /// Represents a string literal set that can contain any string elements.
 /// </summary>

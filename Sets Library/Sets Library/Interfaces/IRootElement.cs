@@ -16,7 +16,7 @@
  * - Generic and type-safe with support for any element type.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Defines a contract for managing the root elements of a set. 

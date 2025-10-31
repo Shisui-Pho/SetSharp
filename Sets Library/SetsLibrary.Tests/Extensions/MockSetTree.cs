@@ -1,5 +1,5 @@
-﻿using SetsLibrary;
-namespace SetsLibrary.Tests.Extensions
+﻿using SetSharp;
+namespace SetSharp.Tests.Extensions
 {
     public class MockSetTree : ISetTree<int>
     {

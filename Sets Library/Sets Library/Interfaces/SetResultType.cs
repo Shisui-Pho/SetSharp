@@ -14,7 +14,7 @@
  * - Used for evaluating proper sets, universal sets, and other set relationships.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents the types of relationships between sets.

@@ -16,7 +16,7 @@
  * - Generic and type-safe with support for set trees.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Defines a contract for managing nested subsets (or subtrees) within a set.

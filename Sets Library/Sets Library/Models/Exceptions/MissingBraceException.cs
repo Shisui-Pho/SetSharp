@@ -16,7 +16,7 @@
  * - Can be used for more specific exception handling related to brace evaluation or parsing errors.
  */
 
-namespace SetsLibrary
+namespace SetSharp
 {
     /// <summary>
     /// Represents a custom exception that is thrown when a missing brace is detected in an expression.

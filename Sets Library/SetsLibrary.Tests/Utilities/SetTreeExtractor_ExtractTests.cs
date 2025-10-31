@@ -1,6 +1,6 @@
-﻿using SetsLibrary.Utility;
+﻿using SetSharp.Utility;
 using Xunit;
-namespace SetsLibrary.Tests.Utilities.Extract
+namespace SetSharp.Tests.Utilities.Extract
 {
 
     public class SetTreeExtractor_ExtractTests

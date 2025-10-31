@@ -16,7 +16,7 @@
  * - Provides a method to convert string records into objects using the provided converter.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents the configuration for extracting sets, including terminators, optional custom converter, 

@@ -17,7 +17,7 @@
  * - Provides feedback on the position of the incorrect brace if the expression is invalid.
  */
 
-namespace SetsLibrary.Utility;
+namespace SetSharp.Utility;
 
 /// <summary>
 /// Provides methods to evaluate the correctness of braces in a given expression.

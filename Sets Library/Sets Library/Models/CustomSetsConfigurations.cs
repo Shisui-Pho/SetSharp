@@ -10,7 +10,7 @@
  * Introduces a new feature for converting any object
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <inheritdoc/>
 internal class CustomSetsConfigurations<TObject> : SetsConfigurations

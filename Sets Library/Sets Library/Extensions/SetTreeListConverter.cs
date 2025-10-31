@@ -19,7 +19,7 @@
  * - TElement must implement IComparable<TElement> for proper element comparison within the set.
  * - Specific conversion methods also support additional constraints like IConvertible and ICustomObjectConverter<TElement>.
  */
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// Converts an <see cref="ISetTree{TElement}"/> to a list of root elements.

@@ -1,9 +1,9 @@
-﻿using SetsLibrary;
+﻿using SetSharp;
 using Xunit;
 using System;
-using SetsLibrary.Utility;
-using SetsLibrary.Collections;
-namespace SetsLibrary.Tests.New_features;
+using SetSharp.Utility;
+using SetSharp.Collections;
+namespace SetSharp.Tests.New_features;
 
 public class AddBracesPropertyFeature
 {

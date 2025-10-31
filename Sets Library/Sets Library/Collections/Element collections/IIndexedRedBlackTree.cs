@@ -17,7 +17,7 @@
  * - Supports enumerating over the elements in the tree.
  */
 
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// Represents a red-black tree data structure that supports indexed access to elements.

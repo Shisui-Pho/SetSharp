@@ -12,7 +12,7 @@
  * - Tracks the number of null elements in the set.
  */
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents information about null elements in a set tree, including a flag to indicate the presence of null elements

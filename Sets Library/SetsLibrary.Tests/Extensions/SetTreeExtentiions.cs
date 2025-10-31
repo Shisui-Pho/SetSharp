@@ -1,9 +1,9 @@
-﻿using SetsLibrary;
+﻿using SetSharp;
 using System.Threading.Tasks;
 using Xunit;
-using SetsLibrary.Collections;
+using SetSharp.Collections;
 
-namespace SetsLibrary.Tests.Extensions;
+namespace SetSharp.Tests.Extensions;
 
 public class SetTreeExtentiions
 {

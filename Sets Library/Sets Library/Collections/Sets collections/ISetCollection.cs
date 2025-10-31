@@ -20,7 +20,7 @@
  * - Methods for dynamic manipulation: AddIfDuplicate, AddRange, Contains, Remove, Reset, and Clear.
  * - Each element in the set must implement <see cref="IComparable{T}"/> for ordering and comparison.
  */
-namespace SetsLibrary.Collections;
+namespace SetSharp.Collections;
 
 /// <summary>
 /// Represents a collection of sets that can be enumerated and manipulated.

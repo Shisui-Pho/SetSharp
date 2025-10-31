@@ -5,7 +5,7 @@
  * 
  * Description:
  * Defines the SetsOperationException class, a custom exception used specifically 
- * for handling errors related to operations on sets within the SetsLibrary. 
+ * for handling errors related to operations on sets within the SetSharp. 
  * This class extends the SetsException class, allowing for more detailed error 
  * reporting related to set operations.
  * 
@@ -16,12 +16,12 @@
  * - Provides context-specific information related to set operations.
  */
 
-namespace SetsLibrary
+namespace SetSharp
 {
     /// <summary>
     /// Represents a custom exception for errors encountered during operations on sets.
     /// This class extends <see cref="SetsException"/> and is used specifically 
-    /// for reporting errors related to set operations in the SetsLibrary.
+    /// for reporting errors related to set operations in the SetSharp.
     /// </summary>
     public class SetsOperationException : SetsException
     {

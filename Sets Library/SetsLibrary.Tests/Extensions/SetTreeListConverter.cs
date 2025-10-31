@@ -1,8 +1,8 @@
-﻿using SetsLibrary;
-using SetsLibrary.Collections;
+﻿using SetSharp;
+using SetSharp.Collections;
 using System.Reflection;
 using Xunit;
-namespace SetsLibrary.Tests.Extensions;
+namespace SetSharp.Tests.Extensions;
 
 public class SetTreeListConverter
 {

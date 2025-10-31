@@ -13,7 +13,7 @@
  * - Inherits from the SetsException class.
  * - Supports the inclusion of both a custom message and detailed information when throwing the exception.
  */
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a custom exception that is thrown when there is something wrong with the configurations.

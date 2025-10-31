@@ -20,7 +20,7 @@
  * - Specific conversion methods also support additional constraints like IConvertible and ICustomObjectConverter<TElement>.
  */
 using System.Diagnostics.CodeAnalysis;
-namespace SetsLibrary.Collections
+namespace SetSharp.Collections
 {
     /// <summary>
     /// Provides extension methods for converting <see cref="ISetTree{TElement}"/> objects into different collection types.

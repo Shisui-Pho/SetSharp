@@ -1,8 +1,8 @@
-﻿using SetsLibrary.Collections;
-using SetsLibrary.Utility;
+﻿using SetSharp.Collections;
+using SetSharp.Utility;
 using System.Xml.Linq;
 
-namespace SetsLibrary;
+namespace SetSharp;
 
 /// <summary>
 /// Represents a tree structure for sets, allowing the organization and manipulation of set elements.

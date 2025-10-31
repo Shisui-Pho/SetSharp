@@ -1,5 +1,5 @@
 ﻿using Xunit;
-namespace SetsLibrary.Tests.Models.SetTree
+namespace SetSharp.Tests.Models.SetTree
 {
 
     public class SetTreeTests
