@@ -33,7 +33,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     where TElement : IComparable<TElement>
 {
     //Data field to store elements
-    private List<TElement> _elements;
+    private IndexedRedBlackTree<TElement> _elements;
 
     //Properties
 
@@ -92,17 +92,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     {
         //Don't add if null
         ArgumentNullException.ThrowIfNull(value, nameof(value));
-
-        //If first element
-        if (Count == 0)
-        {
-            _elements.Add(value);
-            return;
-        }
-
-        //Find the index for insertion
-        int pointOfInsertion = FindIndexOfInsertion(value);
-        _elements.Insert(pointOfInsertion, value);
+        _elements.Add(value);
     }//AddIfDuplicate
     ///<summary>
     ///Adds an element to the collection, ensuring the collection remains sorted. Duplicates will not be added.
@@ -121,14 +111,10 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
             return;
         }
 
-        int indexOfInsertion = FindIndexOfInsertion(val);
-
-        //Only add unique elements
-        if (indexOfInsertion < Count && _elements[indexOfInsertion].CompareTo(val) == 0) 
-            return;
-
-        
-        _elements.Insert(indexOfInsertion, val);
+        if (!_elements.Contains(val))
+        {
+            _elements.Add(val);
+        }
     }//Add
     ///<summary>
     ///Finds the index at which the specified value should be inserted to maintain sorted order.
@@ -167,12 +153,20 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(coll, nameof(coll));
 
-        foreach (var item in coll)
+        var sorted = coll as SortedCollection<TElement>;
+
+        if(sorted == null)
         {
-            AddIfDuplicate(item);
+            foreach (var item in coll)
+            {
+                AddIfDuplicate(item);
+            }
+        }
+        else
+        {
+            this._elements.AddRange(sorted._elements);
         }
     }//AddRange
-
     ///<summary>
     ///Checks whether the collection contains the specified element.
     ///</summary>
@@ -208,14 +202,15 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     {
         ArgumentNullException.ThrowIfNull(val, nameof(val));
 
-        int index = FindIndexOfInsertion(val);
+        //int index = FindIndexOfInsertion(val);
 
-        if (index < Count && val.CompareTo(_elements[index]) == 0)
-        {
-            return index;
-        }
+        //if (index < Count && val.CompareTo(_elements[index]) == 0)
+        //{
+        //    return index;
+        //}
 
-        return -1; //Element not found
+        //return -1; //Element not found
+        return _elements.IndexOf(val);
     }//IndexOf
 
     ///<summary>
@@ -256,7 +251,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     ///</summary>
     public void Clear()
     {
-        _elements = new List<TElement>();
+        _elements = new IndexedRedBlackTree<TElement>();
     }//Clear
 
     //Explicit interface implementation for non-generic IEnumerable

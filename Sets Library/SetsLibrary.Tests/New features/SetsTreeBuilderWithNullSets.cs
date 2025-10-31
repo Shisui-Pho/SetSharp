@@ -24,7 +24,7 @@ public class SetsTreeBuilderWithNullSets
     public void BuildSetTree_EmptyElements_NotIgnored_AppendsEmptySetSymbol()
     {
         // Arrange
-        var config = new SetsConfigurations(",", ignoreEmptyFields: false);
+        var config = new SetsConfigurations(",", ignoreEmptyFields: true);
         string input = "{,}"; // empty elements
 
         // Act
@@ -105,7 +105,7 @@ public class SetsTreeBuilderWithNullSets
     public void BuildSetTree_EmptySetWithinSetWithMultipleEmptyElements_ReturnsExpectedTree()
     {
         // Arrange
-        var config = new SetsConfigurations(",", ignoreEmptyFields: false);
+        var config = new SetsConfigurations(",", ignoreEmptyFields: true);
         string input = "{1,,2,3,{,}}"; // Nested empty set
 
         // Act

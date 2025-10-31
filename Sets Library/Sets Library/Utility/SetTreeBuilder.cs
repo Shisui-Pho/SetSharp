@@ -1,7 +1,7 @@
 ﻿/*
  * File: SetTreeBuilder.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 29 March 2025
+ * Date: 31 October 2025
  * 
  * Description:
  * This file contains the definition of the SetTreeBuilder class, which provides utility methods 
@@ -32,6 +32,17 @@ namespace SetsLibrary.Utility;
 public class SetTreeBuilder<T>
     where T : IComparable<T>
 {
+    private struct ExtractElementResult
+    {
+        [MemberNotNullWhen(true, (nameof(Value)))]
+        public bool HasValue { get; set; } = false;
+        public T? Value { get; set; }
+        public ExtractElementResult(bool hasValue, T? value = default(T))
+        {
+            HasValue = hasValue;
+            Value = value;
+        }
+    }
     /// <summary>
     /// Extracts a set tree from a string expression using the specified extraction configuration.
     /// </summary>
@@ -40,7 +51,7 @@ public class SetTreeBuilder<T>
     /// <returns>An instance of <see cref="ISetTree{T}"/> representing the extracted set tree.</returns>
     public static ISetTree<T> BuildSetTree(string expression, SetsConfigurations extractionConfig)
     {
-        // Remove the first and last brace if they exist
+        //Remove the first and last brace if they exist
         if (expression.StartsWith("{") && expression.EndsWith("}"))
         {
             expression = expression.Remove(0, 1);
@@ -56,31 +67,14 @@ public class SetTreeBuilder<T>
             return treeStructure;
         }
 
-        //Get the subsets
-        var subsets = ExtractSubsets(expression,extractionConfig.RowTerminator.Length,out string root);
-
-        // Create the root tree with the remaining elements after removing subsets
-        ISetTree<T> tree = BuildSetTree(root, extractionConfig);
-
-        // AddIfDuplicate all subsets as subtrees
-        foreach (var subset in subsets)
-        {
-            tree.AddElement(BuildSetTree(subset, extractionConfig));
-        }
-
+        var roots = new SortedCollection<T>();
+        var subsets = BreakDownExpression(expression, extractionConfig, roots);
+        var tree = new SetTree<T>(extractionConfig ,roots, subsets);
         return tree;
     }//BuildSetTree
-    private static SortedCollection<string> ExtractSubsets(string expression,int lenRowTerminator ,out string rootElements)
+    private static SortedCollection<ISetTree<T>> BreakDownExpression(string expression, SetsConfigurations config, SortedCollection<T> rootElements)
     {
-        //Here the first braces have been removed 
-        SortedCollection<string> subsets = [];
-
-        //String builders to hold the current subset and current root
-        StringBuilder _roots = new();
-        StringBuilder _subSet = new();
-
-        //Stack to keep track of the braces
-        Stack<int> stBraces = [];
+        SortedCollection<ISetTree<T>> subsets = [];
 
         //Loop through the entire string
         for (int i = 0; i < expression.Length; i++)
@@ -91,60 +85,105 @@ public class SetTreeBuilder<T>
             //Check for the opening brace
             if (_current == '{')
             {
-                //Push something to the stack
-                stBraces.Push(i);
+                //Extract a subset string
+                var subset = ExtractSubSet(expression, ref i);
+                //-Recursively build a subtree
+                var subtree = BuildSetTree(subset, config);
 
-                //Attach the brace to the current subset
-                _subSet.Append(_current);
-
-                //Move to the next character
-                continue;
+                subsets.Add(subtree);
+            }
+            else
+            {
+                //A normal element
+                var el = ExtractObject(expression, config, ref i);
+                if (el.HasValue) rootElements.Add(el.Value);
+            }
+        }//end for
+        return subsets;
+    }//BreakDownExpression
+    private static ExtractElementResult ExtractObject(string expression, SetsConfigurations config, ref int startIndex)
+    {
+        //TODO: Handle escape sequences
+        if (expression[startIndex] == config.RowTerminator[0])
+        {
+            ThrowIfInvalidRowTerminatorInExpression(expression, config.RowTerminator, startIndex);
+            startIndex += config.RowTerminator.Length;//Skip the terminator itself
+        }
+        
+        //Extract element until we hit a row terminator
+        StringBuilder element = new StringBuilder();
+        bool startedLookAtElements = false;
+        while(startIndex < expression.Length)
+        {
+            if (expression[startIndex] == config.RowTerminator[0])
+            {
+                ThrowIfInvalidRowTerminatorInExpression(expression, config.RowTerminator, startIndex);
+                startIndex += config.RowTerminator.Length - 1;
+                break;//Word was successfully extracted
+            }
+            
+            //if we hit an opening brace without any row terminator, then it's invalid
+            if (expression[startIndex] == '{' && startedLookAtElements)
+            {
+                throw new SetsException("Encountered an opening brace without any row terminator");
             }
 
-            //Check for the closing brace
-            if (_current == '}')
+            //If we hit a closing brace
+            if (expression[startIndex] == '}' || expression[startIndex] == '{')
             {
-                //If there's nothing in the stack then we have an error
-                if (stBraces.Count == 0)
+                startIndex = startedLookAtElements ? startIndex :
+                             startIndex - config.RowTerminator.Length;
+                break;
+            }
+            //Ignore spaces
+            if (!(expression[startIndex] == ' ' && !startedLookAtElements))
+            {
+                element.Append(expression[startIndex]);
+                startedLookAtElements = true;
+            }
+            startIndex++;
+        }//end while
+
+        string?[] fields = GetFields(element.ToString(), config, out bool isEmpty);
+
+        //Convert element
+        T? obj = default;
+
+        if (startedLookAtElements) obj = ConvertToObject(fields, config);
+
+        return new ExtractElementResult { HasValue = startedLookAtElements, Value = obj};
+    }//ExtractObject
+    private static string ExtractSubSet(string expression, ref int startIndex)
+    {
+        //The expression should start with an opening brace
+        if (expression[startIndex] != '{')
+            throw new SetsException("Expression not in the right format");
+
+        StringBuilder str = new();
+        Stack<int> stBraces = [];
+        while (startIndex < expression.Length)
+        {
+            if (expression[startIndex] == '{')
+                stBraces.Push(0);//Does not matter what I push to the stack
+
+            if(expression[startIndex] == '}')
+            {
+                if(stBraces.Count == 0)
                 {
-                    string details = $"Encountered a closing without an opening brace\n {expression}\n{"".PadLeft(i)}";
+                    string details = $"Encountered a closing without an opening brace\n {expression}\n{"".PadLeft(startIndex)}";
                     throw new MissingBraceException("Missing an opening brace matching.", details);
                 }
-                _subSet.Append(_current);//Attach the closing braces
-
-                //Remove one opening brace
-                _ = stBraces.Pop();
-
-                if (stBraces.Count == 0)
-                {
-                    //Here it means that the subset has been extracted
-                    //-We need to add the subset
-                    subsets.Add(_subSet.ToString());
-
-                    //Reset the subset 
-                    _subSet.Clear();
-
-                    //Skip the next row terminator
-                    i += lenRowTerminator;
-
-                    //Remove the previouse terminator from the root if it exists
-                    _roots = RemoveLastTerminator(_roots, lenRowTerminator, i < expression.Length);
-                }
-
-                //Move to the next character
-                continue;
+                //Remove one closing brace
+                stBraces.Pop();
             }
+            str.Append(expression[startIndex]);
+            startIndex++;
 
-            //When the code reaches here, it means tha we either add to the subset
-            // or the root elements
+            //If the current subset has been extracted
+            if (stBraces.Count == 0)
+                break;
+        }
 
-            if (stBraces.Count == 0)// THis goes to the root
-                _roots.Append(_current);
-            else
-                _subSet.Append(_current);
-        }//end for
-
-        //Check if the stack is empty
         //- If it is then we have an error
         if (stBraces.Count > 0)
         {
@@ -153,10 +192,22 @@ public class SetTreeBuilder<T>
             throw new MissingBraceException("Missing closing braces.", details);
         }//end if invalid brace
 
-        rootElements = _roots.ToString();
-        return subsets;
-    }//ExtractSubSets
-
+        return str.ToString();
+    }//ExtractSubSet
+    private static void ThrowIfInvalidRowTerminatorInExpression(string expression, string rowTerminator,int startIndex)
+    {
+        //TODO: Handle escape sequences
+        int length = rowTerminator.Length;
+        int index = 0;
+        //Verify the row terminator
+        while (index < rowTerminator.Length)
+        {
+            if (expression[startIndex + index] != rowTerminator[index])
+                throw new SetsException("Expression contained an invalid row terminator, make sure to use the correct escape sequance where applicable.",
+                                        $"At index {startIndex + index} is a row terminator character not matching the configuration.");
+            index++;
+        }
+    }//ThrowIfInvalidRowTerminatorInExpression
     private static StringBuilder RemoveLastTerminator(StringBuilder roots, int lenRowTerminator, bool isEndOfExpression)
     {
         if (lenRowTerminator > roots.Length || isEndOfExpression)
@@ -167,7 +218,6 @@ public class SetTreeBuilder<T>
 
         return roots;
     }//RemoveLastTerminator
-
     /// <summary>
     /// Sorts the root elements and removes duplicates, ensuring that the set only contains unique elements.
     /// </summary>
@@ -206,62 +256,70 @@ public class SetTreeBuilder<T>
                 countEmptySets += 1;
                 continue;
             }
-            T? item = default(T);
-
-            try
-            {
-                //If a custom converter is used, convert using that; otherwise, attempt to convert to T
-                if (extractionConfig.IsICustomObject)
-                {
-                    item = ToCustomObject(fields, extractionConfig);
-                }
-                else
-                {
-                    item = ToPrimitiveType(fields[0]);
-                }
-
-                //Check for nullls
-                if (item is not null)
-                {
-                    uniqueElements.Add(item);
-                }
-                else
-                {
-                    throw new SetsException("Unable to complete conversion, check confiurations.");
-                }
-            }
-            catch
-            (Exception ex)
-            {
-                //Handle any exceptions during conversion (throwing is optional)
-                string det = $"Failed to convert the string \'{element}\' to type of \'{typeof(T)}\'";
-                throw new SetsException("Conversion failed due to invalid format", det, ex);
-            }
+            //If a custom converter is used, convert using that; otherwise, attempt to convert to T
+            T item = ConvertToObject(fields, extractionConfig);
+            uniqueElements.Add(item);
         }//end for each
-
         return uniqueElements;
     }//SortAndRemoveDuplicates
-    private static T? ToPrimitiveType([NotNullIfNotNull("field")]string? field)
+    private static T ConvertToObject(string?[] fields, SetsConfigurations config)
+    {
+        T? item = default(T);
+        try
+        {
+            ExtractElementResult? result = null;
+            if (config.IsICustomObject)
+            {
+                item = ToCustomObject(fields, config);
+            }
+            else
+            {
+                result = ToPrimitiveType(fields[0]);
+            }
+
+            if (result.HasValue && result.Value.HasValue)
+                item = result.Value.Value;
+
+            if (item is null)
+            {
+                throw new SetsException("Unable to complete conversion, check configurations.");
+            }
+        }
+        catch(Exception ex)
+        {
+            string element = string.Join(config.FieldTerminator, fields.Select(b => b is not null));
+            //Handle any exceptions during conversion (throwing is optional)
+            string det = $"Failed to convert the string \'{element}\' to type of \'{typeof(T)}\'";
+            throw new SetsException("Conversion failed due to invalid format", det, ex);
+        }//catch
+
+        return item;
+    }//ConvertToObject
+    private static ExtractElementResult ToPrimitiveType([NotNullIfNotNull("field")] string? field)
     {
         //Check if the field is empty first
         if (field is null)
-            return default(T);
+            return new ExtractElementResult { HasValue = false };
 
         //Trim sting to remove white spaces
         if (typeof(T) != typeof(string))
+        {
             field = field.Trim();
+        }
+        
+        if(typeof(T) != typeof(string) && string.IsNullOrEmpty(field))
+            return new ExtractElementResult { HasValue = false };
 
-        //Convert to the specified type T
+        //ConvertToObject to the specified type T
         var item = (T)Convert.ChangeType(field, typeof(T));
 
-        return item;
+        return new ExtractElementResult { HasValue = true, Value = item};
     }//ToPrimitiveType
     private static T? ToCustomObject(string?[] fields,SetsConfigurations extractionConfig)
     {
-        //Call api to convert to custom object
         var converter = ((CustomSetsConfigurations<T>)extractionConfig).Funct_ToObject;
 
-        if (converter is null)
+        if (converter is null || fields is null)
         {
             string details = $"The object \'{typeof(T)}\' was marked as an element of a custom object set, but no parameter of converter wass passed.";
             throw new SetsConfigurationException("Failed to convert object to set.", details);
@@ -271,7 +329,7 @@ public class SetTreeBuilder<T>
         var item = converter(fields);
         return item;
     }
-    private static string?[] GetFields(string element, SetsConfigurations config, out bool isempty)
+    private static string?[] GetFields(string element, SetsConfigurations config, out bool isEmpty)
     {
         //Split the string according to it's field terminator
         string?[] fields = element.Split(config.FieldTerminator);
@@ -288,7 +346,7 @@ public class SetTreeBuilder<T>
                 countEmptyFields++;
             }
         }
-        isempty = countEmptyFields == fields.Length;
+        isEmpty = countEmptyFields == fields.Length;
 
         return fields;
     }//IsEmptySet

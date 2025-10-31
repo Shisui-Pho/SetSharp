@@ -1,5 +1,6 @@
 ﻿using SetsLibrary.Collections;
 using SetsLibrary.Utility;
+using System.Xml.Linq;
 
 namespace SetsLibrary;
 
@@ -164,9 +165,19 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(elements, nameof(elements));
 
-        //AddIfDuplicate them one by one
-        foreach (T element in elements)
-            this.AddElement(element);
+        if(elements is ISortedCollection<T>)
+        {
+            //Here we can skip the loop and just assign directly
+            //-This is more efficient since the structure is aleady sorted
+            this._elements.AddRange(elements);
+            this.TreeInfo.IsEmptyTree = false;
+        }
+        else
+        {
+            //AddIfDuplicate them one by one
+            foreach (T element in elements)
+                this.AddElement(element);
+        }
     }
 
     /// <summary>
@@ -200,9 +211,24 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         //Check for nulls
         ArgumentNullException.ThrowIfNull(subsets, nameof(subsets));
 
-        //AddIfDuplicate subsets one by one
-        foreach (ISetTree<T> subset in subsets)
-            this.AddElement(subset);
+        if (subsets is ISortedCollection<T>)
+        {
+            //Here we can skip the loop and just assign directly
+            //-This is more efficient since the structure is aleady sorted
+            this._subSets.AddRange(subsets);
+            if (subsets.First().TreeInfo.IsEmptyTree)
+            {
+                //AddIfDuplicate it as a null set
+                WillHaveNullElements(true, 1);
+            }
+            TreeInfo.IsEmptyTree = false;
+        }
+        else
+        {
+            //AddIfDuplicate subsets one by one
+            foreach (ISetTree<T> subset in subsets)
+                this.AddElement(subset);
+        }
     }
 
     /// <summary>
