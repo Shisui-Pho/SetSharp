@@ -23,10 +23,10 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore Dependencies
-      run: dotnet restore "./Sets Library/Sets Library/Sets Library.csproj"
+      run: dotnet restore "./SetSharp/SetSharp/SetSharp.csproj"
 
     - name: Build Solution
-      run: dotnet build "./Sets Library/Sets Library/Sets Library.csproj" --no-restore --configuration Release
+      run: dotnet build "./SetSharp/SetSharp/SetSharp.csproj" --no-restore --configuration Release
 
     - name: Run Tests
-      run: dotnet test "./Sets Library/SetsLibrary.Tests/SetsLibrary.Tests.csproj" --no-build --verbosity minimal
+      run: dotnet test "./SetSharp/SetSharp.Tests/SetSharp.Tests.csproj" --no-build --verbosity minimal
