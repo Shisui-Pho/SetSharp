@@ -264,11 +264,11 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         }
         else
         {
-            InsertExchageSortedBFT(sorted);
+            InsertExchangeSortedBFT(sorted);
             Count += sorted.Count;
         }
     }//SwapTreesAddRange
-    private void InsertExchageSortedBFT(IndexedRedBlackTree<TElement> sorted)
+    private void InsertExchangeSortedBFT(IndexedRedBlackTree<TElement> sorted)
     {
         if (sorted.Count < Count)
             throw new Exception("Invalid operation, consider using the Add method");

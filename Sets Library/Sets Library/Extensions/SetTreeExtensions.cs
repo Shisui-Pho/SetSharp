@@ -140,7 +140,7 @@ namespace SetsLibrary.Collections
 
             try
             {
-                // Convert to list and return
+                // ConvertToObject to list and return
                 return converter.ToListRootElements();
             }
             catch (Exception ex)
