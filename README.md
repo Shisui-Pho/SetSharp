@@ -1,16 +1,16 @@
 
 
-<h1 align="center">Sets Library</h1>
+<h1 align="center">SetSharp</h1>
 <div align="center">
   <img src="https://img.shields.io/badge/language-C%23-blue.svg" alt="C#" />
   <img src="https://img.shields.io/badge/.NET-8.0-blueviolet.svg" alt=".NET 8" />
-  <a href="https://github.com/Shisui-Pho/Sets-Library/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/Shisui-Pho/Sets-Library" alt="License" />
+  <a href="https://github.com/Shisui-Pho/SetSharp/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/Shisui-Pho/SetSharp" alt="License" />
   </a>
 </div>
 
 ## Overview
-Sets Library parses and manipulates structured sets expressed as strings. It supports nested subsets, dynamic collections, and custom-object conversion. The API is intentionally small and extensible so you can parse expressions into usable set objects and perform set operations programmatically.
+SetSharp parses and manipulates structured sets expressed as strings. It supports nested subsets, dynamic collections, and custom-object conversion. The API is intentionally small and extensible so you can parse expressions into usable set objects and perform set operations programmatically.
 
 Highlights:
 - Compact, extensible API for structured sets
@@ -24,7 +24,7 @@ Add the project to your solution as a project reference.
 Create a configuration and parse an expression:
 
 ```csharp
-using SetsLibrary;
+using SetSharp;
 
 var cfg = new SetsConfigurations(",");
 var set = new TypedSet<int>("{1,2,3,2,1}", cfg);
@@ -42,10 +42,10 @@ For custom types implement `ICustomObjectConverter<T>` and use `CustomObjectSet<
 - SortedCollection<T> — keeps elements in sorted order and supports uniqueness semantics.
 
 ## Namespaces
-- `SetsLibrary` — core set types and interfaces.
-- `SetsLibrary.Collections` — collection helpers (SetCollection, SortedCollection, etc.).
-- `SetsLibrary.Operations` — set operation implementations (UnionWith, IntersectWith, SymmetricDifference, ...).
-- `SetsLibrary.Extensions` — conversion and helper extension methods.
+- `SetSharp` — core set types and interfaces.
+- `SetSharp.Collections` — collection helpers (SetCollection, SortedCollection, etc.).
+- `SetSharp.Operations` — set operation implementations (UnionWith, IntersectWith, SymmetricDifference, ...).
+- `SetSharp.Extensions` — conversion and helper extension methods.
 
 ## Examples
 Typed set parsing and cardinality:
