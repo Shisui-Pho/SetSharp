@@ -24,7 +24,7 @@
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Sets Library\Sets Library.csproj" />
+	  <ProjectReference Include="..\Sets Library\SetSharp.csproj" />
 	</ItemGroup>
 
 </Project>
