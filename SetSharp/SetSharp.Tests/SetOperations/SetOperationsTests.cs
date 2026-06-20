@@ -669,8 +669,8 @@ namespace SetSharp.Tests
                 setA.AddElement(CreateSet(new[] { i }));
                 setB.AddElement(CreateSet(new[] { i + 500 }));
             }
-            var s1 = setA.BuildStringRepresentation();
-            var s2 = setB.BuildStringRepresentation();
+            //var s1 = setA.BuildStringRepresentation();
+            //var s2 = setB.BuildStringRepresentation();
             // Act
             var result = setA.SymmetricDifference(setB);
 
