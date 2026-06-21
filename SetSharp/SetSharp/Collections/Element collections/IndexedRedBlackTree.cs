@@ -112,10 +112,11 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Clear();
         AddRange(elements);
     }
-    private IndexedRedBlackTree(Node root)
+    private IndexedRedBlackTree(Node root, int initialSize = 0)
     {
         Clear();
         this.root = root;
+        Count = initialSize;
     }
     #endregion Properties, indexers and constructors
     #region Public methods
@@ -162,30 +163,37 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         ArgumentNullException.ThrowIfNull(item, nameof(item));
         return FindNode(item) != null;
     }
+
     /// <inheritdoc/>
     public int IndexOf(TElement item)
     {
-        if (root == null || item == null) return -1;
+        int index = 0;
+        Node? current = root;
 
-        var stack = new Stack<Node>();
-        var current = root;
-        int index = -1;
-        while (current != null || stack.Count > 0)
+        while (current != null)
         {
-            while (current != null)
+            int cmp = item.CompareTo(current.Data);
+
+            if (cmp < 0)
             {
-                stack.Push(current);
                 current = current.Left;
             }
-            index++;
-            current = stack.Pop();
-            if (current.Data.CompareTo(item) == 0)
-                return index;
-            current = current.Right;
+            else if (cmp > 0)
+            {
+                index += GetSize(current.Left) + 1;
+                current = current.Right;
+            }
+            else
+            {
+                return index + GetSize(current.Left);
+            }
         }
+
         //Element not found
         return -1;
     }
+
+
     /// <inheritdoc/>
     public IEnumerator<TElement> GetEnumerator()
     {
@@ -278,15 +286,19 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
 
         var newRoot = new Node(sorted.root.Data);
         newRoot.Color = sorted.root.Color;
+        newRoot.Size = sorted.root.Size;
+
 
         CopyTreeBFT(sorted,ref newRoot);
 
         //Re-add the current element from current root.
-        IndexedRedBlackTree<TElement> tree = new(newRoot);
+        IndexedRedBlackTree<TElement> tree = new(newRoot, sorted.Count);
+
         tree.AddRange(this);
 
         //Change roots
         this.root = tree.root;
+        //this.Count += count; //Keep the count the same as before
     }//InsertExchageSortedBFT
     private void InsertDefaultSortedBFT(IndexedRedBlackTree<TElement> sorted)
     {
@@ -321,6 +333,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                 n_node.Left = new Node(s_node.Left.Data);
                 n_node.Left.Color = s_node.Left.Color;
                 n_node.Left.Parent = n_node;
+                n_node.Left.Size = s_node.Left.Size;
 
                 newNodes.Enqueue(n_node.Left);
                 sortedNodes.Enqueue(s_node.Left);
@@ -330,6 +343,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                 n_node.Right = new Node(s_node.Right.Data);
                 n_node.Right.Color = s_node.Right.Color;
                 n_node.Right.Parent = n_node;
+                n_node.Right.Size = s_node.Right.Size;
 
                 newNodes.Enqueue(n_node.Right);
                 sortedNodes.Enqueue(s_node.Right);
@@ -647,7 +661,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         else
         {
             // Case 3: Sibling is black with left red and right black
-            if (sibling.Right == null || sibling.Right.Color == NodeColor.Black)
+            if (sibling.Right == null || sibling.Right?.Color == NodeColor.Black)
             {
                 if (sibling.Left != null)
                     sibling.Left.Color = NodeColor.Black;
