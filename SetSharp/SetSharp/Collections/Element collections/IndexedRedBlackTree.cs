@@ -608,15 +608,16 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                 // Simple case: if child is red, just make it black
                 child.Color = NodeColor.Black;
             }
-            else
+            else if (node.Parent != null)
             {
-                // Complex case: double black situation
-                if (child != null && node.Parent != null)
-                    FixDoubleBlack(child, node.Parent);
+                // Complex case: double black situation. 'child' may legitimately be null
+                // here (we just removed a black leaf) - FixDoubleBlack must still run to
+                // repair the black-height deficiency at that now-empty position.
+                FixDoubleBlack(child, node.Parent);
             }
         }
     }
-    #nullable enable
+
     private void FixDoubleBlack(Node node, Node parent)
     {
         // Continue fixing until we reach root or the node becomes red
@@ -628,8 +629,10 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             }
             else
             {
-                if (node != null)
-                    FixDoubleBlackRight(ref node, ref parent);
+                // `node` may legitimately be null here too (deficiency at an empty right
+                // child position) - it must still go through FixDoubleBlackRight rather than
+                // being skipped, or the loop never advances and spins forever.
+                FixDoubleBlackRight(ref node, ref parent);
             }
         }
 
