@@ -38,7 +38,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         public Node Right { get; set; } = null!;
         public Node Parent { get; set; } = null!;
         public NodeColor Color { get; set; } = NodeColor.Red;
-
+        public int Size { get; set; } = 1;
         public Node Grandparent => Parent.Parent;
 
         public Node Uncle
@@ -112,10 +112,11 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Clear();
         AddRange(elements);
     }
-    private IndexedRedBlackTree(Node root)
+    private IndexedRedBlackTree(Node root, int initialSize = 0)
     {
         Clear();
         this.root = root;
+        Count = initialSize;
     }
     #endregion Properties, indexers and constructors
     #region Public methods
@@ -162,30 +163,37 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         ArgumentNullException.ThrowIfNull(item, nameof(item));
         return FindNode(item) != null;
     }
+
     /// <inheritdoc/>
     public int IndexOf(TElement item)
     {
-        if (root == null || item == null) return -1;
+        int index = 0;
+        Node? current = root;
 
-        var stack = new Stack<Node>();
-        var current = root;
-        int index = -1;
-        while (current != null || stack.Count > 0)
+        while (current != null)
         {
-            while (current != null)
+            int cmp = item.CompareTo(current.Data);
+
+            if (cmp < 0)
             {
-                stack.Push(current);
                 current = current.Left;
             }
-            index++;
-            current = stack.Pop();
-            if (current.Data.CompareTo(item) == 0)
-                return index;
-            current = current.Right;
+            else if (cmp > 0)
+            {
+                index += GetSize(current.Left) + 1;
+                current = current.Right;
+            }
+            else
+            {
+                return index + GetSize(current.Left);
+            }
         }
+
         //Element not found
         return -1;
     }
+
+
     /// <inheritdoc/>
     public IEnumerator<TElement> GetEnumerator()
     {
@@ -278,15 +286,19 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
 
         var newRoot = new Node(sorted.root.Data);
         newRoot.Color = sorted.root.Color;
+        newRoot.Size = sorted.root.Size;
+
 
         CopyTreeBFT(sorted,ref newRoot);
 
         //Re-add the current element from current root.
-        IndexedRedBlackTree<TElement> tree = new(newRoot);
+        IndexedRedBlackTree<TElement> tree = new(newRoot, sorted.Count);
+
         tree.AddRange(this);
 
         //Change roots
         this.root = tree.root;
+        //this.Count += count; //Keep the count the same as before
     }//InsertExchageSortedBFT
     private void InsertDefaultSortedBFT(IndexedRedBlackTree<TElement> sorted)
     {
@@ -321,6 +333,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                 n_node.Left = new Node(s_node.Left.Data);
                 n_node.Left.Color = s_node.Left.Color;
                 n_node.Left.Parent = n_node;
+                n_node.Left.Size = s_node.Left.Size;
 
                 newNodes.Enqueue(n_node.Left);
                 sortedNodes.Enqueue(s_node.Left);
@@ -330,6 +343,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                 n_node.Right = new Node(s_node.Right.Data);
                 n_node.Right.Color = s_node.Right.Color;
                 n_node.Right.Parent = n_node;
+                n_node.Right.Size = s_node.Right.Size;
 
                 newNodes.Enqueue(n_node.Right);
                 sortedNodes.Enqueue(s_node.Right);
@@ -352,6 +366,8 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
 
             while (current != null)
             {
+                //Update size
+                //current.Size++;
                 parent = current;
                 current = item.CompareTo(current.Data) < 0 ? current.Left : current.Right;
             }
@@ -365,6 +381,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                     parent.Right = newNode;
             }
         }
+        RecomputeSizesUpwards(newNode.Parent);
         return newNode;
     }
     // Fix Red-Black Tree violations after insertion
@@ -453,6 +470,9 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
 
         rightChild.Left = node;
         node.Parent = rightChild;
+
+        UpdateSize(node);
+        UpdateSize(rightChild);
     }//RotateLeft
     private void RotateRight(Node node)
     {
@@ -473,32 +493,33 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
 
         leftChild.Right = node;
         node.Parent = leftChild;
+
+        //Update the sizes for left and node
+        UpdateSize(node);
+        UpdateSize(leftChild);
     }//RotateRight
     private Node? GetNodeAtIndex(int index)
     {
-        if (root == null) return null;
-
-        var stack = new Stack<Node>();
         var current = root;
-        int currentIndex = 0;
 
-        while (current != null || stack.Count > 0)
+        while (current != null)
         {
-            while (current != null)
+            int leftSize = GetSize(current.Left);
+
+            if(index < leftSize)
             {
-                stack.Push(current);
                 current = current.Left;
             }
-
-            current = stack.Pop();
-
-            if (currentIndex == index)
+            else if(index == leftSize)
+            {
                 return current;
-
-            currentIndex++;
-            current = current.Right;
+            }
+            else
+            {
+                index -= leftSize + 1;
+                current = current.Right;
+            }
         }
-
         return null;
     }//GetNodeAtIndex
     private Node? FindNode(TElement item)
@@ -558,6 +579,8 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Node child = node.Left ?? node.Right;
         bool isNodeBlack = node.Color == NodeColor.Black;
 
+        Node? sizeFixStart = node.Parent;
+
         if (child != null)
             child.Parent = node.Parent;
 
@@ -575,6 +598,8 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             node.Parent.Right = child;
         }
 
+        RecomputeSizesUpwards(sizeFixStart);
+
         // If the deleted node was black, we need to fix violations
         if (isNodeBlack)
         {
@@ -583,15 +608,16 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                 // Simple case: if child is red, just make it black
                 child.Color = NodeColor.Black;
             }
-            else
+            else if (node.Parent != null)
             {
-                // Complex case: double black situation
-                if (child != null && node.Parent != null)
-                    FixDoubleBlack(child, node.Parent);
+                // Complex case: double black situation. 'child' may legitimately be null
+                // here (we just removed a black leaf) - FixDoubleBlack must still run to
+                // repair the black-height deficiency at that now-empty position.
+                FixDoubleBlack(child, node.Parent);
             }
         }
     }
-    #nullable enable
+
     private void FixDoubleBlack(Node node, Node parent)
     {
         // Continue fixing until we reach root or the node becomes red
@@ -603,8 +629,10 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             }
             else
             {
-                if (node != null)
-                    FixDoubleBlackRight(ref node, ref parent);
+                // `node` may legitimately be null here too (deficiency at an empty right
+                // child position) - it must still go through FixDoubleBlackRight rather than
+                // being skipped, or the loop never advances and spins forever.
+                FixDoubleBlackRight(ref node, ref parent);
             }
         }
 
@@ -636,7 +664,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         else
         {
             // Case 3: Sibling is black with left red and right black
-            if (sibling.Right == null || sibling.Right.Color == NodeColor.Black)
+            if (sibling.Right == null || sibling.Right?.Color == NodeColor.Black)
             {
                 if (sibling.Left != null)
                     sibling.Left.Color = NodeColor.Black;
@@ -711,6 +739,22 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             node = node.Right;
         }
         return node;
+    }
+    private static void UpdateSize(Node node)
+    {
+        node.Size = 1 + GetSize(node.Left) + GetSize(node.Right);
+    }
+    private static int GetSize(Node? node)
+    {
+        return node?.Size ?? 0;
+    }
+    private static void RecomputeSizesUpwards(Node? node)
+    {
+        while(node != null)
+        {
+            UpdateSize(node);
+            node = node.Parent;
+        }
     }
     #endregion Helper methods
 }//class
