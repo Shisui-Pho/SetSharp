@@ -18,6 +18,7 @@
  */
 
 using System.Collections;
+using System.Reflection.Metadata.Ecma335;
 namespace SetSharp.Collections;
 /// <summary>
 /// Represents a red-black tree data structure that supports indexed access to elements, implementing the IIndexedRedBlackTree interface.
@@ -31,7 +32,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Red,
         Black
     }
-    private class Node(TElement item)
+    private sealed class Node(TElement item)
     {
         public TElement Data { get; set; } = item;
         public Node Left { get; set; } = null!;
@@ -130,6 +131,58 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Count++;
         FixViolation(newNode);
     }
+    /// <inheritdoc/>
+    public bool TryAdd(TElement item)
+    {
+        ArgumentNullException.ThrowIfNull(item, nameof(item));
+
+        if (root == null)
+        {
+            root = new Node(item);
+            Count++;
+            FixViolation(root);
+            return true;
+        }
+
+        //We need to find the point of insertion and look for duplicates while we're at it
+        // Caching the last comparison result means we don't call CompareTo a second
+        // time to decide left/right once the loop exits — unlike the original InsertBST
+        // which calls item.CompareTo(parent.Data) again after the loop.
+
+        var current = root;
+        Node parent = null!;
+
+        int lastCamp = 0;
+
+
+        while(current != null)
+        {
+            lastCamp = item.CompareTo(current.Data);
+
+            if (lastCamp == 0)
+                return false; //Duplicate found
+
+            parent = current;
+            current = lastCamp < 0 ? current.Left : current.Right;
+        }
+
+
+        //here the item is unique
+        //-We will allocate teh element and set it's parent to the current parent
+        var newNode = new Node(item);
+        newNode.Parent = parent;
+
+        if (lastCamp < 0)
+            parent.Left = newNode;
+        else
+            parent.Right = newNode;
+
+        RecomputeSizesUpwards(parent);
+        Count++;
+        FixViolation(newNode);
+        return true;
+    }
+
     ///<inheritdoc/>
     public void AddRange(IEnumerable<TElement> items)
     {
