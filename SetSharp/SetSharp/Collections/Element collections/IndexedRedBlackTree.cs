@@ -177,12 +177,12 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         else
             parent.Right = newNode;
 
-        RecomputeSizesUpwards(parent);
+        //RecomputeSizesUpwards(parent);
+        IncrementSizesUpwards(parent);
         Count++;
         FixViolation(newNode);
         return true;
     }
-
     ///<inheritdoc/>
     public void AddRange(IEnumerable<TElement> items)
     {
@@ -420,7 +420,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             while (current != null)
             {
                 //Update size
-                //current.Size++;
+                current.Size++;
                 parent = current;
                 current = item.CompareTo(current.Data) < 0 ? current.Left : current.Right;
             }
@@ -434,7 +434,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                     parent.Right = newNode;
             }
         }
-        RecomputeSizesUpwards(newNode.Parent);
+        //RecomputeSizesUpwards(newNode.Parent);
         return newNode;
     }
     // Fix Red-Black Tree violations after insertion
@@ -806,6 +806,14 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         while(node != null)
         {
             UpdateSize(node);
+            node = node.Parent;
+        }
+    }
+    private static void IncrementSizesUpwards(Node? node)
+    {
+        while (node != null)
+        {
+            node.Size++;
             node = node.Parent;
         }
     }
