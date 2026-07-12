@@ -291,17 +291,24 @@ public class IndexedRedBlackTreeTests
     [InlineData(1, 50)]
     [InlineData(5, 100)]
     [InlineData(50, 60)]
-    public void AddRange_VariousRatios_RandomValues_ProducesCorrectUnion(int targetSize, int sourceSize)
+    public void AddRange_VariousRatios_RandomValues_ProducesCorrectUnion(
+        int targetSize, int sourceSize)
     {
-        var targetValues = RandomValues(targetSize, seed: targetSize * 31 + sourceSize);
-        var sourceValues = RandomValues(sourceSize, seed: sourceSize * 17 + targetSize);
+        // ShuffledRange gives unique values within each tree. Cross-tree overlaps
+        // are expected and the result is their sorted set-union.
+        var targetValues = ShuffledRange(targetSize, seed: targetSize * 31 + sourceSize);
+        var sourceValues = ShuffledRange(sourceSize, seed: sourceSize * 17 + targetSize);
 
         var target = new IndexedRedBlackTree<int>(targetValues);
         var source = new IndexedRedBlackTree<int>(sourceValues);
 
         target.AddRange(source);
 
-        AssertSortedConsistency(target, targetValues.Concat(sourceValues).ToList());
+        var expected = targetValues.Concat(sourceValues)
+                                   .Distinct()
+                                   .OrderBy(x => x)
+                                   .ToList();
+        AssertSortedConsistency(target, expected);
     }
 
     #endregion
@@ -838,6 +845,236 @@ public class IndexedRedBlackTreeTests
     }
 
     #endregion
+
+    #region TryAdd
+
+    [Fact]
+    public void TryAdd_EmptyTree_ReturnsTrueAndInsertsElement()
+    {
+        var tree = new IndexedRedBlackTree<int>();
+
+        bool result = tree.TryAdd(42);
+
+        Assert.True(result);
+        Assert.Equal(1, tree.Count);
+        Assert.Equal(42, tree[0]);
+    }
+
+    [Fact]
+    public void TryAdd_UniqueItem_ReturnsTrueAndInsertsElement()
+    {
+        var tree = new IndexedRedBlackTree<int>(new[] { 1, 2, 3 });
+
+        bool result = tree.TryAdd(99);
+
+        Assert.True(result);
+        Assert.Equal(4, tree.Count);
+        Assert.True(tree.Contains(99));
+    }
+
+    [Fact]
+    public void TryAdd_DuplicateItem_ReturnsFalseAndLeavesTreeUnchanged()
+    {
+        var tree = new IndexedRedBlackTree<int>(new[] { 1, 2, 3 });
+
+        bool result = tree.TryAdd(2);
+
+        Assert.False(result);
+        Assert.Equal(3, tree.Count);
+        // Sorted order must be unchanged
+        Assert.Equal(new[] { 1, 2, 3 }, tree.ToList());
+    }
+
+    [Fact]
+    public void TryAdd_Null_ThrowsArgumentNullException()
+    {
+        var tree = new IndexedRedBlackTree<string>();
+
+        Assert.Throws<ArgumentNullException>(() => tree.TryAdd(null!));
+    }
+
+    [Fact]
+    public void TryAdd_MaintainsSortedOrder()
+    {
+        var tree = new IndexedRedBlackTree<int>();
+        var unique = new[] { 5, 1, 9, 3, 7 };
+
+        foreach (var v in unique)
+            tree.TryAdd(v);
+
+        Assert.Equal(unique.OrderBy(x => x), tree.ToList());
+    }
+
+    [Fact]
+    public void TryAdd_AllDuplicates_NeverInsertsAndCountStaysZero()
+    {
+        var tree = new IndexedRedBlackTree<int>();
+        tree.TryAdd(10);            // first insertion succeeds
+
+        for (int i = 0; i < 50; i++)
+        {
+            bool result = tree.TryAdd(10);
+            Assert.False(result);
+        }
+
+        Assert.Equal(1, tree.Count);
+    }
+
+    [Fact]
+    public void TryAdd_MixOfUniqueAndDuplicates_OnlyInsertsUnique()
+    {
+        var tree = new IndexedRedBlackTree<int>();
+        var inserts = new[] { 5, 3, 5, 1, 3, 7, 7, 9 };
+
+        int inserted = 0;
+        foreach (var v in inserts)
+            if (tree.TryAdd(v)) inserted++;
+
+        var expectedUnique = inserts.Distinct().OrderBy(x => x).ToList();
+
+        Assert.Equal(expectedUnique.Count, inserted);
+        Assert.Equal(expectedUnique.Count, tree.Count);
+        Assert.Equal(expectedUnique, tree.ToList());
+    }
+
+    [Fact]
+    public void TryAdd_IsEquivalentToContainsPlusAdd_ForUniqueItems()
+    {
+        // Verify TryAdd produces exactly the same tree as the old Contains + Add pattern,
+        // using a shuffled sequence with intentional duplicates.
+        var values = ShuffledRange(100, seed: 42).Concat(ShuffledRange(50, seed: 43)).ToList();
+
+        var treeOld = new IndexedRedBlackTree<int>();
+        foreach (var v in values)
+        {
+            if (!treeOld.Contains(v))
+                treeOld.Add(v);
+        }
+
+        var treeNew = new IndexedRedBlackTree<int>();
+        foreach (var v in values)
+            treeNew.TryAdd(v);
+
+        Assert.Equal(treeOld.ToList(), treeNew.ToList());
+        Assert.Equal(treeOld.Count, treeNew.Count);
+    }
+
+    [Fact]
+    public void TryAdd_DuplicateDoesNotCorruptSizeFields()
+    {
+        // If TryAdd returned false but accidentally updated Size on some nodes before
+        // detecting the duplicate, indexed access would break. This test catches that.
+        var tree = new IndexedRedBlackTree<int>(new[] { 10, 20, 30, 40, 50 });
+
+        tree.TryAdd(30); // duplicate — must be a no-op
+
+        // Every indexed position must still resolve correctly
+        var expected = new[] { 10, 20, 30, 40, 50 };
+        for (int i = 0; i < expected.Length; i++)
+            Assert.Equal(expected[i], tree[i]);
+    }
+
+    [Fact]
+    public void TryAdd_LargeRandomSequenceWithDuplicates_MatchesDistinctOracle()
+    {
+        var rng = new Random(2025);
+        var values = Enumerable.Range(0, 2000).Select(_ => rng.Next(500)).ToList();
+        var tree = new IndexedRedBlackTree<int>();
+
+        foreach (var v in values)
+            tree.TryAdd(v);
+
+        var expected = values.Distinct().OrderBy(x => x).ToList();
+
+        Assert.Equal(expected.Count, tree.Count);
+        Assert.Equal(expected, tree.ToList());
+    }
+
+    [Fact]
+    public void TryAdd_AscendingInsertionWithDuplicates_StaysCorrect()
+    {
+        var tree = new IndexedRedBlackTree<int>();
+
+        // Alternating unique and duplicate — worst case for an unbalanced BST
+        for (int i = 0; i < 500; i++)
+        {
+            tree.TryAdd(i);
+            tree.TryAdd(i); // immediate duplicate
+        }
+
+        Assert.Equal(500, tree.Count);
+        for (int i = 0; i < 500; i++)
+            Assert.Equal(i, tree[i]);
+    }
+
+    #endregion TryAdd
+
+
+    #region AddRange using O(m+n) search
+
+    [Fact]
+    public void AddRange_TwoTreesWithFullOverlap_ProducesSameTreeAsEither()
+    {
+        // If both trees contain identical elements, the result equals either tree.
+        var values = ShuffledRange(50, seed: 77);
+        var a = new IndexedRedBlackTree<int>(values);
+        var b = new IndexedRedBlackTree<int>(values);
+
+        a.AddRange(b);
+
+        AssertSortedConsistency(a, values);   // no growth — all duplicates suppressed
+    }
+
+    [Fact]
+    public void AddRange_TwoTreesWithPartialOverlap_ProducesCorrectUnion()
+    {
+        var a = new IndexedRedBlackTree<int>(Enumerable.Range(0, 10));  // 0..9
+        var b = new IndexedRedBlackTree<int>(Enumerable.Range(5, 10));  // 5..14
+
+        a.AddRange(b);
+
+        var expected = Enumerable.Range(0, 15).ToList();                 // 0..14
+        AssertSortedConsistency(a, expected);
+    }
+
+    [Fact]
+    public void AddRange_TwoLargeTrees_ResultIsValidAndIndexable()
+    {
+        // Stress test: merge two large trees, then drain entirely by index to
+        // confirm that Size fields, RB balance, and indexed access are all correct.
+        var valA = ShuffledRange(500, seed: 1);
+        var valB = ShuffledRange(500, seed: 2);   // overlaps with valA (both 0..499)
+
+        var a = new IndexedRedBlackTree<int>(valA);
+        var b = new IndexedRedBlackTree<int>(valB);
+        a.AddRange(b);
+
+        // Both trees cover 0..499, so the union is also 0..499
+        AssertSortedConsistency(a, Enumerable.Range(0, 500).ToList());
+
+        // Drain from the back — every RemoveAt must return the right value
+        for (int i = 499; i >= 0; i--)
+            Assert.Equal(i, a.RemoveAt(a.Count - 1));
+
+        Assert.True(a.IsEmpty);
+    }
+
+    [Fact]
+    public void AddRange_AfterMerge_InsertAndRemoveStillWork()
+    {
+        var a = new IndexedRedBlackTree<int>(new[] { 1, 3, 5, 7, 9 });
+        var b = new IndexedRedBlackTree<int>(new[] { 2, 4, 6, 8, 10 });
+
+        a.AddRange(b);                          // should produce 1..10
+        AssertSortedConsistency(a, Enumerable.Range(1, 10).ToList());
+
+        a.TryAdd(11);
+        a.Remove(1);
+        AssertSortedConsistency(a, Enumerable.Range(2, 10).ToList());
+    }
+    #endregion
+
+
 
     #region Custom comparable / reference types
 

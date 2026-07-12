@@ -48,6 +48,18 @@ public interface IIndexedRedBlackTree<TElement> where TElement : IComparable<TEl
     /// <param name="item">The element to be added to the tree.</param>
     void Add(TElement item);
     /// <summary>
+    /// Attempts to add <paramref name="item"/> to the tree in a single traversal.
+    /// Finds the insertion point and checks for a duplicate simultaneously, so it is
+    /// strictly cheaper than calling <see cref="Contains"/> followed by <see cref="Add"/>.
+    /// </summary>
+    /// <param name="item">The item to insert.</param>
+    /// <returns>
+    /// <c>true</c> if the item was inserted.
+    /// <c>false</c> if an equal item already exists; the tree is left unchanged.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="item"/> is null.</exception>
+    bool TryAdd(TElement item);
+    /// <summary>
     /// Adds a collection of elements to the tree.
     /// </summary>
     /// <param name="items">The collection of elements to be added to the tree.</param>

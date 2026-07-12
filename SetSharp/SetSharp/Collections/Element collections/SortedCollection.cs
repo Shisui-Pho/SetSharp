@@ -2,6 +2,7 @@
  * File: BaseSortedCollection.cs
  * Author: Phiwokwakhe Khathwane
  * Date: 24 November 2024
+ * Last Modified: 11 July 2026
  * 
  * Description:
  * This file defines the BaseSortedCollection<TElement> abstract class, which provides 
@@ -66,6 +67,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     ///<summary>
     ///Initializes a new instance of the <see cref="SortedCollection{TElement}"/> class.
     ///</summary>
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public SortedCollection()
     {
         Clear();
@@ -82,6 +84,7 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     }//ctor 02
 
     //Methods
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     ///<summary>
     ///Adds an element to the collection, ensuring the collection remains sorted. Duplicates will also be added.
@@ -111,10 +114,12 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
             return;
         }
 
-        if (!_elements.Contains(val))
-        {
-            _elements.Add(val);
-        }
+        //Replace this with try add
+        //if (!_elements.Contains(val))
+        //{
+        //    _elements.Add(val);
+        //}
+        _ = _elements.TryAdd(val);
     }//Add
     ///<summary>
     ///Finds the index at which the specified value should be inserted to maintain sorted order.
@@ -251,7 +256,10 @@ public class SortedCollection<TElement> : ISortedCollection<TElement>
     ///</summary>
     public void Clear()
     {
-        _elements = new IndexedRedBlackTree<TElement>();
+        if (_elements == null)
+            _elements = new IndexedRedBlackTree<TElement>();
+        else
+            _elements.Clear(); //= new IndexedRedBlackTree<TElement>();
     }//Clear
 
     //Explicit interface implementation for non-generic IEnumerable

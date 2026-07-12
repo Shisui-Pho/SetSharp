@@ -18,6 +18,7 @@
  */
 
 using System.Collections;
+using System.Reflection.Metadata.Ecma335;
 namespace SetSharp.Collections;
 /// <summary>
 /// Represents a red-black tree data structure that supports indexed access to elements, implementing the IIndexedRedBlackTree interface.
@@ -31,7 +32,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Red,
         Black
     }
-    private class Node(TElement item)
+    private sealed class Node(TElement item)
     {
         public TElement Data { get; set; } = item;
         public Node Left { get; set; } = null!;
@@ -130,33 +131,84 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
         Count++;
         FixViolation(newNode);
     }
+    /// <inheritdoc/>
+    public bool TryAdd(TElement item)
+    {
+        ArgumentNullException.ThrowIfNull(item, nameof(item));
+
+        if (root == null)
+        {
+            root = new Node(item);
+            Count++;
+            FixViolation(root);
+            return true;
+        }
+
+        //We need to find the point of insertion and look for duplicates while we're at it
+        // Caching the last comparison result means we don't call CompareTo a second
+        // time to decide left/right once the loop exits — unlike the original InsertBST
+        // which calls item.CompareTo(parent.Data) again after the loop.
+
+        var current = root;
+        Node parent = null!;
+
+        int lastCamp = 0;
+
+
+        while(current != null)
+        {
+            lastCamp = item.CompareTo(current.Data);
+
+            if (lastCamp == 0)
+                return false; //Duplicate found
+
+            parent = current;
+            current = lastCamp < 0 ? current.Left : current.Right;
+        }
+
+
+        //here the item is unique
+        //-We will allocate teh element and set it's parent to the current parent
+        var newNode = new Node(item);
+        newNode.Parent = parent;
+
+        if (lastCamp < 0)
+            parent.Left = newNode;
+        else
+            parent.Right = newNode;
+
+        //RecomputeSizesUpwards(parent);
+        IncrementSizesUpwards(parent);
+        Count++;
+        FixViolation(newNode);
+        return true;
+    }
     ///<inheritdoc/>
     public void AddRange(IEnumerable<TElement> items)
     {
         ArgumentNullException.ThrowIfNull(items, nameof(items));
-        var sorted = items as IndexedRedBlackTree<TElement>;
-        if (sorted == null)
+
+        // Non-tree enumerables: add one at a time (order is unknown, no merge possible).
+        if (items is not IndexedRedBlackTree<TElement> other)
         {
             foreach (var item in items)
                 Add(item);
             return;
         }
 
-        //If the incomming tree is way bigger than the current tree, 
-        //- it will be efficient to swap the tree, and add the current one to the 
-        //- incoming one.
-        float ratio = (float)Count / sorted.Count;
-        if(ratio <= MIN_CHANGE_STRUCTURE_RATIO)
-        {
-            this.SwapTreesAddRange(sorted);
-        }
-        else
-        {
-            foreach (var item in items)
-                Add(item);
-        }
-    }//AddRange
+        if (other.IsEmpty) return;
 
+        // O(m+n): merge both sorted sequences then build a perfectly balanced RB tree.
+        var merged = MergeSortedUnique(this, other);
+
+        Count = merged.Count;
+        if (Count == 0) { root = null; return; }
+
+        int bh = ComputeBlackHeight(Count);
+        root = BuildFromSortedList(merged, 0, Count - 1, depth: 1, blackHeight: bh);
+        root!.Parent = null!;
+    }
+   
     /// <inheritdoc/>
     public bool Contains(TElement item)
     {
@@ -367,7 +419,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             while (current != null)
             {
                 //Update size
-                //current.Size++;
+                current.Size++;
                 parent = current;
                 current = item.CompareTo(current.Data) < 0 ? current.Left : current.Right;
             }
@@ -381,7 +433,7 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
                     parent.Right = newNode;
             }
         }
-        RecomputeSizesUpwards(newNode.Parent);
+        //RecomputeSizesUpwards(newNode.Parent);
         return newNode;
     }
     // Fix Red-Black Tree violations after insertion
@@ -564,7 +616,6 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             current = current.Right;
         }//end while
     }//InOrderTraversal
-    #nullable disable
     private void RemoveNode(Node node)
     {
         // Case 1: Node has two children - find inorder successor and replace
@@ -755,6 +806,74 @@ public class IndexedRedBlackTree<TElement> : IIndexedRedBlackTree<TElement>, IEn
             UpdateSize(node);
             node = node.Parent;
         }
+    }
+    private static void IncrementSizesUpwards(Node? node)
+    {
+        while (node != null)
+        {
+            node.Size++;
+            node = node.Parent;
+        }
+    }
+    private Node? BuildFromSortedList(List<TElement> items, int lo, int hi, int depth, int blackHeight)
+    {
+        if (lo > hi) return null;
+
+        int mid = lo + (hi - lo) / 2;
+        var node = new Node(items[mid])
+        {
+            Color = depth > blackHeight ? NodeColor.Red : NodeColor.Black
+        };
+
+        node.Left = BuildFromSortedList(items, lo, mid - 1, depth + 1, blackHeight);
+        if (node.Left != null) node.Left.Parent = node;
+
+        node.Right = BuildFromSortedList(items, mid + 1, hi, depth + 1, blackHeight);
+        if (node.Right != null) node.Right.Parent = node;
+
+        UpdateSize(node);
+        return node;
+    }
+    private static int ComputeBlackHeight(int n)
+    {
+        int bh = 0, val = n + 1;
+        while (val > 1) { val >>= 1; bh++; }
+        return bh;
+    }
+
+    private static List<TElement> MergeSortedUnique(IndexedRedBlackTree<TElement> a, IndexedRedBlackTree<TElement> b)
+    {
+        var result = new List<TElement>(a.Count + b.Count);
+        using var ea = a.GetEnumerator();
+        using var eb = b.GetEnumerator();
+
+        bool hasA = ea.MoveNext();
+        bool hasB = eb.MoveNext();
+        TElement? prev = default;
+        bool hasPrev = false;
+
+        // Emit a value only if it differs from the last emitted value.
+        void Emit(TElement value)
+        {
+            if (!hasPrev || value.CompareTo(prev!) != 0)
+            {
+                result.Add(value);
+                prev = value;
+                hasPrev = true;
+            }
+        }
+
+        while (hasA && hasB)
+        {
+            int cmp = ea.Current.CompareTo(eb.Current);
+            if (cmp < 0) { Emit(ea.Current); hasA = ea.MoveNext(); }
+            else if (cmp > 0) { Emit(eb.Current); hasB = eb.MoveNext(); }
+            else { Emit(ea.Current); hasA = ea.MoveNext(); hasB = eb.MoveNext(); }
+        }
+        while (hasA) { Emit(ea.Current); hasA = ea.MoveNext(); }
+        while (hasB) { Emit(eb.Current); hasB = eb.MoveNext(); }
+
+        return result;
     }
     #endregion Helper methods
 }//class
