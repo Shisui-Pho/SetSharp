@@ -291,17 +291,24 @@ public class IndexedRedBlackTreeTests
     [InlineData(1, 50)]
     [InlineData(5, 100)]
     [InlineData(50, 60)]
-    public void AddRange_VariousRatios_RandomValues_ProducesCorrectUnion(int targetSize, int sourceSize)
+    public void AddRange_VariousRatios_RandomValues_ProducesCorrectUnion(
+        int targetSize, int sourceSize)
     {
-        var targetValues = RandomValues(targetSize, seed: targetSize * 31 + sourceSize);
-        var sourceValues = RandomValues(sourceSize, seed: sourceSize * 17 + targetSize);
+        // ShuffledRange gives unique values within each tree. Cross-tree overlaps
+        // are expected and the result is their sorted set-union.
+        var targetValues = ShuffledRange(targetSize, seed: targetSize * 31 + sourceSize);
+        var sourceValues = ShuffledRange(sourceSize, seed: sourceSize * 17 + targetSize);
 
         var target = new IndexedRedBlackTree<int>(targetValues);
         var source = new IndexedRedBlackTree<int>(sourceValues);
 
         target.AddRange(source);
 
-        AssertSortedConsistency(target, targetValues.Concat(sourceValues).ToList());
+        var expected = targetValues.Concat(sourceValues)
+                                   .Distinct()
+                                   .OrderBy(x => x)
+                                   .ToList();
+        AssertSortedConsistency(target, expected);
     }
 
     #endregion
@@ -1001,6 +1008,10 @@ public class IndexedRedBlackTreeTests
     }
 
     #endregion TryAdd
+
+
+
+
 
 
     #region Custom comparable / reference types
