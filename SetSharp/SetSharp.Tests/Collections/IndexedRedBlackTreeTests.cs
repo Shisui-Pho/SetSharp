@@ -1010,7 +1010,69 @@ public class IndexedRedBlackTreeTests
     #endregion TryAdd
 
 
+    #region AddRange using O(m+n) search
 
+    [Fact]
+    public void AddRange_TwoTreesWithFullOverlap_ProducesSameTreeAsEither()
+    {
+        // If both trees contain identical elements, the result equals either tree.
+        var values = ShuffledRange(50, seed: 77);
+        var a = new IndexedRedBlackTree<int>(values);
+        var b = new IndexedRedBlackTree<int>(values);
+
+        a.AddRange(b);
+
+        AssertSortedConsistency(a, values);   // no growth — all duplicates suppressed
+    }
+
+    [Fact]
+    public void AddRange_TwoTreesWithPartialOverlap_ProducesCorrectUnion()
+    {
+        var a = new IndexedRedBlackTree<int>(Enumerable.Range(0, 10));  // 0..9
+        var b = new IndexedRedBlackTree<int>(Enumerable.Range(5, 10));  // 5..14
+
+        a.AddRange(b);
+
+        var expected = Enumerable.Range(0, 15).ToList();                 // 0..14
+        AssertSortedConsistency(a, expected);
+    }
+
+    [Fact]
+    public void AddRange_TwoLargeTrees_ResultIsValidAndIndexable()
+    {
+        // Stress test: merge two large trees, then drain entirely by index to
+        // confirm that Size fields, RB balance, and indexed access are all correct.
+        var valA = ShuffledRange(500, seed: 1);
+        var valB = ShuffledRange(500, seed: 2);   // overlaps with valA (both 0..499)
+
+        var a = new IndexedRedBlackTree<int>(valA);
+        var b = new IndexedRedBlackTree<int>(valB);
+        a.AddRange(b);
+
+        // Both trees cover 0..499, so the union is also 0..499
+        AssertSortedConsistency(a, Enumerable.Range(0, 500).ToList());
+
+        // Drain from the back — every RemoveAt must return the right value
+        for (int i = 499; i >= 0; i--)
+            Assert.Equal(i, a.RemoveAt(a.Count - 1));
+
+        Assert.True(a.IsEmpty);
+    }
+
+    [Fact]
+    public void AddRange_AfterMerge_InsertAndRemoveStillWork()
+    {
+        var a = new IndexedRedBlackTree<int>(new[] { 1, 3, 5, 7, 9 });
+        var b = new IndexedRedBlackTree<int>(new[] { 2, 4, 6, 8, 10 });
+
+        a.AddRange(b);                          // should produce 1..10
+        AssertSortedConsistency(a, Enumerable.Range(1, 10).ToList());
+
+        a.TryAdd(11);
+        a.Remove(1);
+        AssertSortedConsistency(a, Enumerable.Range(2, 10).ToList());
+    }
+    #endregion
 
 
 
