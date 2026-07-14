@@ -29,6 +29,13 @@ namespace SetSharp.Utility;
 /// Provides utility methods to extract a set tree from a string expression and configuration.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set tree. This type must implement <see cref="IComparable{T}"/>.</typeparam>
+/// <remarks>
+/// This class has been marked obsolete. The higher-level parser API should be used instead:
+/// <see cref="SetSharp.SetParser.SetParser{T}"/> exposes parsing entry points (for example, <c>Parse</c>).
+/// Using the parser keeps tokenization and parsing responsibilities in a single, testable surface
+/// and allows better handling of escape sequences, diagnostics and configuration-aware parsing.
+/// </remarks>
+[Obsolete("SetTreeBuilder<T> is obsolete; use SetParser<T>.Parse(string, SetsConfigurations) instead.", false)]
 public class SetTreeBuilder<T>
     where T : IComparable<T>
 {
