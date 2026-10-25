@@ -11,7 +11,6 @@
  * its public surface; the tokenization algorithm itself is intentionally left
  * unimplemented here and will throw a NotImplementedException until implemented.
  */
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace SetSharp;

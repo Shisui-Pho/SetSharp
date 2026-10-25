@@ -17,7 +17,6 @@
  * - Documentation explains expected behavior and the contract for `BuildSetTree`.
  */
 using SetSharp.Collections;
-using System.ComponentModel.DataAnnotations;
 
 namespace SetSharp.SetParser;
 /// <summary>

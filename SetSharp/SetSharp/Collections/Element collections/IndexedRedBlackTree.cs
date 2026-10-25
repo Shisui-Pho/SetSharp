@@ -18,7 +18,6 @@
  */
 
 using System.Collections;
-using System.Reflection.Metadata.Ecma335;
 namespace SetSharp.Collections;
 /// <summary>
 /// Represents a red-black tree data structure that supports indexed access to elements, implementing the IIndexedRedBlackTree interface.

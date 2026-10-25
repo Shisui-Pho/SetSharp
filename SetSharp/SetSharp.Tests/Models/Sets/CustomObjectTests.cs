@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Xunit;
+﻿using Xunit;
 
 namespace SetSharp.Tests.Models.Sets
 {
