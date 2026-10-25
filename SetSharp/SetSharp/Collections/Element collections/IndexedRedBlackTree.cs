@@ -1,7 +1,7 @@
 ﻿/*
  * File: IndexedRedBlackTree.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 25 January 2025
+ * Date: 25 January 2026
  * 
  * Description:
  * This file defines the IndexedRedBlackTree<TElement> class, which implements the IIndexedRedBlackTree<TElement> interface. 

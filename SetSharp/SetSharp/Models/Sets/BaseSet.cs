@@ -25,6 +25,7 @@
  */
 
 using SetSharp.SetOperations;
+using SetSharp.SetParser;
 using SetSharp.Utility;
 using System.Diagnostics.CodeAnalysis;
 
@@ -125,11 +126,11 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     {
         // Ensure the extraction configuration is not null, as it is required for proper set extraction
         ArgumentNullException.ThrowIfNull(extractionConfiguration, nameof(extractionConfiguration));
-
         // Set the extraction configuration
         this.ExtractionConfiguration = ModifyConfigurations(extractionConfiguration);
         // Create a new instance of SetTreeWithIndexes using the provided configuration
         _treeWrapper = new SetTreeWithIndexes<T>(extractionConfiguration);
+        OriginalExpression = string.Empty;
     } // Default constructor (uses SetsConfigurations)
 
     /// <summary>
@@ -199,7 +200,8 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         //BuildSetTree and return the set tree from the expression using the extraction configuration
         try
         {
-            return SetTreeBuilder<T>.BuildSetTree(expression, ExtractionConfiguration);
+            var parser = new SetParser<T>(expression, ExtractionConfiguration);
+            return parser.BuildSetTree();
         }
         catch (SetsException ex)
         {
@@ -545,6 +547,7 @@ public abstract class BaseSet<T> : IStructuredSet<T>
         string? setB = set.BuildStringRepresentation();
 
         //Merge strings
+        //FIXME: The seperator should be what is defined in the extraction configs!!!
         string _set = setA.Remove(setA.Length - 1) + "," + setB?.Remove(0, 1);
         return BuildNewSet(_set);
     }//MergeWith

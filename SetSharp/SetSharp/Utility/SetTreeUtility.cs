@@ -16,11 +16,17 @@
  */
 
 namespace SetSharp.Utility;
-
 /// <summary>
 /// Provides utility methods for working with set trees, including converting a set tree to its string representation.
 /// </summary>
 /// <typeparam name="T">The type of elements in the set tree. This type must implement <see cref="IComparable{T}"/>.</typeparam>
+/// <remarks>
+/// This utility has been marked obsolete. Prefer the higher-level serializer API:
+/// <c>SetSerializer</c> (for example, <c>SetSharp.Utility.SetSerializer.Serialize&lt;T&gt;(ISetTree&lt;T&gt;)</c>).
+/// The serializer centralizes formatting, escaping and configuration concerns and is the recommended entry point
+/// for producing string representations of set trees.
+/// </remarks>
+[Obsolete("SetTreeUtility<T> is obsolete; use SetSerializer.Serialize<T>(ISetTree<T>) instead.", false)]
 public static class SetTreeUtility<T>
     where T : IComparable<T>
 {

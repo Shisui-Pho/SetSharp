@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Security.Cryptography.X509Certificates;
+using Xunit;
 
 namespace SetSharp.Tests.Models.Sets
 {
@@ -289,7 +290,7 @@ namespace SetSharp.Tests.Models.Sets
         public void TestEmptyNestedSetHandling()
         {
             // Arrange
-            var config = new SetsConfigurations(",", "\n");
+            var config = new SetsConfigurations(",", "\n", false);
             string expression = "{John, Doe,20\n{}}";
 
             // Act
@@ -297,9 +298,20 @@ namespace SetSharp.Tests.Models.Sets
             var result = set.BuildStringRepresentation();
 
             // Assert
-            Assert.Equal("{John, Doe,20\n{}}", result); // Empty nested set should be ignored
+            Assert.Equal("{John, Doe,20\n{}}", result); // Empty nested set should not be ignored
         }
+        [Fact]
+        public void TestEmptyNestedSubset()
+        {
+            //Arrange
+            var config = new SetsConfigurations(",", ignoreEmptyFields:false);
 
+            var expression = "{Hello9, World, {}, BlaNDAERTERS}";
+            var set = new StringLiteralSet(expression, config);
+
+            var result = set.BuildStringRepresentation();
+            Assert.Equal("{BlaNDAERTERS,Hello9,World,{}}", set.BuildStringRepresentation()); 
+        }
         // Test: Multiple Custom Object Converters (Different Field Terminators)
         [Fact]
         public void TestMultipleCustomObjectConverters()
