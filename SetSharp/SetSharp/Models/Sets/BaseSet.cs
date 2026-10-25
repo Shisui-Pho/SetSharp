@@ -24,6 +24,7 @@
  * functionality specific to the type of set being created.
  */
 
+using SetSharp.Extensions;
 using SetSharp.SetOperations;
 using SetSharp.SetParser;
 using SetSharp.Utility;
@@ -534,6 +535,12 @@ public abstract class BaseSet<T> : IStructuredSet<T>
     {
         //Check for argument null exceptions
         ArgumentNullException.ThrowIfNull(set, nameof(set));
+
+        //if the two sets don't have the same configurations, then we cannot perfom the merge
+        if(!set.ExtractionConfiguration.IsTheSameAs(this.ExtractionConfiguration))
+        {
+            throw new SetsConfigurationException("Mismatched configuration.", "The configurations of the sets you're trying to merge seem to not be the same.");
+        }
 
         //Check if they have elements
         if (this.Cardinality <= 0)
