@@ -27,7 +27,6 @@
 using SetSharp.Extensions;
 using SetSharp.SetOperations;
 using SetSharp.SetParser;
-using SetSharp.Utility;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SetSharp;
