@@ -1,7 +1,7 @@
 ﻿/*
  * File: IndexedRedBlackTree.cs
  * Author: Phiwokwakhe Khathwane
- * Date: 25 January 2025
+ * Date: 25 January 2026
  * 
  * Description:
  * This file defines the IndexedRedBlackTree<TElement> class, which implements the IIndexedRedBlackTree<TElement> interface. 
@@ -18,7 +18,6 @@
  */
 
 using System.Collections;
-using System.Reflection.Metadata.Ecma335;
 namespace SetSharp.Collections;
 /// <summary>
 /// Represents a red-black tree data structure that supports indexed access to elements, implementing the IIndexedRedBlackTree interface.

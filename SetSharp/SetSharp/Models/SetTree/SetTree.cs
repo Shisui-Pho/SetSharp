@@ -120,6 +120,14 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
         this.AddRange(elements);
         this.AddRange(subsets);
     }
+
+    public SetTree(SetsConfigurations extractionSettings, SortedElements<T> elements, SortedSubSets<T> subsets)
+        : this(extractionSettings)
+    {
+        this._elements = elements;
+        this._subSets = subsets;
+        this.TreeInfo.IsEmptyTree = Count == 0;
+    }
     #endregion Constructors
 
     #region Internal Methods
@@ -396,7 +404,8 @@ public class SetTree<T> : ISetTree<T> where T : IComparable<T>
     /// <returns>A string representation of the set tree.</returns>
     public override string ToString()
     {
-        return SetTreeUtility<T>.ToElementString(this);
+        var serializer = new SetSerializer<T>(this.ExtractionSettings);
+        return serializer.Serialize(this);
     }//ToString
 
     /// <summary>
