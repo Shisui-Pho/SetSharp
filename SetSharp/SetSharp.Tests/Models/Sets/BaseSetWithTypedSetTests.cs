@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using Xunit.Sdk;
 
 namespace SetSharp.Tests.Models.Sets
 {
@@ -350,5 +351,20 @@ namespace SetSharp.Tests.Models.Sets
             Assert.Equal(expectedCardinality, baseSet.Cardinality);
         }
 
+        [Fact]
+        public void TestMergeSetWithDifferentConfigurationsShouldFail()
+        {
+            string initialExpressionA = "{2,1, 6, 18}";
+            string initialExpressionB = "{9&3&3&1}";
+
+
+            var setAConfig = new SetsConfigurations(",");
+            var setBConfig = new SetsConfigurations("&");
+
+            var setA = new TypedSet<int>(initialExpressionA, setAConfig);
+            var setB = new TypedSet<int>(initialExpressionB, setBConfig);
+
+            Assert.Throws( typeof(SetsConfigurationException), () => setA.MergeWith(setB));
+        }
     }//class
 }//namespace
