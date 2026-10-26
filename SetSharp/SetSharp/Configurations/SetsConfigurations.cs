@@ -59,7 +59,7 @@ public class SetsConfigurations
     /// <param name="ignoreEmptyFields">If true then all empty sets will be ignored.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="elementSeparator"/> is null.</exception>
     /// <exception cref="SetsConfigurationException">Thrown if the default field terminator is the same as <paramref name="elementSeparator"/> or if they contain reserved characters.</exception>
-    public SetsConfigurations(string elementSeparator, bool addBraces = false, bool ignoreEmptyFields = false)
+    public SetsConfigurations(string elementSeparator, bool ignoreEmptyFields = false, bool addBraces = false)
     {
         string fieldTerminator = "\t";
         VerifyProperties(fieldTerminator, elementSeparator);
